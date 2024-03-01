@@ -9,7 +9,7 @@ from django.dispatch import receiver
 # Create your models here.
 
 
-
+ 
 class MyAccountManager(BaseUserManager):
     def create_user(self, first_name, email, phone_number, password=None, date_of_birth=None, profile_picture=None, user_type='client', approval_status='PENDING'):
         if not email:

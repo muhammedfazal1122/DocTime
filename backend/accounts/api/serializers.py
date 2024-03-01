@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer,TokenRefreshSerializer
-from accounts.models import Doctor, Patient, User, Verification
+from accounts.models import Doctor, Patient, User, Verification,OTPModel
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import RefreshToken, Token,AccessToken
@@ -57,3 +57,4 @@ class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
         fields = '__all__'
+

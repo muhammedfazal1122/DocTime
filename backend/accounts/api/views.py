@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from django.http import JsonResponse
 
 
@@ -58,4 +59,20 @@ class UserLogin(APIView):
         }
         print(content)
         return Response(content, status=status.HTTP_200_OK)
-    
+
+class UserLogout(APIView):
+    permission_classes = (IsAuthenticated)
+    def post(self, request):
+        try:    
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            content = {'massage':"ok"}
+            return Response (content,status=status.HTTP_205_RESET_CONTENT)
+        except:
+            return Response (status=status.HTTP_401_UNAUTHORIZED)
+        
+class OTPVerificationView(APIView):
+    def post(self, request):
+       
+        return Response(status=status)

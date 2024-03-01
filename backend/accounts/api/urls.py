@@ -14,8 +14,10 @@ urlpatterns = [
 
     #################################Register#############################
     path('register',views.RegisterView.as_view(), name="user-register"),
-    path('login',views.UserLogin.as_view(), name="user-user-login")
+    path('login',views.UserLogin.as_view(), name="user-user-login"),
+    path('logout', views.UserLogout.as_view(), name='user-logout'),
+    path('verify-otp', views.OTPVerificationView.as_view(), name='verify-otp'),
 
-    
+
 
 ]
