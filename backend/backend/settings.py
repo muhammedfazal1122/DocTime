@@ -93,8 +93,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'doctime',
+        'USER': 'postgres',
+        'PASSWORD': '1122',
+        'HOST': 'localhost',  # Or the host where your PostgreSQL server is running
+        'PORT': '5432',       # Default PostgreSQL port
     }
 }
 
@@ -200,3 +204,13 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+#SMTP configaration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS =  True
+EMAIL_HOST_USER = 'ecomm.apps.info@gmail.com'
+EMAIL_HOST_PASSWORD =  'wkvimegxjdohfjbg'

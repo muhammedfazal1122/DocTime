@@ -94,7 +94,7 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default = False)
     is_email_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
 
 
@@ -192,4 +192,4 @@ class OTPModel(models.Model):
     timestamp = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.user.username} - {self.otp}"
+        return f"{self.user.first_name} - {self.otp}"

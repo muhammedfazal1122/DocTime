@@ -32,12 +32,13 @@
   
   .form .input {
     width: 100%;
-    background: white;
+    color: gray;
+    background: rgb(235, 250, 255);
     border: none;
     padding: 15px 20px;
     border-radius: 20px;
     margin-top: 15px;
-    box-shadow: #cff0ff 0px 10px 10px -5px;
+    box-shadow: #638391 0px 10px 10px -5px;
     border-inline: 2px solid transparent;
   }
   

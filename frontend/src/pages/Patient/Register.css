@@ -109,7 +109,7 @@
   }
   
   .Registform label .Registinput:valid + span {
-    color: green;
+    color: rgb(0, 116, 154);
   }
   
   .Registsubmit {
