@@ -1,5 +1,4 @@
 .Registform {
-    display: flex;
     flex-direction: column;
     gap: 10px;
     max-width: 350px;
@@ -8,17 +7,37 @@
     border-radius: 20px;
     position: relative;
 
-    top: 20px;
+    top: 10px;
+    max-width: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; 
+  }
+  .registerParantdiv{
     max-width: 350px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* This makes the div take up the full height of the viewport */
-    margin: 0 auto; 
+    height: 107vh; /* This makes the div take up the full height of the viewport */
+    margin: 0 auto; /* This centers the div horizontally */
   }
 
-  
+  .formrelated{
+    bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
   .Registtitle {
     font-size: 28px;
     color: royalblue;
@@ -182,4 +201,12 @@
       transform: translateX(0);
       opacity: 1;
     }
+  }
+
+  .togButton{
+    justify-content: flex-end;
+    margin-left: 40px;
+    
+    position: relative;
+  
   }

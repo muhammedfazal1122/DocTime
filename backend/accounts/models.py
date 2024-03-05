@@ -76,13 +76,9 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=100,unique = True)
     gender = models.CharField(max_length=10, choices=gender_type, default='male')
     date_of_birth = models.DateField(null=True, blank=True)
-    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICE, default='client')
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICE, default='patient')
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    approval_status = models.CharField(
-        max_length=20,
-        choices=APPROVAL_STATUS_CHOICES,
-        default='PENDING',
-    )
+    approval_status = models.CharField(max_length=20,choices=APPROVAL_STATUS_CHOICES,default='PENDING',)
     street = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
     state = models.CharField(max_length=255, blank=True, null=True)
@@ -181,7 +177,7 @@ class Patient(models.Model):
     custom_id = models.CharField(max_length=10, primary_key=True, unique=True, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE,related_name='patient_user')
     full_name = models.CharField(max_length=255)
-    blood_group = models.CharField(max_length=5, choices=blood_group, default='A+') 
+    blood_group = models.CharField(max_length=5, choices=blood_group, default='B+') 
 
 
     

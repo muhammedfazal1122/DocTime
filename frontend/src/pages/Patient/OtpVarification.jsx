@@ -39,10 +39,10 @@ const OTPVerificationForm = () => {
       console.log(res);
       if (res.status === 200) {
         console.log("Success");
-        navigate('/login');
+        navigate('/auth/login');
       }
       return res;
-    } catch (error) {
+    } catch (error) {  
       console.log(error);
       console.log("Error");
     }
@@ -63,11 +63,12 @@ const OTPVerificationForm = () => {
     if (e.key === 'Backspace' && index > 0 && e.target.value === '') {
       inputRefs[index - 1].current.focus();
     }
+    
   };
 
   return (
     <>
-      <Navbar />
+     
       <div className='parentotpcontainer'>
         <form className="otpform">
           {/* <span className="otpclose">X</span> */}
@@ -95,9 +96,11 @@ const OTPVerificationForm = () => {
             Verify
           </button>
           <p className="otpresend">You don't receive the code ? <a className="otpresend-action" onClick={handleResend}></a></p>
+          <button className='otpvalidate'>Resent</button>
+          
         </form>
       </div>
-      <Footer />
+
     </>
   );
 };

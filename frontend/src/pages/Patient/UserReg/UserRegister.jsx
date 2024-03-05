@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Navbar from '../../Compounts/Navbar';
-import Footer from '../../Compounts/Footer';
-import '../../pages/Patient/Register.css';
+import Navbar from '../../../Compounts/Navbar';
+import Footer from '../../../Compounts/Footer';
+import '../../Patient/UserReg/Register.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,11 @@ const UserRegister = () => {
   const baseURL = "http://127.0.0.1:8000";
   const navigate = useNavigate();
 
+
+  const handleButtonClick = () => {
+    navigate('/auth/login');
+ };
+ 
   // State to hold the user's email
   const [userEmail, setUserEmail] = useState('');
 
@@ -23,7 +28,7 @@ const UserRegister = () => {
         // Store the user's email in localStorage
         localStorage.setItem('userEmail', formData.get('email'));
 
-        navigate('/otpvarification');
+        navigate('/auth/otpvarification');
       }
       console.log(res);
       return res;
@@ -36,9 +41,12 @@ const UserRegister = () => {
   
  return (
  <div>
-    <Navbar/>
+  
+
+  
+
     <form className="Registform" onSubmit={handleSubmit}>
-      <p className="Registtitle">Register</p>
+      <p className="Registtitle">Patient Register</p>
       <p className="Registmessage">Signup now and get full access to our app.</p>
       <div className="Registflex">
         <label>
@@ -112,8 +120,23 @@ const UserRegister = () => {
       <p className="Registsignin">
         Already have an account? <a href="#">Signin</a>
       </p>
-    </form>
-    <Footer/>
+
+      
+        </form>
+        <div className='formrelated'>
+
+        <div className='togButton'>
+        <button class="cta" onClick={handleButtonClick}>
+        <span>Patient Login</span>
+        <svg width="15px" height="10px" viewBox="0 0 13 10">
+        <path d="M1,5 L11,5"></path>
+        <polyline points="8 1 12 5 8 9"></polyline>
+        </svg>
+        </button>
+
+        </div>
+        </div>
+    
  </div>
  );
 };

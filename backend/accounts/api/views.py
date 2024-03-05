@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from .serializers import User,UserRegisterSerializer,UserSerializer, OTPModel
+from .serializers import User,UserRegisterSerializer,UserSerializer, OTPModel,DoctorSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -12,7 +12,6 @@ from django.core.mail import send_mail
 import random
 from django.utils import timezone
 from datetime import datetime
-
 
 
 class RegisterView(APIView):
@@ -114,6 +113,7 @@ class OTPVerificationView(APIView):
             if 'email' in request.data:
                 user = User.objects.get(email=request.data['email'])
                 print(user,'user+++++++++++++++++++')
+                
                 otp_object = OTPModel.objects.get(user=user)
                 print(otp_object,'otp_object')
                 if otp_object.otp == int(request.data['otp']):
@@ -126,3 +126,9 @@ class OTPVerificationView(APIView):
                 return Response("Email is required", status=400)
         except ObjectDoesNotExist:
             return Response("User does not exist or OTP not generated", status=404)
+        
+class DoctotRegister(APIView):
+    def post(self, request):
+        email = request.data['email']
+        password = request.data['password']
+        serizer = DoctorSerializer.is_valid()

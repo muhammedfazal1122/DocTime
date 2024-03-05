@@ -18,6 +18,8 @@ urlpatterns = [
     path('logout', views.UserLogout.as_view(), name='user-logout'),
     path('verify-otp', views.OTPVerificationView.as_view(), name='verify-otp'),
 
+    path('doctor/register',views.DoctotRegister.as_view,name='doctor-register')
+
 
 
 ]

@@ -1,8 +1,17 @@
 import React from 'react'
+import Navbar from '../Compounts/Navbar'
+import Footer from '../Compounts/Footer'
 
 const DoctorWrapper = () => {
   return (
-    <div>DoctorWrapper</div>
+    <div>
+      <Navbar/>
+
+      
+
+      <Footer/>
+      
+    </div>
   )
 }
 
