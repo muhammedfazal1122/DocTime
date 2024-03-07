@@ -31,22 +31,22 @@ const navConfig = [
   },
   {
     title: 'Client',
-    path: '/admincontrol/patient',
+    path: '/admincontrol/',
     icon: icon('ic_user'),
   },
   {
     title: 'Doctor',
-    path: '/admincontrol/doctor',
+    path: '/admincontrol/',
     icon: icon('ic_user'),
   },
   {
     title: 'Order List',
-    path: '/admincontrol/order',
+    path: '/admincontrol/',
     icon: icon('ic_blog'),
   },
   {
     title: 'Approval',
-    path: '/admincontrol/DocVerification',
+    path: '/admincontrol/',
     icon: icon('ic_lock'),
   },
   // {

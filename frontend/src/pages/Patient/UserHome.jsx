@@ -1,5 +1,5 @@
 import React from 'react';
-import BlurCard from '../../Compounts/Cards/BlurCards';
+import BlurCard from '../../Compounts/BlurCards/BlurCards';
 
 const UserHome = () => {
  return (

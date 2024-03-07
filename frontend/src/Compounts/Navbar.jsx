@@ -45,7 +45,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className='bg-cyan-950 flex justify-between items-center h-18 max-w-[1240%] mx-auto px-4 text-white'>
+    <nav className='bg-cyan-950 flex justify-between items-center h-17 max-w-[1240%] mx-auto px-4 text-white'>
       <img className='w-24 h-24' src="/public/Screenshot_2024-02-19_151751-removebg-preview.png" alt="" />
   
       <ul className='hidden md:flex'>
@@ -90,28 +90,32 @@ const Navbar = () => {
   
       {/* Patient and DocLogin buttons */}
       {!isAuthenticated ? (
-  <>
-    <Link to="/auth/login">
-      <button className="UserLoginButton">
-        Patient Login
-      </button>
-    </Link>
-    <span style={{ fontSize: '0.8rem', margin: '0 0.5rem' }}>/</span>
-    <Link to="/auth/doctor/login">
-      <button className="UserLoginButton">
-        DocLoginButton
-      </button>
-    </Link>
-  </>
+        <>
+          <div className="login-buttons">
+            <Link to="/auth/login">
+              <button className="UserLoginButton">Patient Login</button>
+            </Link>
+            <span style={{ fontSize: '0.8rem', margin: '0 0.5rem' }}></span>
+            <Link to="/auth/doctor/login">
+              <button className="UserLoginButton">Doctor Login</button>
+            </Link>
+          </div>
+        </>
+
       ) : (
         <>
           {/* MyProfile */}
+          <span style={{ fontSize: '0.8rem', margin: '0 10.9rem' }}></span>
+          <span style={{ fontSize: '0.8rem', margin: '0 5.9rem' }}></span>
+    
+
           <Avatar
             size="lg"
             alt="avatar"
             src="https://docs.material-tailwind.com/img/face-2.jpg"
             className="border rounded-xl border-green-500 shadow-xl shadow-green-900/20 ring-4 ring-green-500/30 max-w-11"
           />
+
           {/* LogoutButton */}
           <button className="Btn" onClick={HandleLogout}>
             <div className="sign">

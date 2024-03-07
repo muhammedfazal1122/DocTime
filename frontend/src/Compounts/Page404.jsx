@@ -4,7 +4,7 @@ import Navbar from '../Compounts/Navbar'
 const TVScreen = () => {
   return (
     <div>
-<Navbar/>
+
     
     <div className="main_wrapper">
       <div className="main">
