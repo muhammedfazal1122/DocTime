@@ -16,6 +16,7 @@ const OTPVerificationForm = () => {
   useEffect(() => {
     // Fetch the user's email from wherever it's stored (e.g., localStorage)
     const email = localStorage.getItem('userEmail');
+    const user_type = localStorage.getItem('user_type');
     // const 
     if (email) {
       setUserEmail(email);
@@ -34,18 +35,30 @@ const OTPVerificationForm = () => {
     const otp = inputRefs.map((ref) => ref.current.value).join('');
     
     try {
-
       const res = await axios.post(baseURL + '/auth/verify-otp', { otp, email: userEmail });
+      const user_type = localStorage.getItem('user_type');
+      console.log(user_type);
+
       console.log(res);
       if (res.status === 200) {
-        console.log("Success");
-        navigate('/auth/login');
+        console.log(user_type,'user_type');
+
+        if (user_type === "patient") {
+          console.log("Patient Successfully logined");
+          navigate('/auth/login');
+        } else if (user_type === "doctor") {
+          console.log("Doctor Successfully logined");
+          navigate('/auth/doctor/login')
+        }else{
+          console.log("other error");
+        }
       }
       return res;
     } catch (error) {  
       console.log(error);
       console.log("Error");
     }
+    
   };
 
   const handleResend = () => {

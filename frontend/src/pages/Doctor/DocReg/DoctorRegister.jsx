@@ -18,13 +18,14 @@ const DoctorRegister = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+    formData.append('user_type', 'doctor');
     try {
-      const res = await axios.post(baseURL + '/auth/doctor/register', formData);
+      const res = await axios.post(baseURL + '/auth/register', formData);
       if (res.status === 201) {
         console.log("Success");
         
-        // Store the user's email in localStorage
         localStorage.setItem('userEmail', formData.get('email'));
+        localStorage.setItem('user_type', formData.get('user_type'));
 
         navigate('/auth/otpvarification');
       }
@@ -33,7 +34,7 @@ const DoctorRegister = () => {
     } catch (error) {
       console.log(error, "errooo");
     }
-    console.log(`First Name: ${formData.get('first_name')}, Last Name: ${formData.get('last_name')}, Email: ${formData.get('email')}, Phone Number: ${formData.get('phone_number')}, Password: ${formData.get('password')}, Confirm Password: ${formData.get('confirmPassword')}`);
+    console.log(` Email: ${formData.get('email')}, usertype=====${user_type} Confirm Password: ${formData.get('confirmPassword')}`);
   };
 
   

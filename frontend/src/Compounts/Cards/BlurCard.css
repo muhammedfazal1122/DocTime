@@ -1,0 +1,61 @@
+.cards {
+  display: flex;
+  flex-direction: row;
+  gap: 70px; /* Increased the gap between cards */
+  max-width: 80%; /* Adjusted the max-width for responsiveness */
+  margin: 0 auto;
+}
+
+.cards .red {
+  
+  background-image: url('/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg');
+  background-color: #007e9e;
+}
+
+.cards .blue {
+  background-image: url('/src/assets/logo/medical-teleconsultation-sick-patient-home.jpg');
+
+
+  background-color: #0062ff;
+}
+
+.cards .green {
+  background-image: url('/src/assets/logo/39388.jpg');
+  background-color: #18cd5e;
+}
+
+.cards .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  height: 180px; /* Increased the height of the card */
+  width: 200px; /* Increased the width of the card */
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  transition: 400ms;
+  /* background-image: url('/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg');  */
+  background-size: cover; /* Ensure the image covers the entire card */
+  background-position: center; /* Center the image within the card */
+}
+
+.cards .card p.tip {
+  font-size: 1.5em; /* Increased the font size of the tip */
+  font-weight: 700;
+}
+
+.cards .card p.second-text {
+  color: rgb(201, 201, 201);
+  font-size: 0.7em; /* Increased the font size of the second text */
+}
+
+.cards .card:hover {
+  transform: scale(1.2, 1.2);
+}
+
+.cards:hover > .card:not(:hover) {
+  filter: blur(10px);
+  transform: scale(0.9, 0.9);
+}

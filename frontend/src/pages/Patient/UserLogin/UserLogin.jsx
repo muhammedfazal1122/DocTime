@@ -29,22 +29,25 @@ const UserLogin = () => {
 
     try {
       const res = await axios.post(baseURL + '/auth/login', form);
-      if (res && res.status === 200) {
+      const user_type = localStorage.getItem('user_type');
+
+      if (res.status === 200 ) {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);
-        console.log("eeeeeeeeeeeeeeee", res.data);
+        console.log( jwtDecode(res.data.access).user_id);
         dispatch(
           set_authentication({
-            name: jwtDecode(res.data.access),
+            name: jwtDecode(res.data.access).first_name,
             isAuthenticated: true,
             isAdmin: res.data.isAdmin,
             is_doctor: res.data.is_doctor,
+            user_id: jwtDecode(res.data.access).user_id,
+
           })
         );
         console.log(res.data.is_doctor, "this is the status");
-        if (res.data.is_doctor) {
-          console.log("IT IS DOCTOR");
-          // navigate("/doctor/dashboard");
+        if (res.data.is_doctor | res.data.isAdmin) {
+          console.log("IT IS DOCTOR or an Admin ");
         } else {
           console.log("ok");
           navigate('/');

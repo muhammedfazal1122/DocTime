@@ -39,20 +39,22 @@ const DoctorLogin = () => {
             is_doctor: res.data.is_doctor,
           })
         );
-        console.log(res.data.is_doctor, "this is the status");
+        console.log(res.data.is_doctor, "this is the is_doctor");
         if (res.data.is_doctor) {
           console.log("IT IS DOCTOR");
-          // navigate("/doctor/dashboard");
+          navigate("auth/doctor/home");
         } else {
-          console.log("ok");
-          navigate('/');
+          console.log("not ok");
         }
       }
+      return res;
     } catch (error) { 
       console.log(error);
+      console.log("Error");
     }
-
+    
     console.log(`Email: ${email}, Password: ${password}`);
+    
   };
 
   return (

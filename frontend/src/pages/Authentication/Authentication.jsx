@@ -5,6 +5,7 @@ import UserRegister from '../Patient/UserReg/UserRegister';
 import OTPVerificationForm from '../Patient/OtpVarification';
 import DoctorLogin from '../Doctor/DocLogin/DoctorLogin';
 import DoctorRegister from '../Doctor/DocReg/DoctorRegister';
+import DocHome from '../Doctor/DocHome';
 
 const Authentication = () => {
   return (
@@ -17,6 +18,7 @@ const Authentication = () => {
         
         <Route path="/doctor/login" element={<DoctorLogin />} />
         <Route path="/doctor/register" element={<DoctorRegister />} />
+        <Route path="/doctor/home" element={<DocHome />} />
 
         <Route path="/otpvarification" element={<OTPVerificationForm />} />
       </Routes>

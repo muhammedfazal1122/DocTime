@@ -83,7 +83,10 @@ class UserLogin(APIView):
 
         refresh["first_name"] = str(user.first_name)
         # refresh["is_admin"] = str(user.is_superuser)
+        print("Ddddddddddddddddddddddddddd")
         
+        
+
 
         content = {
             'refresh': str(refresh),
@@ -109,6 +112,7 @@ class UserLogout(APIView):
 class OTPVerificationView(APIView):
     def post(self, request):
         try:
+            print("otttttttpppppppp")
             # Check if the 'email' key is present in request.data
             if 'email' in request.data:
                 user = User.objects.get(email=request.data['email'])
@@ -117,8 +121,12 @@ class OTPVerificationView(APIView):
                 otp_object = OTPModel.objects.get(user=user)
                 print(otp_object,'otp_object')
                 if otp_object.otp == int(request.data['otp']):
+                    print("otp is correcrt")
                     user.is_active = True
                     user.save()
+# ----------------------------------------------------------
+ # Delete the OTP instance after successful verification
+                    otp_object.delete()
                     return Response("User successfully verified",status=200)
                 else:
                     return Response("OTP is wrong",status=400)

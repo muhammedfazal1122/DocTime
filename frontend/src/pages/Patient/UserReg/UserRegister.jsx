@@ -20,6 +20,8 @@ const UserRegister = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
+    formData.append('user_type', 'patient');
+
     try {
       const res = await axios.post(baseURL + '/auth/register', formData);
       if (res.status === 201) {
@@ -27,6 +29,7 @@ const UserRegister = () => {
         
         // Store the user's email in localStorage
         localStorage.setItem('userEmail', formData.get('email'));
+        localStorage.setItem('user_type', formData.get('user_type'));
 
         navigate('/auth/otpvarification');
       }
