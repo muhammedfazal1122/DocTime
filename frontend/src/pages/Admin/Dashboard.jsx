@@ -13,7 +13,7 @@ export default function Dashboard() {
   return (
     <Container maxWidth="xl">
       <Typography variant="h4" sx={{ mb: 5 }}>
-        Hi, Welcome back 👋
+     Hello, Welcome back 👋
       </Typography>
 
       <Grid container spacing={3}>
@@ -43,7 +43,7 @@ export default function Dashboard() {
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
           />
         </Grid>
-
+        
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Bug Reports"

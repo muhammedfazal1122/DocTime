@@ -58,3 +58,8 @@ class DoctorSerializer(serializers.ModelSerializer):
         model = Doctor
         fields = '__all__'
 
+
+class PatientUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        

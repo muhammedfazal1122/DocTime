@@ -22,7 +22,7 @@ const updateUserToken = async ()=>{
         {
             return {'name':null,isAuthenticated:false}
         }  
-        
+
       }
       catch (error) {
          return {'name':null,isAuthenticated:false}

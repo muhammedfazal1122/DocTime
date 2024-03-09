@@ -11,6 +11,7 @@ import { Outlet, useRoutes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import isAuthUser from '../utils/IsAuthUser';
 import { set_authentication } from '../Redux/AuthanticationUser';
+import UserRoute from '../Private/UserRoute';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -49,7 +50,10 @@ const UserWrapper = () => {
     element: (
       <>
      <Navbar/>
+     <UserRoute>
+
       <Outlet/>
+     </UserRoute>
       <Footer/>
       </>
     ),

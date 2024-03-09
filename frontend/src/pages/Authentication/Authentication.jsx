@@ -18,7 +18,7 @@ const Authentication = () => {
         
         <Route path="/doctor/login" element={<DoctorLogin />} />
         <Route path="/doctor/register" element={<DoctorRegister />} />
-        <Route path="/doctor/home" element={<DocHome />} />
+
 
         <Route path="/otpvarification" element={<OTPVerificationForm />} />
       </Routes>

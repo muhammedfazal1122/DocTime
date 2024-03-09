@@ -15,6 +15,13 @@ const Navbar = () => {
   const navigate = useNavigate()
 
   const { name, isAuthenticated } = useSelector((state) => state.authentication_user);
+
+  const GotoHome = () =>{
+    navigate('/')
+  }
+
+
+
   const HandleLogout = () =>{
 
     localStorage.clear();
@@ -46,13 +53,13 @@ const Navbar = () => {
 
   return (
     <nav className='bg-cyan-950 flex justify-between items-center h-17 max-w-[1240%] mx-auto px-4 text-white'>
-      <img className='w-24 h-24' src="/public/Screenshot_2024-02-19_151751-removebg-preview.png" alt="" />
-  
+      <img className='w-24 h-24' src="/public/Screenshot_2024-02-19_151751-removebg-preview.png" alt="" onClick={GotoHome} />
+
       <ul className='hidden md:flex'>
         {navItems.map(item => (
           <li
             key={item.id}
-            className='p-4 hover:bg-[#4bc4d9] rounded-xl m-2 cursor-pointer duration-300 hover:text-black'
+            className='p-4 hover:bg-[#4bc4d9] rounded-xl m-2 cursor-pointer duration-300 hover:text-black' onClick={GotoHome}
           >
             {item.text}
           </li>
@@ -94,7 +101,7 @@ const Navbar = () => {
           <div className="login-buttons">
             <Link to="/auth/login">
               <button className="UserLoginButton">Patient Login</button>
-            </Link>
+            </Link>   
             <span style={{ fontSize: '0.8rem', margin: '0 0.5rem' }}></span>
             <Link to="/auth/doctor/login">
               <button className="UserLoginButton">Doctor Login</button>

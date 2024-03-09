@@ -42,7 +42,7 @@ const DoctorLogin = () => {
         console.log(res.data.is_doctor, "this is the is_doctor");
         if (res.data.is_doctor) {
           console.log("IT IS DOCTOR");
-          navigate("auth/doctor/home");
+          navigate("/doctor/DocHome");
         } else {
           console.log("not ok");
         }

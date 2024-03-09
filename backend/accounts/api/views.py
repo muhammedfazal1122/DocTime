@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from .serializers import User,UserRegisterSerializer,UserSerializer, OTPModel,DoctorSerializer
+from .serializers import User,UserRegisterSerializer,UserSerializer, OTPModel,DoctorSerializer,Patient
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -135,8 +135,13 @@ class OTPVerificationView(APIView):
         except ObjectDoesNotExist:
             return Response("User does not exist or OTP not generated", status=404)
         
-class DoctotRegister(APIView):
-    def post(self, request):
-        email = request.data['email']
-        password = request.data['password']
-        serizer = DoctorSerializer.is_valid()
+
+
+# class UserDetailes(APIView):
+#     def get(request):
+
+class UserDetailsUpdate(APIView):
+    def post(request, id):
+        patient = Patient.objects.get(custom_id = id)
+        print(patient)
+        

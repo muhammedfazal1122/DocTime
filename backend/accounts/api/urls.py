@@ -18,7 +18,12 @@ urlpatterns = [
     path('logout', views.UserLogout.as_view(), name='user-logout'),
     path('verify-otp', views.OTPVerificationView.as_view(), name='verify-otp'),
 
-    path('doctor/register',views.DoctotRegister.as_view,name='doctor-register')
+    #  ********************************    Profile *****************************
+
+
+    # path('user/detailes', views.UserDetailes.as_view(), name='user-profile'),
+    path("user/update/<str:pk>", views.UserDetailsUpdate.as_view(), name="user-update"),
+
 
 
 

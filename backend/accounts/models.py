@@ -1,5 +1,5 @@
 import datetime
-from typing import Any
+from typing import Any, Iterable
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -155,11 +155,20 @@ class Doctor(models.Model):
     consultation_slots = models.IntegerField(default=5)
     education = models.TextField(max_length=50,blank=True, null=True)
     college_name = models.TextField(max_length=50, default="Not Available")   
-    years_of_experience = models.IntegerField(default=0)
+    
+    consultation_time = models.TextField(max_length=50,default="10AM to 5PM")
     about_me = models.CharField(max_length=255, blank=True, null=True)
-    Hospital=models.TextField(max_length=50, blank=True, null=True)
-    consultation_time=models.TextField(max_length=50,default="10AM to 5PM")
-    rating=models.IntegerField(default=4)
+    Hospital = models.TextField(max_length=50, blank=True, null=True)
+    rating = models.IntegerField(default=4)
+
+    def save(self, *args, **kwargs) :
+        if not self.custom_id:
+            lastdoctor = Doctor.objects.order_by('-custom_id').first()
+            if lastdoctor:
+                self.custom_id = f'D{max(5000, int(lastdoctor.custom_id[1:]) + 1)}'
+            else:
+                self.custom_id = 'D5000'
+        super().save(*args, **kwargs)
 
 
 class Patient(models.Model):
@@ -178,6 +187,15 @@ class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,related_name='patient_user')
     full_name = models.CharField(max_length=255)
     blood_group = models.CharField(max_length=5, choices=blood_group, default='B+') 
+    def save(self, *args, **kwargs):
+        if not self.custom_id:
+            # Auto-generate custom ID for Patient starting from P5000
+            last_patient = Patient.objects.order_by('-custom_id').first()
+            if last_patient:
+                self.custom_id = f'P{max(5000, int(last_patient.custom_id[1:]) + 1)}'
+            else:
+                self.custom_id = 'P5000'
+        super().save(*args, **kwargs)
 
 
     
@@ -189,3 +207,13 @@ class OTPModel(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} - {self.otp}"
+
+receiver(post_save,sender = User)
+def create_profile_for_user(sender ,instance, created, **kwargs):
+    if created:
+        if instance.user_type == 'doctor':
+            Doctor.objects.create(user = instance, full_name = instance.first_name+" "+instance.last_name)
+        elif instance.user_type == 'patient':
+            Patient.objects.create(user = instance, full_name = instance.first_name+" "+instance.last_name)  
+
+post_save.connect(create_profile_for_user, sender=User)

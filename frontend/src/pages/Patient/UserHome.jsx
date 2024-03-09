@@ -1,8 +1,14 @@
 import React from 'react';
 import BlurCard from '../../Compounts/BlurCards/BlurCards';
+import UserProfile from './UserProfile/UserProfile';
 
 const UserHome = () => {
+   
  return (
+   <>
+
+<UserProfile/>
+   
 <div className="relative w-full h-screen">
  <div className="relative w-full h-full">
     <img src="src/assets/logo/doctor-offering-medical-teleconsultation.jpg" alt="" className="w-full h-full inset-0" />
@@ -12,7 +18,7 @@ const UserHome = () => {
     <BlurCard/>
  </div>
 </div>
-
+</>
  );
 }
 

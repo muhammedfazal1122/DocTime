@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import Navbar from '../../../Compounts/Navbar';
-import Footer from '../../../Compounts/Footer';
-import '../../Patient/UserReg/Register.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify'; // Import the 'toast' function from react-toastify
+
 
 const DoctorRegister = () => {
   const baseURL = "http://127.0.0.1:8000";
@@ -11,35 +10,71 @@ const DoctorRegister = () => {
 
   const handleButtonClick = () => {
     navigate('/auth/doctor/login');
- };
-  // State to hold the user's email
-  const [userEmail, setUserEmail] = useState('');
+  };
+
+  // State to hold the form data
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone_number: '',
+    password: '',
+    confirmPassword: ''
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
-    formData.append('user_type', 'doctor');
-    try {
-      const res = await axios.post(baseURL + '/auth/register', formData);
-      if (res.status === 201) {
-        console.log("Success");
-        
-        localStorage.setItem('userEmail', formData.get('email'));
-        localStorage.setItem('user_type', formData.get('user_type'));
 
-        navigate('/auth/otpvarification');
+    const { first_name, last_name, email, password, confirmPassword } = formData;
+
+    // Perform validation
+    if (!first_name || !last_name) {
+      toast.error("Please enter a name");
+    } else if (first_name.indexOf(" ") !== -1 || last_name.indexOf(" ") !== -1) {
+      toast.error("Enter a valid name");
+    } else if (!email) {
+      toast.error("Please enter an email address");
+    } else if (password.trim() === "") {
+      toast.error("Please enter a password");
+    } else if (email.indexOf("@") === -1 || email.indexOf(".") === -1) {
+      toast.error("Invalid email address");
+    } else if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+    } else {
+      // All validation passed, proceed with form submission
+      const userData = {
+        first_name,
+        last_name,
+        email,
+        phone_number: formData.phone_number,
+        password,
+        user_type: 'doctor'
+      };
+
+      try {
+        const res = await axios.post(baseURL + '/auth/register', userData);
+        if (res.status === 201) {
+          console.log("Success");
+          localStorage.setItem('userEmail', email);
+          localStorage.setItem('user_type', 'doctor');
+          navigate('/auth/otpvarification');
+        }
+        console.log(res);
+        return res;
+      } catch (error) {
+        console.log(error, "errooo");
       }
-      console.log(res);
-      return res;
-    } catch (error) {
-      console.log(error, "errooo");
     }
-    console.log(` Email: ${formData.get('email')}, usertype=====${user_type} Confirm Password: ${formData.get('confirmPassword')}`);
   };
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
   
  return (
  <div>
+   <ToastContainer  />
   <div className='registerParantdiv'>
 
     <form className="Registform" onSubmit={handleSubmit}>
@@ -51,6 +86,8 @@ const DoctorRegister = () => {
             className="Registinput"
             type="text"
             name="first_name"
+            value={formData.first_name}
+            onChange={handleChange}
             required
           />
           <span>Firstname</span>
@@ -61,6 +98,8 @@ const DoctorRegister = () => {
             className="Registinput"
             type="text"
             name="last_name"
+            value={formData.last_name}
+            onChange={handleChange}
             required
           />
           <span>Lastname</span>
@@ -72,6 +111,8 @@ const DoctorRegister = () => {
           className="Registinput"
           type="email"
           name="email"
+          value={formData.email}
+          onChange={handleChange}
           required
         />
         <span>Email</span>
@@ -82,6 +123,8 @@ const DoctorRegister = () => {
           className="Registinput"
           type="text"
           name="phone_number"
+          value={formData.phone_number}
+          onChange={handleChange}
           required
         />
         <span>Phonenumber</span>
@@ -92,6 +135,8 @@ const DoctorRegister = () => {
           className="Registinput"
           type="password"
           name="password"
+          value={formData.password}
+          onChange={handleChange}
           required
         />
         <span>Password</span>
@@ -102,6 +147,8 @@ const DoctorRegister = () => {
           className="Registinput"
           type="password"
           name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
           required
         />
         <span>Confirm password</span>
