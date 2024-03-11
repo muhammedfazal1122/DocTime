@@ -48,7 +48,7 @@ function DoctorRoute({ children }) {
   }
 
   if (!isAuthenticated.isAuthenticated) {
-    return <Navigate to="auth/doctor/login" />;
+    return <Navigate to="/auth/doctor/login" />;
   }
 
   return children;

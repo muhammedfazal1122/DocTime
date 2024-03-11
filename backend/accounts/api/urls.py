@@ -21,10 +21,17 @@ urlpatterns = [
     #  ********************************    Profile *****************************
 
 
-    # path('user/detailes', views.UserDetailes.as_view(), name='user-profile'),
-    path("user/update/<str:pk>", views.UserDetailsUpdate.as_view(), name="user-update"),
+    path("user/details/", views.UserDetails.as_view(), name="user-details"),
 
+    
+    # path("user/update/<str:pk>", views.PatientUseDetailsUpdate.as_view(), name="user-update"),
 
+    #  ********************************    Doctor Profile *****************************
+
+    path('detailes/<str:custom_id>/', views.DoctorDetailesView.as_view(), name='doctor-profile'),
+    # for getting the Doctor cusom id using user id
+
+    path("custom-id/<str:pk>",views.DoctorCustomIdView.as_view(),name="custom-id-doctor"),
 
 
 ]

@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from .serializers import User,UserRegisterSerializer,UserSerializer, OTPModel,DoctorSerializer,Patient
+from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, OTPModel,DoctorSerializer,Patient,PatientUserSerializer,Doctor
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -12,7 +12,10 @@ from django.core.mail import send_mail
 import random
 from django.utils import timezone
 from datetime import datetime
-
+from rest_framework import status, generics
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import SearchFilter
 
 class RegisterView(APIView):
     def post(self, request):
@@ -84,9 +87,6 @@ class UserLogin(APIView):
         refresh["first_name"] = str(user.first_name)
         # refresh["is_admin"] = str(user.is_superuser)
         print("Ddddddddddddddddddddddddddd")
-        
-        
-
 
         content = {
             'refresh': str(refresh),
@@ -137,11 +137,36 @@ class OTPVerificationView(APIView):
         
 
 
-# class UserDetailes(APIView):
-#     def get(request):
 
-class UserDetailsUpdate(APIView):
-    def post(request, id):
-        patient = Patient.objects.get(custom_id = id)
-        print(patient)
+class DoctorDetailesView(generics.RetrieveAPIView):
+    queryset = Doctor.objects.all()
+    print(queryset,"qqqqqqqqqqqqqqqqqqqq")
+    serializer_class = DoctorSerializer
+    permission_classes = [IsAuthenticated]    
+    lookup_field = 'custom_id'  # Using your custom_id field for lookup
+
+
+
+class DoctorCustomIdView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserDoctorCustomIDSerializer
+    print("lllllllllllllll",serializer_class)
+    lookup_field = 'pk' 
+
+
+class UserDetails(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = User.objects.get(id=request.user.id)
         
+        data = UserSerializer(user).data
+        try :
+            profile_pic = user.profile_picture
+            data['profile_pic'] = request.build_absolute_uri('/')[:-1]+profile_pic.url
+        except:
+            profile_pic = ''
+            data['profile_pic']=''
+            
+        content = data
+        return Response(content,status=status.HTTP_200_OK)
+

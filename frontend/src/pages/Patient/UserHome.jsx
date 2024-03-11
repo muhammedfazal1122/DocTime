@@ -1,13 +1,11 @@
 import React from 'react';
 import BlurCard from '../../Compounts/BlurCards/BlurCards';
-import UserProfile from './UserProfile/UserProfile';
 
 const UserHome = () => {
    
  return (
    <>
 
-<UserProfile/>
    
 <div className="relative w-full h-screen">
  <div className="relative w-full h-full">

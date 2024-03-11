@@ -50,6 +50,8 @@ const UserLogin = () => {
           console.log("IT IS DOCTOR or an Admin ");
         } else {
           console.log("ok");
+          toast.success('You are successfully logged in !')
+
           navigate('/');
         }
       }

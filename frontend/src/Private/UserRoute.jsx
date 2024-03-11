@@ -26,9 +26,6 @@ function UserRoute({ children }) {
     return <Loader/>
   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="auth/login" />;
-  }
 
   return children;
 }

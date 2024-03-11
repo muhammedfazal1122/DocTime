@@ -13,7 +13,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['first_name'] = user.first_name
-        # 
+        #  
         return token
 
 class UserSerializer(serializers.ModelSerializer):
@@ -47,12 +47,19 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return super(UserRegisterSerializer, self).create(validated_data)
 
 
+
+
 class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = '__all__'
 
 
+class DoctorCustomIDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields = ['custom_id,phone_number']       
+        
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
@@ -62,4 +69,11 @@ class DoctorSerializer(serializers.ModelSerializer):
 class PatientUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        
+        exclude = ('password','is_id_verified', 'is_email_verified', 'is_staff', 'is_superuser', 'user_type')
+
+
+class UserDoctorCustomIDSerializer(serializers.ModelSerializer):
+    doctor_user=DoctorCustomIDSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ['id','first_name','doctor_user','phone_number']        

@@ -39,7 +39,7 @@ const AdminLogin = () => {
         console.log(res.data.isAdmin, "this is the admin");
         if (res.data.isAdmin) {
           console.log("IT IS admin");
-          navigate("/admincontrol");
+          navigate("/admincontrol/dashbord");
         } else {
           console.log("not ok");
         }
