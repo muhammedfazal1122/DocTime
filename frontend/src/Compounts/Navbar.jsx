@@ -7,17 +7,22 @@ import { Link, useNavigate } from 'react-router-dom';
 import { set_authentication } from '../Redux/AuthanticationUser';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UserProfileBox from '../pages/Patient/UserProfile/UserProfileBox';
 
 const Navbar = () => {
   // State to manage the navbar's visibility on smaller screens
   const [nav, setNav] = useState(false);
   const dispatch =   useDispatch()
   const navigate = useNavigate()
+  const [showProfileBox, setShowProfileBox] = useState(false); 
 
   const { name, isAuthenticated } = useSelector((state) => state.authentication_user);
 
-  const GotoHome = () =>{
+  const GotoHome = () =>{ 
     navigate('/')
+  }
+  const handleAvatarClick = () => {
+    setShowProfileBox(!showProfileBox);
   }
 
 
@@ -111,17 +116,23 @@ const Navbar = () => {
 
       ) : (
         <>
+
+          
+        
           {/* MyProfile */}
           <span style={{ fontSize: '0.8rem', margin: '0 10.9rem' }}></span>
           <span style={{ fontSize: '0.8rem', margin: '0 5.9rem' }}></span>
     
-
-          <Avatar
+          <Avatar  
             size="lg"
             alt="avatar"
-            src="https://docs.material-tailwind.com/img/face-2.jpg"
+            src="https://docs.material-tailwind.com/img/face-2.jpg" 
             className="border rounded-xl border-green-500 shadow-xl shadow-green-900/20 ring-4 ring-green-500/30 max-w-11"
+            onClick={handleAvatarClick} // Add the click handler
           />
+          
+    
+          
 
           {/* LogoutButton */}
           <button className="Btn" onClick={HandleLogout}>

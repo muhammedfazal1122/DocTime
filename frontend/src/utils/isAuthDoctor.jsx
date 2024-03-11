@@ -7,6 +7,7 @@ const updateDocToken = async () => {
   const refreshToken = localStorage.getItem("refresh");
 
   try {
+
     const res = await axios.post(baseUrl + "auth/token/refresh", {
       refresh: refreshToken,
     });
@@ -23,23 +24,22 @@ const updateDocToken = async () => {
   }
 };
 
-// const fetchisDoctor = async () => {
-//   const token = localStorage.getItem("access");
+const fetchisDoctor = async () => {
+  const token = localStorage.getItem("access");
+  try {
+    const res = await axios.get(baseUrl + "auth/user/details/", {
+      headers: {                                
+        Authorization: `Bearer ${token}`,       
+        Accept: "application/json",             
+        "Content-Type": "application/json",
+      },
+    });
 
-//   try {
-//     const res = await axios.get(baseUrl + "auth/user/details/", {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//         Accept: "application/json",
-//         "Content-Type": "application/json",
-//       },
-//     });
-
-//     return res.data.user_type === "doctor";
-//   } catch (error) {
-//     return false;
-//   }
-// };
+    return res.data.user_type === "doctor";
+  } catch (error) {
+    return false;
+  }
+};
 
 const isAuthDoctor = async () => {
   const accessToken = localStorage.getItem("access");
@@ -57,24 +57,27 @@ const isAuthDoctor = async () => {
   let decoded = jwtDecode(accessToken);
 
   if (decoded.exp > currentTime) {
-    // let checkDoc = await fetchisDoctor();
+    let checkDoc = await fetchisDoctor();
+    console.log(checkDoc.user_id,'checkDo-------------------------------------c.user_id');
     return {
       name: decoded.first_name,
       isAuthenticated: true,
       isAdmin: false,
       is_doctor: true,
+      user_id:checkDoc.user_id
     };
   } else {
     const updateSuccess = await updateDocToken();
 
     if (updateSuccess) {
       let decoded = jwtDecode(accessToken);
-    //   let checkAdmin = await fetchisDoctor();
+      let checkAdmin = await fetchisDoctor();
       return {
         name: decoded.first_name,
         isAuthenticated: true,
         isAdmin: false,
         is_doctor: true,
+        
       };
     } else {
       return {

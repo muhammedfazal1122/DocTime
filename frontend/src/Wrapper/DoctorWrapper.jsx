@@ -18,7 +18,8 @@ const DoctorWrapper = () => {
     dispatch(
       set_authentication({
         name: isAuthenticated.name,
-        isAuthenticated: isAuthenticated.isAuthenticated
+        isAuthenticated: isAuthenticated.isAuthenticated,
+        
       })
     );
   };

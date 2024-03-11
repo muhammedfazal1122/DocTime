@@ -37,6 +37,7 @@ const DoctorLogin = () => {
             isAuthenticated: true,
             isAdmin: res.data.isAdmin,
             is_doctor: res.data.is_doctor,
+            user_id: res.data.user_id
           })
         );
         console.log(res.data.is_doctor, "this is the is_doctor");

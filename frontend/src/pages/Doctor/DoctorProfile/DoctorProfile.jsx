@@ -1,8 +1,13 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import ProfileCard from '../../../Compounts/ProfileCard/ProfileCard';
 
 const DoctorProfile = () => {
   const baseURL = "http://127.0.0.1:8000";
+
+  const userId = useSelector(state => state.authentication_user.user_id);
+  console.log(userId,'userId')
 
   const [formData, setFormData] = useState({
     full_name: '',
@@ -11,25 +16,49 @@ const DoctorProfile = () => {
     consultation_duration: '',
     consultation_slots: '',
     education: '',
-    college_name: 'Not Available',
+    college_name: '',
     consultation_time: '',
     about_me: '',
     Hospital: '',
-    rating: 4,
+    rating: '',
   });
-
+ 
+    
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(baseURL);
-        // Handle response data here if needed
+        const authToken = localStorage.getItem('access')
+        console.log(userId,'uuuuuuuuuuuuuuuuuuuuuuuuuu')
+        const fetchDoctorDetails = await axios.get(`${baseURL}/auth/docdetailes/${userId}/`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`
+          }
+        });
+        const { data } = fetchDoctorDetails;
+        console.log(data.doctor_user.consultation_duration,'fffffffffffffffffffffffuuuuuuuuuuuuuu');
+
+
+        setFormData({
+          ...formData,
+          full_name: data.doctor_user.full_name,  
+          specializations: data.doctor_user.specializations,  
+          consultaion_fees: data.doctor_user.consultaion_fees,  
+          consultation_duration: data.doctor_user.consultation_duration,  
+          consultation_slots: data.doctor_user.consultation_slots,  
+          education: data.doctor_user.education,  
+          college_name: data.doctor_user.college_name,  
+          consultation_time: data.doctor_user.consultation_time,  
+          about_me: data.doctor_user.about_me, 
+          Hospital: data.doctor_user.Hospital, 
+          rating: data.doctor_user.rating, 
+        });
       } catch (error) {
         // Handle error
       }
     };
 
     fetchData();
-  }, [baseURL]);
+  }, [baseURL, userId]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,9 +72,23 @@ const DoctorProfile = () => {
 
   return (
     <>
+  <div className="flex justify-center items-center h-screen">
+
+{/* <div className="max-w-screen-lg flex"> */}
+      
+       <div className="w-30  justify-center ">
+      <ProfileCard />
+    </div>
+
+
+
+    {/* Form */}
+    <div className="w-70  justify-center">
+    <div className="flex justify-center"> {/* Center the form */}
+
       <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-12 px-6 shadow sm:rounded-lg sm:px-10">
+          <div className="bg-slate-400 py-12 px-6 shadow sm:rounded-lg sm:px-10">
             <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-6">
               <div>
                 <label htmlFor="full_name" className="block text-sm font-medium text-gray-700">
@@ -53,7 +96,7 @@ const DoctorProfile = () => {
                 </label>
                 <div className="mt-1">
                   <input
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     required=""
                     type="text"
                     name="full_name"
@@ -63,7 +106,7 @@ const DoctorProfile = () => {
                 </div>
               </div>
     {/* -------------------------------------------------------------------------------- */}
-
+    
               <div>
                 <label htmlFor="specializations" className="block text-sm font-medium text-gray-700">
                   Specializations
@@ -79,8 +122,8 @@ const DoctorProfile = () => {
                     onChange={handleChange}
                   />
                 </div>
-              </div>
-    {/* ------------------------------------------------------------- */}
+              </div> 
+    {/* --------------------------------------------------------------------------------- */}
               <div>
                 <label htmlFor="consultaion_fees" className="block text-sm font-medium text-gray-700">
                 consultaion fees
@@ -107,7 +150,7 @@ const DoctorProfile = () => {
                   <input
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     required=""
-                    type="number"
+                    type="time"
                     name="consultation_duration"
                     id="consultation_duration"
                     value={formData.consultation_duration}
@@ -259,13 +302,16 @@ const DoctorProfile = () => {
                 <button
                   className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   type="submit">
-                  Sign up
+                  Update
                 </button>
               </div>
             </form>
           </div>
         </div>
        </div>
+     </div>
+    </div>
+    </div>
 
     </>
   );

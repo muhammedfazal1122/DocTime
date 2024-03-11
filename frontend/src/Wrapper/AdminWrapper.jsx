@@ -39,11 +39,11 @@ const Adminwrapper = () => {
     },
     {
       element: (
-        <AdminRoute>
+        // <AdminRoute>
           <DashboardLayout>
             <Outlet />
           </DashboardLayout>
-        </AdminRoute>
+        // </AdminRoute>
       ),
       children: [
         { path: '/dashbord', element: <Dashboard /> },
