@@ -93,6 +93,7 @@ class UserLogin(APIView):
             'access': str(refresh.access_token),
             'isAdmin': user.is_superuser,
             'is_doctor': user.is_doctor(),
+            'user_id': user.id
         }
         print(content)
         return Response(content, status=status.HTTP_200_OK)
@@ -140,18 +141,21 @@ class OTPVerificationView(APIView):
 
 class DoctorDetailesView(generics.RetrieveAPIView):
     queryset = Doctor.objects.all()
-    print(queryset,"qqqqqqqqqqqqqqqqqqqq")
+    # print(queryset,"")
     serializer_class = DoctorSerializer
     permission_classes = [IsAuthenticated]    
     lookup_field = 'custom_id'  # Using your custom_id field for lookup
 
 
 
-class DoctorCustomIdView(generics.RetrieveAPIView):
+class DoctorUserIdView(generics.RetrieveAPIView):
     queryset = User.objects.all()
+    print(queryset,'qqqqqqqqqqqqqqqqqqqq')
     serializer_class = UserDoctorCustomIDSerializer
     print("lllllllllllllll",serializer_class)
-    lookup_field = 'pk' 
+    permission_classes = [IsAuthenticated]    
+    lookup_field = 'pk'
+    print(lookup_field,'ppkkkkkkkkkkkk')
 
 
 class UserDetails(APIView):

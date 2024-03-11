@@ -154,7 +154,7 @@ class Doctor(models.Model):
     consultation_duration = models.DurationField(default=datetime.timedelta(hours=1))
     consultation_slots = models.IntegerField(default=5)
     education = models.TextField(max_length=50,blank=True, null=True)
-    college_name = models.TextField(max_length=50, default="Not Available")   
+    college_name = models.CharField(max_length=50, default="Not Available")   
     
     consultation_time = models.TextField(max_length=50,default="10AM to 5PM")
     about_me = models.CharField(max_length=255, blank=True, null=True)

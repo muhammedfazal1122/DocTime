@@ -58,12 +58,7 @@ class PatientSerializer(serializers.ModelSerializer):
 class DoctorCustomIDSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
-        fields = ['custom_id,phone_number']       
-        
-class DoctorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Doctor
-        fields = '__all__'
+        fields = '__all__'   
 
 
 class PatientUserSerializer(serializers.ModelSerializer):
@@ -76,4 +71,29 @@ class UserDoctorCustomIDSerializer(serializers.ModelSerializer):
     doctor_user=DoctorCustomIDSerializer(read_only=True)
     class Meta:
         model = User
-        fields = ['id','first_name','doctor_user','phone_number']        
+        fields = ['id','first_name','doctor_user',] 
+
+
+        
+class DoctorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields = '__all__'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

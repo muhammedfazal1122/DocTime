@@ -31,7 +31,7 @@ urlpatterns = [
     path('detailes/<str:custom_id>/', views.DoctorDetailesView.as_view(), name='doctor-profile'),
     # for getting the Doctor cusom id using user id
 
-    path("custom-id/<str:pk>",views.DoctorCustomIdView.as_view(),name="custom-id-doctor"),
+    path("docdetailes/<str:pk>/",views.DoctorUserIdView.as_view(),name="user-id-doctor"),
 
 
 ]
