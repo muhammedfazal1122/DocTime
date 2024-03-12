@@ -153,12 +153,12 @@ class Doctor(models.Model):
     consultaion_fees = models.DecimalField(max_digits=10, decimal_places=0, default=300)
     consultation_duration = models.DurationField(default=datetime.timedelta(hours=1))
     consultation_slots = models.IntegerField(default=5)
-    education = models.TextField(max_length=50,blank=True, null=True)
+    education = models.TextField(max_length=50,blank=True, null=True,default = 'MBBS,MD')
     college_name = models.CharField(max_length=50, default="Not Available")   
     
     consultation_time = models.TextField(max_length=50,default="10AM to 5PM")
-    about_me = models.CharField(max_length=255, blank=True, null=True)
-    Hospital = models.TextField(max_length=50, blank=True, null=True)
+    about_me = models.CharField(max_length=555, blank=True, null=True , default = "Experienced healthcare provider with 5+ years in delivering quality patient care. Specializes in diagnosis, treatment, and collaboration for enhanced outcomes. Utilizes modern medical technologies and preventive measures.")
+    Hospital = models.TextField(max_length=50, blank=True, null=True,default = 'Mother Care Hospital')
     rating = models.IntegerField(default=4)
 
     def save(self, *args, **kwargs) :

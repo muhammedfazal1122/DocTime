@@ -1,30 +1,58 @@
-import React from 'react';
-import './ProfileCard.scss'
+import React, { useEffect, useState } from 'react';
+import './ProfileCard.scss';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+
 const ProfileCard = () => {
+  const baseURL = "http://127.0.0.1:8000";
+  const userId = useSelector(state => state.authentication_user.user_id);
+
+  const [doctorDetails, setDoctorDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const authToken = localStorage.getItem('access');
+        const fetchDoctorDetails = await axios.get(`${baseURL}/auth/docdetailes/${userId}/`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`
+          }
+        });
+        const { data } = fetchDoctorDetails;
+        setDoctorDetails(data);
+      } catch (error) {
+        console.error("Error fetching doctor details:", error);
+      }
+    };
+
+    fetchData();
+  }, [baseURL, userId]);
+
   return (
     <div className='parentProfileCard'>
-
-<div className="flex justify-center items-center h-full">
-
-    <div >
-    <div className="flip-card mx-auto">
-      <div className="flip-card-inner">
-        <div className="flip-card-front">
-          <div className="profile-image">
-          <img
-              src="/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg" // Replace "path_to_your_image.jpg" with the actual path to your image
-              alt="Profile Picture"
-              className="pfp"
-            />
-            <div className="name">
-             Muhammed Fazal
-            </div>
-          </div>
-        </div>
-        <div className="flip-card-back">
-          <div className="Description">
+    <div className="flex justify-center items-center h-full">
+      <div>
+        <div className="flip-card mx-auto">
+          <div className="flip-card-inner">
+            {doctorDetails && ( // Render if doctorDetails is not null
+              <>
+                <div className="flip-card-front">
+                  <div className="profile-image">
+                    <img
+                      // src={doctorDetails.profile_picture} // Assuming profile_picture is the key for the image URL
+                      src="/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg"
+                      alt="Profile Picture"
+                      className="pfp"
+                    />
+                    <div className="name">
+                      {doctorDetails.doctor_user.full_name}
+                    </div>
+                  </div>
+                </div>
+            <div className="flip-card-back">
+            <div className="Description">
             <p className="description">
-              Hello, I am a software engineer with over 5 years of experience in web development. I specialize in building scalable, high-performance web applications using modern web technologies such as React, Angular, and Node.js.
+            {doctorDetails.doctor_user.about_me}
             </p>
             <div className="socialbar">
               <a id="github" href="#">
@@ -50,6 +78,9 @@ const ProfileCard = () => {
             </div>
           </div>
         </div>
+
+        </>
+        )}
       </div>
     </div> 
     </div> 
