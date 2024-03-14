@@ -1,5 +1,7 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
-from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, OTPModel,DoctorSerializer,Patient,PatientUserSerializer,Doctor
+from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, DoctorCustomIDSerializer,OTPModel,Patient,PatientUserSerializer,Doctor
+from .serializers import VarificationSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -16,6 +18,9 @@ from rest_framework import status, generics
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
+from rest_framework.generics import RetrieveUpdateAPIView
+
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -138,39 +143,71 @@ class OTPVerificationView(APIView):
         
 
 
-
-class DoctorDetailesView(generics.RetrieveAPIView):
+class DoctorDetailsUpdate(generics.UpdateAPIView):
     queryset = Doctor.objects.all()
-    # print(queryset,"")
-    serializer_class = DoctorSerializer
-    permission_classes = [IsAuthenticated]    
-    lookup_field = 'custom_id'  # Using your custom_id field for lookup
+    serializer_class = DoctorCustomIDSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'user'  
+
+    def get_object(self):
+        return self.queryset.get(user=self.request.user)
 
 
-
-class DoctorUserIdView(generics.RetrieveAPIView):
+class DoctorUserIdView(RetrieveUpdateAPIView):
     queryset = User.objects.all()
-    print(queryset,'qqqqqqqqqqqqqqqqqqqq')
     serializer_class = UserDoctorCustomIDSerializer
-    print("lllllllllllllll",serializer_class)
     permission_classes = [IsAuthenticated]    
     lookup_field = 'pk'
-    print(lookup_field,'ppkkkkkkkkkkkk')
+
 
 
 class UserDetails(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request):
-        user = User.objects.get(id=request.user.id)
-        
-        data = UserSerializer(user).data
-        try :
-            profile_pic = user.profile_picture
-            data['profile_pic'] = request.build_absolute_uri('/')[:-1]+profile_pic.url
-        except:
-            profile_pic = ''
-            data['profile_pic']=''
-            
-        content = data
-        return Response(content,status=status.HTTP_200_OK)
 
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+
+class ProfilePicUpdate(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class KycVerificationUpload(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, user):
+        # Retrieve the user instance using the UUID from the URL
+        user_instance = get_object_or_404(User, id=user)
+        # Ensure the authenticated user matches the user instance from the URL
+        if request.user != user_instance:
+            return Response({"detail": "User mismatch"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = VarificationSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

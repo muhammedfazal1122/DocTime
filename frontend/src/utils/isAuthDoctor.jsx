@@ -15,6 +15,7 @@ const updateDocToken = async () => {
     if (res.status === 200) {
       localStorage.setItem("access", res.data.access);
       localStorage.setItem("refresh", res.data.refresh);
+      console.log("updateDocToken OKKKKKKKKK");
       return true;
     } else {
       return false;
@@ -33,8 +34,9 @@ const fetchisDoctor = async () => {
         Accept: "application/json",             
         "Content-Type": "application/json",
       },
-    });
-
+    });  
+    console.log("fetchisDoctor(userDETAILES) is ok ");
+    
     return res.data.user_type === "doctor";
   } catch (error) {
     return false;
@@ -58,14 +60,14 @@ const isAuthDoctor = async () => {
 
   if (decoded.exp > currentTime) {
     let checkDoc = await fetchisDoctor();
-    console.log(checkDoc.user_id,'checkDo-------------------------------------c.user_id');
     return {
       name: decoded.first_name,
       isAuthenticated: true,
       isAdmin: false,
-      is_doctor: true,
-      user_id:checkDoc.user_id
-    };
+      is_doctor: checkDoc,
+      user_id: decoded.user_id,
+    };     
+    
   } else {
     const updateSuccess = await updateDocToken();
 
@@ -76,7 +78,7 @@ const isAuthDoctor = async () => {
         name: decoded.first_name,
         isAuthenticated: true,
         isAdmin: false,
-        is_doctor: true,
+        is_doctor: checkAdmin,
         
       };
     } else {

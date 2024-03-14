@@ -5,6 +5,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from datetime import time
 
 # Create your models here.
 
@@ -118,6 +119,7 @@ class User(AbstractBaseUser):
 class Verification(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,related_name='doc_verification')
     aadhar_file = models.FileField(upload_to='verification_documents/aadhar', blank=True, null=True)
+    register_number = models.FileField(upload_to='register_number/register_number', blank=True, null=True)
     degree_certificate = models.FileField(upload_to='verification_documents/degree', blank=True, null=True)
     experience_certificate = models.FileField(upload_to='verification_documents/experience', blank=True, null=True)
     is_verified = models.BooleanField(default=False)
@@ -156,7 +158,8 @@ class Doctor(models.Model):
     education = models.TextField(max_length=50,blank=True, null=True,default = 'MBBS,MD')
     college_name = models.CharField(max_length=50, default="Not Available")   
     
-    consultation_time = models.TextField(max_length=50,default="10AM to 5PM")
+    consultation_time_start = models.TimeField(auto_now=False, auto_now_add=False, default=time(10, 0))
+    consultation_time_end = models.TimeField(auto_now=False, auto_now_add=False, default=time(12, 0))
     about_me = models.CharField(max_length=555, blank=True, null=True , default = "Experienced healthcare provider with 5+ years in delivering quality patient care. Specializes in diagnosis, treatment, and collaboration for enhanced outcomes. Utilizes modern medical technologies and preventive measures.")
     Hospital = models.TextField(max_length=50, blank=True, null=True,default = 'Mother Care Hospital')
     rating = models.IntegerField(default=4)

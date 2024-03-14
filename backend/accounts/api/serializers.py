@@ -19,7 +19,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ('password' )
+        exclude = ('password' ,)
 
 
 
@@ -55,36 +55,51 @@ class PatientSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DoctorCustomIDSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Doctor
-        fields = '__all__'   
-
 
 class PatientUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ('password','is_id_verified', 'is_email_verified', 'is_staff', 'is_superuser', 'user_type')
 
-
-class UserDoctorCustomIDSerializer(serializers.ModelSerializer):
-    doctor_user=DoctorCustomIDSerializer(read_only=True)
-    class Meta:
-        model = User
-        fields = ['id','first_name','doctor_user',] 
-
-
-        
-class DoctorSerializer(serializers.ModelSerializer):
+class DoctorCustomIDSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
+        fields = '__all__'   
+
+class UserDoctorCustomIDSerializer(serializers.ModelSerializer):
+    doctor_user = DoctorCustomIDSerializer()  
+
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'doctor_user','profile_picture']
+
+    def update(self, instance, validated_data):
+        print("Before update:", instance.doctor_user)
+        doctor_user_data = validated_data.pop('doctor_user', None)
+        if doctor_user_data:
+            doctor_serializer = DoctorCustomIDSerializer(
+                instance=instance.doctor_user, data=doctor_user_data, partial=True)
+            if doctor_serializer.is_valid():
+                doctor_serializer.save()
+            else:
+                print("Validation errors:", doctor_serializer.errors)
+                raise serializers.ValidationError(doctor_serializer.errors)
+
+        # Update user fields
+        # instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.save()
+        print("After update:", instance.doctor_user)
+        return instance
+
+class VarificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Verification
         fields = '__all__'
 
-
-
-
-
-
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['user'] = user
+        return super().create(validated_data)
 
 
 

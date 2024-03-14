@@ -18,20 +18,21 @@ urlpatterns = [
     path('logout', views.UserLogout.as_view(), name='user-logout'),
     path('verify-otp', views.OTPVerificationView.as_view(), name='verify-otp'),
 
-    #  ********************************    Profile *****************************
-
-
+    #  ********************************    Doctor Profile *****************************
     path("user/details/", views.UserDetails.as_view(), name="user-details"),
+    path('doctor-update/<str:user>/', views.DoctorDetailsUpdate.as_view(), name='doctor-profile'),
+
+    # for getting the Doctor cusom id using user id
+    path("docdetailes/<str:pk>/",views.DoctorUserIdView.as_view(),name="user-id-doctor"),
+    path("profilepic-update/", views.ProfilePicUpdate.as_view(), name="user-details"),
+
+    #  ********************************   KycVerification *****************************
+
+    path("KycVerification-upload/<str:user>/", views.KycVerificationUpload .as_view(), name="user-details"),
+
+
+
+
 
     
-    # path("user/update/<str:pk>", views.PatientUseDetailsUpdate.as_view(), name="user-update"),
-
-    #  ********************************    Doctor Profile *****************************
-
-    path('detailes/<str:custom_id>/', views.DoctorDetailesView.as_view(), name='doctor-profile'),
-    # for getting the Doctor cusom id using user id
-
-    path("docdetailes/<str:pk>/",views.DoctorUserIdView.as_view(),name="user-id-doctor"),
-
-
 ]

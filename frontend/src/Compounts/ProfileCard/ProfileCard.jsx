@@ -1,15 +1,15 @@
+
 import React, { useEffect, useState } from 'react';
 import './ProfileCard.scss';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 const ProfileCard = () => {
-  const baseURL = "http://127.0.0.1:8000";
-  const userId = useSelector(state => state.authentication_user.user_id);
+ const baseURL = "http://127.0.0.1:8000";
+ const userId = useSelector(state => state.authentication_user.user_id);
+ const [doctorDetails, setDoctorDetails] = useState(null);
 
-  const [doctorDetails, setDoctorDetails] = useState(null);
-
-  useEffect(() => {
+ useEffect(() => {
     const fetchData = async () => {
       try {
         const authToken = localStorage.getItem('access');
@@ -26,25 +26,25 @@ const ProfileCard = () => {
     };
 
     fetchData();
-  }, [baseURL, userId]);
+ }, [baseURL, userId]); // Removed doctorDetails from the dependency array
 
-  return (
+ return (
     <div className='parentProfileCard'>
-    <div className="flex justify-center items-center h-full">
-      <div>
-        <div className="flip-card mx-auto">
-          <div className="flip-card-inner">
-            {doctorDetails && ( // Render if doctorDetails is not null
-              <>
-                <div className="flip-card-front">
-                  <div className="profile-image">
-                    <img
-                      // src={doctorDetails.profile_picture} // Assuming profile_picture is the key for the image URL
-                      src="/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg"
-                      alt="Profile Picture"
-                      className="pfp"
-                    />
-                    <div className="name">
+      <div className="flex justify-center items-center h-full">
+        <div>
+          <div className="flip-card mx-auto">
+            <div className="flip-card-inner">
+              {doctorDetails && (
+                <>
+                 <div className="flip-card-front">
+                    <div className="profile-image">
+                      {/* Append timestamp to profile picture URL to prevent caching */}
+                      <img
+                        src={`${doctorDetails.profile_picture}?${new Date().getTime()}`}
+                        alt="Profile Picture"
+                        className="pfp"
+                      />
+                      <div className="name">
                       {doctorDetails.doctor_user.full_name}
                     </div>
                   </div>
@@ -52,6 +52,7 @@ const ProfileCard = () => {
             <div className="flip-card-back">
             <div className="Description">
             <p className="description">
+
             {doctorDetails.doctor_user.about_me}
             </p>
             <div className="socialbar">
