@@ -4,7 +4,7 @@ import './profileBox.scss'
 
 const UserProfile = () => {
   return (
-    <div className='profile-box'>
+    <div className='profile-box '>
         <div className="input">
   <button className="value">
     <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" data-name="Layer 2">

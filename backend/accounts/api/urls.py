@@ -28,11 +28,8 @@ urlpatterns = [
 
     #  ********************************   KycVerification *****************************
 
-    path("KycVerification-upload/<str:user>/", views.KycVerificationUpload .as_view(), name="user-details"),
+    path("KycVerification-upload/<str:user_id>/", views.KycVerificationUpload.as_view(), name="user-details"),
 
 
 
-
-
-    
 ]

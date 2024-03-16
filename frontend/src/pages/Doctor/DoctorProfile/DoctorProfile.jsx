@@ -72,7 +72,7 @@ const DoctorProfile = () => {
     e.preventDefault();
     try {
       const authToken = localStorage.getItem('access');
-      const response = await axios.patch(`${baseURL}/auth/doctor-update/`, formData, {
+      const response = await axios.patch(`${baseURL}/auth/doctor-update/${userId}/`, formData, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       toast.success("Profile updated successfully.");

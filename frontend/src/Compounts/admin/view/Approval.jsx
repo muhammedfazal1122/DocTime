@@ -13,7 +13,7 @@ function Approval() {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json',                                                
             },
         }).then((res) => {
             console.log(res.data)
@@ -39,7 +39,7 @@ function Approval() {
         //     console.log(err);
         //     TError(err)
         // })
-    }, [])
+    }, [])                  
 
     const approveVendor = async (id, approval) =>{
         const formData = {'approve': approval}

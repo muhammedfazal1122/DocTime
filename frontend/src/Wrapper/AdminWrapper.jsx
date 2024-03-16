@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import AdminRoute from '../Private/AdminRoute'
 import { set_authentication } from '../Redux/AuthanticationUser'
 import isAuthAdmin from '../utils/isAuthAdmin'
+import VarificationDoc from '../pages/Admin/VarificationDoc'
 
 const Adminwrapper = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,10 @@ const Adminwrapper = () => {
       ),
       children: [
         { path: '/dashbord', element: <Dashboard /> },
+        { path: '/patient', element: <Dashboard /> },
+        { path: '/doctor', element: <Dashboard /> },
+        { path: '/order', element: <Dashboard /> },
+        { path: '/DocVerification', element: <VarificationDoc /> },
       ]
     },
     {

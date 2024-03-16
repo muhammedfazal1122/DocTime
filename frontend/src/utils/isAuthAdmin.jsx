@@ -1,10 +1,9 @@
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import localStorage from "js-cookie";
 import { baseUrl } from "./constants/Constants";
 
 const updateAdminToken = async () => {
-  const refreshToken = localStorage.get("refresh");
+  const refreshToken = localStorage.getItem("refresh");
 
   try {
     const res = await axios.post(baseUrl + "auth/token/refresh", {
@@ -24,7 +23,7 @@ const updateAdminToken = async () => {
 };
 
 const fetchisAdmin = async () => {
-  const token = localStorage.get("access");
+  const token = localStorage.getItem("access");
 
   try {
     const res = await axios.get(baseUrl + "auth/user/details/", {
@@ -43,8 +42,9 @@ const fetchisAdmin = async () => {
 
 const isAuthAdmin = async () => {
   console.log("isAuthAdminisAuthAdmin");
-  const accessToken = localStorage.get("access");
-  console.log(accessToken,";(accessToken)")
+  const accessToken = localStorage.getItem('access');
+
+
   if (!accessToken) {
     return { name: null, isAuthenticated: false, isAdmin: false };
   }
@@ -52,14 +52,17 @@ const isAuthAdmin = async () => {
   const currentTime = Date.now() / 1000;
   let decoded = jwtDecode(accessToken);
 
-  if (decoded.exp > currentTime) {
+  if (decoded.exp > currentTime) {  
     let checkAdmin = await fetchisAdmin();
+
     return {
       name: decoded.first_name,
       isAuthenticated: true,
       isAdmin: checkAdmin,
     };
   } else {
+    console.log(accessToken,";(accessToken,)",checkAdmin)
+
     const updateSuccess = await updateAdminToken();
 
     if (updateSuccess) {

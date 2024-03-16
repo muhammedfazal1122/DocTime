@@ -2,17 +2,16 @@
   import axios from 'axios';
   import { Link, useNavigate } from 'react-router-dom';
   import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+  import { useSelector } from 'react-redux';
   const baseURL = "http://127.0.0.1:8000";
 
   const KYCAuthDoctor = () => {
   const [certificateImage, setCertificateImage] = useState(null);
-  const [qualificationImage, setQualificationImage] = useState(null);
+  const [licencecertificateImage, setQualificationImage] = useState(null);
   const [aadhaarNumber, setAadhaarNumber] = useState("");
-  const [Register, setRegister] = useState("");
+  const [register_number, setRegister] = useState("");
   const [experience, setExperience] = useState(false);
   const [yearsOfExperience, setYearsOfExperience] = useState(0);
-  const [hospitalName, setHospitalName] = useState("");
   const [error, setError] = useState("");
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ import { useSelector } from 'react-redux';
         case "aadhaar":
           setAadhaarNumber(value);
           break;
-        case "Register":
+        case "register_number":
           setRegister(value);
           break;
         case "experience":
@@ -37,9 +36,7 @@ import { useSelector } from 'react-redux';
         case "years":
           setYearsOfExperience(parseInt(value, 10));
           break;
-        case "hospital":
-          setHospitalName(value);
-          break;
+     
         default:
           break;
       }
@@ -48,7 +45,7 @@ import { useSelector } from 'react-redux';
   const handleSubmit = async (e) => {
       e.preventDefault();
 
-      if (!certificateImage || !qualificationImage || !aadhaarNumber || !Register || !hospitalName) {
+      if (!certificateImage || !licencecertificateImage || !aadhaarNumber || !register_number ) {
         setError("Please fill in all fields.");
         return;
       }
@@ -56,36 +53,40 @@ import { useSelector } from 'react-redux';
       try {
         const formData = new FormData();
         formData.append("certificateImage", certificateImage);
-        formData.append("qualificationImage", qualificationImage);
+        formData.append("licencecertificateImage", licencecertificateImage);
         formData.append("aadhaarNumber", aadhaarNumber);
-        formData.append("Register", Register);
+        formData.append("register_number", register_number);
         formData.append("experience", String(experience));
         formData.append("yearsOfExperience", String(yearsOfExperience));
-        formData.append("hospitalName", hospitalName);
+
+        for (let [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+      }
+
 
 
         const authToken = localStorage.getItem('access');
         console.log(authToken,'llllllllllllllllllllllllllllllllllllllllllllllll');
         console.log(formData,'ffffffffffffffffffffffffff');
-        const response = await axios.post(`${baseURL}/auth/KycVerification-upload/${userId}/`, formData,{
+        const response = await axios.patch(`${baseURL}/auth/KycVerification-upload/${userId}/`, formData, {
           headers: {
-            Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${authToken}`,
+              // 'Content-Type': 'multipart/form-data',
           },
-        });
+      });
+        
 
-        if (response.data.status === "success") {
-          toast.success("KYC completed Susssesfully")
-          navigate("/doctor/DocHome");
-        } else {
-
-          setError(response.data.message || "KYC submission failed.");
+          if (response.data.status === "success") {
+            toast.success("KYC completed Susssesfully")
+            navigate("/doctor/DocHome");
+          } else {
+            setError(response.data.message || "KYC submission failed.");
+          }
+        } catch (error) {
+          console.error("Error during KYC submission:", error);
+          setError("An error occurred. Please try again later.");
         }
-      } catch (error) {
-        console.error("Error during KYC submission:", error);
-        setError("An error occurred. Please try again later.");
-      }
-  };
+    };
 
   const nextStep = () => {
       setStep(step + 1);
@@ -178,14 +179,14 @@ import { useSelector } from 'react-redux';
           </div>
 
           <div className="flex items-center mb-6">
-            <label htmlFor="Register" className="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <label htmlFor="register_number" className="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Register Number:
             </label>
             <input
               type="text"
-              id="Register"
+              id="register_number"
               className="border border-gray-300 p-2"
-              value={Register}
+              value={register_number}
               onChange={handleInputChange}
             />
           </div>
@@ -216,18 +217,7 @@ import { useSelector } from 'react-redux';
             />
           </div>
 
-          <div className="flex items-center mb-6">
-            <label htmlFor="hospital" className="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Hospital Name:
-            </label>
-            <input
-              type="text"
-              id="hospital"
-              className="border border-gray-300 p-2"
-              value={hospitalName}
-              onChange={handleInputChange}
-            />
-          </div>
+     
 
           <div className="flex justify-between">
             <button

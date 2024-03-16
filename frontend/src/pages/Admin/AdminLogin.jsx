@@ -16,7 +16,7 @@ const AdminLogin = () => {
 
   const handleButtonClick = () => {
     navigate('/auth/doctor/register');
- };
+ };    
  
  
   const handleSubmit = async (event) => {
@@ -28,6 +28,7 @@ const AdminLogin = () => {
       if (res && res.status === 200) {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);
+        localStorage.setItem("email",email);
         console.log("eeeeeeeeeeeeeeee", res.data);
         dispatch(
           set_authentication({
@@ -89,17 +90,7 @@ const AdminLogin = () => {
             </div>
           </div>
           <span className="agreement"><a href="#">Learn user licence agreement</a></span>
-      <div className='togButton'>
-
-          <button class="cta" onClick={handleButtonClick}>
-      <span>Doctor Sign up</span>
-      <svg width="15px" height="10px" viewBox="0 0 13 10">
-        <path d="M1,5 L11,5"></path>
-        <polyline points="8 1 12 5 8 9"></polyline>
-      </svg>
-    </button>
-
-          </div>
+      
         </div>
         
       </div>

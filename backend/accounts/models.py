@@ -118,10 +118,11 @@ class User(AbstractBaseUser):
 
 class Verification(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,related_name='doc_verification')
-    aadhar_file = models.FileField(upload_to='verification_documents/aadhar', blank=True, null=True)
-    register_number = models.FileField(upload_to='register_number/register_number', blank=True, null=True)
-    degree_certificate = models.FileField(upload_to='verification_documents/degree', blank=True, null=True)
-    experience_certificate = models.FileField(upload_to='verification_documents/experience', blank=True, null=True)
+    licencecertificateImage = models.FileField(upload_to='verification_documents/licence', blank=True, null=True)
+    qualificationImage = models.FileField(upload_to='verification_documents/qualification', blank=True, null=True)
+    register_number = models.CharField( max_length=10, blank=True, null=True)
+    aadhaarNumber = models.CharField( max_length=10, blank=True, null=True)
+    experience = models.CharField( max_length=10, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
 
     def __str__(self):

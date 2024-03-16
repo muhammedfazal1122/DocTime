@@ -12,13 +12,15 @@ import Cookies from "js-cookie";
 
 import { account } from '../../../../utils/constants/userdetail'; 
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { set_authentication } from '../../../../Redux/AuthanticationUser';
 
 
 
 
 // ----------------------------------------------------------------------
 
-
+// const dispatch = useDispatch()
 
 const MENU_OPTIONS = [
   {
@@ -40,11 +42,11 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const navigate=useNavigate()
   const logout = () =>{
-    Cookies.remove('access');
-    Cookies.remove('refresh');
+    // localStorage.clear();
+
     console.log("rockkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
     // dispatch(
-    //   set_Authentication({
+    //   set_authentication({
     //     name: null,
     //     isAuthenticated: false,
     //     isAdmin:false

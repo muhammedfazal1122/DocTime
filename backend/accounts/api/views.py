@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, DoctorCustomIDSerializer,OTPModel,Patient,PatientUserSerializer,Doctor
-from .serializers import VarificationSerializer
+from .serializers import VarificationSerializer,Verification
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -194,20 +194,18 @@ class ProfilePicUpdate(APIView):
 
 
 
+class KycVerificationUpload(generics.RetrieveUpdateAPIView):
+    serializer_class = VarificationSerializer
+    lookup_field = 'user_id'
 
-class KycVerificationUpload(APIView):
-    permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
+    def get_queryset(self):
+        user_id = self.kwargs.get('user_id')
+        return Verification.objects.filter(user_id=user_id)
 
-    def post(self, request, user):
-        # Retrieve the user instance using the UUID from the URL
-        user_instance = get_object_or_404(User, id=user)
-        # Ensure the authenticated user matches the user instance from the URL
-        if request.user != user_instance:
-            return Response({"detail": "User mismatch"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        serializer = VarificationSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        # Return a custom response with success status and message
+        return Response({"status": "success", "message": "KYC completed successfully"}, status=status.HTTP_200_OK)

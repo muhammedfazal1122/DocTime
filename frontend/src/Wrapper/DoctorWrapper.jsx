@@ -12,6 +12,7 @@ import { set_authentication } from '../Redux/AuthanticationUser';
 import { set_profile } from '../Redux/UserProfileSlice';
 import axios from 'axios'; // Don't forget to import axios
 import KYCAuthDoctor from '../pages/Doctor/DoctorProfile/KYCAuthDoctor';
+import {  NavbarWithSearch } from '../pages/Doctor/DocNavbar/Docnavbar';
 
 const DoctorWrapper = () => {
   const dispatch = useDispatch();
@@ -81,7 +82,7 @@ const DoctorWrapper = () => {
     {
       element: (
         <>
-          <Navbar />
+      <NavbarWithSearch/>
           <DoctorRoute>
             <Outlet />
           </DoctorRoute>
