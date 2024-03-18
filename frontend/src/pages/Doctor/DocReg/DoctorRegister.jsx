@@ -163,6 +163,14 @@ const DoctorRegister = () => {
 
       <p className="Registsignin">
         Already have an account?
+
+        <button class="togButton cta mt-2" onClick={handleButtonClick}>
+          <span>Doctor Login</span>
+          <svg width="15px" height="10px" viewBox="0 0 13 10">
+          <path d="M1,5 L11,5"></path>
+          <polyline points="8 1 12 5 8 9"></polyline>
+          </svg>
+          </button>
         </p>    
           
 
@@ -170,17 +178,7 @@ const DoctorRegister = () => {
      
       </form>
 
-        <div className='togButton'>
-          <button class="cta" onClick={handleButtonClick}>
-          <span>Doctor Login</span>
-          <svg width="15px" height="10px" viewBox="0 0 13 10">
-          <path d="M1,5 L11,5"></path>
-          <polyline points="8 1 12 5 8 9"></polyline>
-          </svg>
-          </button>
-
-        </div>
-        </div>
+    </div>
  </div>
  );
 };

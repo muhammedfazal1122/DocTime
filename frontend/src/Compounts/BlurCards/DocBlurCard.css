@@ -7,7 +7,7 @@
 }
 
 .docCards .docRed {
-  background-image: url('/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg');
+  background-image: url('/src/assets/logo/39388.jpg');
   background-color: #007e9e;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .docCards .docnew {
-  background-image: url('/src/assets/logo/39388.jpg');
+  /* background-image: url('/src/assets/logo/39388.jpg'); */
   background-color: #18cd5e;
 }
 .docCards .docCard {
@@ -105,6 +105,7 @@
 
 .docTextBody {
   color: #04577b;
+  margin-top: 30px;
 }
 
 .docTextTitle {

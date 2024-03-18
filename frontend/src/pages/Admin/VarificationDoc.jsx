@@ -1,14 +1,14 @@
-import { ToTopOutlined } from "@ant-design/icons";
+// import { ToTopOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 import axios from "axios";  
 // import avatar from "../../assets/images/user.png";
-// import EditDoctor from "../../components/admin/elements/Modal/EditDoctor";
-import DocCrump from "../../components/admin/elements/BreadCrumps/DocCrump";
+import EditDoctor from "../../Compounts/admin/elements/Modal/EditDoctor";
+import DocCrump from "../../Compounts/admin/elements/BreadCrumps/DocCrump";
 import { toast } from "react-toastify";
-import DeleteDoct from "../../components/admin/elements/Modal/DeleteDoct";
-import Cookies from 'js-cookie';
+import DeleteDoct from "../../Compounts/admin/elements/Modal/DeleteDoct";
+// import Cookies from 'js-cookie';
 
 
 
@@ -26,66 +26,11 @@ function VarificationDoc() {
   const [searchQuery, setSearchQuery] = useState("");
   const baseUrl = "http://127.0.0.1:8000";
 
-  const handleCheckboxChange = (docId, currentStatus) => {
-    const formData = new FormData();
-    formData.append("user.is_active", !currentStatus);
-
-    axios
-      .patch(baseUrl + `auth/admin/doc/${docId}`, formData)
-      .then((res) => {
-        console.log("Data updated successfully:", res.data);
-        toast.success("Data updated successfully");
-        // Optionally, you can update the state or handle other actions
-        setChecked(!currentStatus);
-      })
-      .catch((err) => {
-        console.error("Error updating data:", err);
-        // Handle the error as needed
-      });
-  };
-
-  const doctorEdit = (custom_id) => {
-    setEditModalVisible(true);
-    setEditingDoctorId(custom_id);
-  };
-
-  const doctorDelete = (custom_id) => {
-    setDeleteModalVisible(true);
-    setEditingDoctorId(custom_id);
-  };
-
-  // to fetch the data as per the search query
-  const fetchUsers = (url) => {
-    const accessToken = Cookies.get("access");
-    axios
-      .get(url, {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-                }})
-      .then((req) => {
-        setDoctorData(req.data.results);
-        setNextPage(req.data.next);
-        setPrevPage(req.data.previous);
-        console.log(req.data.results);
-        // setDoctorData(req.data)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    fetchUsers(baseUrl + `auth/admin/doctor/verication/list/?search=${query}`);
-  };
+  const FetchUserdata = () =>{
+    const respons = axios.get(baseUrl+"")
+  }
 
 
-
-  useEffect(() => {
-    fetchUsers(baseUrl + `auth/admin/doctor/verication/list/?search=${searchQuery}`);
-  }, [isEditModalVisible, checked, isDeleteModalVisible, searchQuery]);
 
   return (
     <>

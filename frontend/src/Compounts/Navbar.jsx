@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { Avatar } from "@material-tailwind/react";
-import './navbar.css'
+import './navbar.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { set_authentication } from '../Redux/AuthanticationUser';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserProfileBox from '../pages/Patient/UserProfile/UserProfileBox';
+import axios from 'axios'; // Import axios
 
 const Navbar = () => {
   // State to manage the navbar's visibility on smaller screens
@@ -15,6 +16,7 @@ const Navbar = () => {
   const dispatch =   useDispatch()
   const navigate = useNavigate()
   const [showProfileBox, setShowProfileBox] = useState(false); 
+  const [Dp, setDp] = useState("")
 
   const { name, isAuthenticated } = useSelector((state) => state.authentication_user);
 
@@ -56,6 +58,22 @@ const Navbar = () => {
     { id: 5, text: 'Contact' },
   ];
 
+
+  const baseURL = "http://127.0.0.1:8000";
+  const userId = useSelector(state => state.authentication_user.user_id);
+  const [doctorDetails, setDoctorDetails] = useState(null);
+  const [profileSucess, setprofileSucess] = useState(0)
+  console.log(profileSucess);
+
+
+const profilepic = localStorage.getItem('Doc_profile_pic')
+
+  useEffect(() => {
+     
+    
+  }, [profilepic]); 
+ 
+
   return (
     <nav className='bg-cyan-950 flex justify-between items-center h-17 max-w-[1240%] mx-auto px-4 text-white'>
       <img className='w-24 h-24' src="/public/Screenshot_2024-02-19_151751-removebg-preview.png" alt="" onClick={GotoHome} />
@@ -64,45 +82,18 @@ const Navbar = () => {
         {navItems.map(item => (
           <li
             key={item.id}
-            className='p-4 hover:bg-[#4bc4d9] rounded-xl m-2 cursor-pointer duration-300 hover:text-black' onClick={GotoHome}
+            className='p-4 hover:bg-[rgb(75,196,217)] rounded-xl m-2 cursor-pointer duration-300 hover:text-black' onClick={GotoHome}
           >
             {item.text}
           </li>
         ))}
       </ul>
   
-      {/* Searchbar */}
-      <div className="input-wrapper">
-        <button className="icon">
-          <svg
-            width="20px"
-            height="20px"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
-              stroke="#fff"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></path>
-            <path
-              d="M22 22L20 20"
-              stroke="#fff"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></path>
-          </svg>
-        </button>
-        <input type="text" name="text" className="input" placeholder="search.." />
-      </div>
-  
       {/* Patient and DocLogin buttons */}
       {!isAuthenticated ? (
         <>
+                  <div className='Buttonparant'>
+
           <div className="login-buttons">
             <Link to="/auth/login">
               <button className="UserLoginButton">Patient Login</button>
@@ -112,21 +103,51 @@ const Navbar = () => {
               <button className="UserLoginButton">Doctor Login</button>
             </Link>
           </div>
+          </div>
         </>
 
       ) : (
         <>
 
-          
+<div className='Buttonparant '>
+
+{/* Searchbar */}
+<div className="input-wrapper">
+  <button className="icon">
+    <svg
+      width="20px"
+      height="20px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
+        stroke="#fff"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      ></path>
+      <path
+        d="M22 22L20 20"
+        stroke="#fff"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      ></path>
+    </svg>
+  </button>
+  <input type="text" name="text" className="input" placeholder="search.." />
+</div>
+</div>
+
         
           {/* MyProfile */}
-          <span style={{ fontSize: '0.8rem', margin: '0 10.9rem' }}></span>
-          <span style={{ fontSize: '0.8rem', margin: '0 5.9rem' }}></span>
-    
+
           <Avatar  
             size="lg"
             alt="avatar"
-            src="https://docs.material-tailwind.com/img/face-2.jpg" 
+            src={profilepic ? profilepic : '/public/assets/avatar/avatar_6.jpg'} // Use placeholder image or default URL
             className="border rounded-xl border-green-500 shadow-xl shadow-green-900/20 ring-4 ring-green-500/30 max-w-11"
             onClick={handleAvatarClick} // Add the click handler
           />
@@ -135,6 +156,9 @@ const Navbar = () => {
           
 
           {/* LogoutButton */}
+          <div className='Buttonparant'>
+
+     
           <button className="Btn" onClick={HandleLogout}>
             <div className="sign">
               <svg viewBox="0 0 512 512">
@@ -145,6 +169,7 @@ const Navbar = () => {
             </div>
             <div className="text">Logout</div>
           </button>
+          </div>
         </>
       )}
   
@@ -159,12 +184,12 @@ const Navbar = () => {
             : 'ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%]'
         }
       >
-        <h1 className='w-full text-3xl font-bold text-[#00df9a] m-4'>DocTime</h1>
+        <h1 className='w-full text-3xl font-bold text-[rgb(75,196,217)] m-4'>DocTime</h1>
   
         {navItems.map(item => (
           <li
             key={item.id}
-            className='p-4 border-b rounded-xl hover:bg-[#00df9a] duration-300 hover:text-black cursor-pointer border-gray-600'
+            className='p-4 border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'
           >
             {item.text}
           </li>

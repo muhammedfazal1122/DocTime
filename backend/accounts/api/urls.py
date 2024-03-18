@@ -31,5 +31,12 @@ urlpatterns = [
     path("KycVerification-upload/<str:user_id>/", views.KycVerificationUpload.as_view(), name="user-details"),
 
 
+    #  ********************************   ADMIN  *****************************
+
+    path('admin/verification/doctor/<str:user__id>/', views.AdminDocVerificationView.as_view(), name='admin-verification-doctor'),
+
+    path("admin/doctor/verication/list/", views.AdminDoctorApprovalListView.as_view(), name="admin-verification-doctor-list"),
+
+
 
 ]

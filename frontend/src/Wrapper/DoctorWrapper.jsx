@@ -82,7 +82,8 @@ const DoctorWrapper = () => {
     {
       element: (
         <>
-      <NavbarWithSearch/>
+        <Navbar/>
+      {/* <NavbarWithSearch/> */}
           <DoctorRoute>
             <Outlet />
           </DoctorRoute>

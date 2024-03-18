@@ -1,8 +1,10 @@
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { baseUrl } from "./constants/Constants";
+import { useNavigate } from "react-router-dom";
 
 const updateAdminToken = async () => {
+  const navigate = useNavigate() 
   const refreshToken = localStorage.getItem("refresh");
 
   try {
@@ -47,6 +49,7 @@ const isAuthAdmin = async () => {
 
   if (!accessToken) {
     return { name: null, isAuthenticated: false, isAdmin: false };
+
   }
 
   const currentTime = Date.now() / 1000;

@@ -91,7 +91,21 @@ class UserDoctorCustomIDSerializer(serializers.ModelSerializer):
         print("After update:", instance.doctor_user)
         return instance
 
+
 class VarificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Verification
+        fields = '__all__'
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['user'] = user
+        return super().create(validated_data)
+
+
+
+class AdminDocVerificationSerializer(serializers.ModelSerializer):
+    docter = DoctorCustomIDSerializer
     class Meta:
         model = Verification
         fields = '__all__'

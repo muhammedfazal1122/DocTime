@@ -6,9 +6,10 @@ import { toast } from 'react-toastify';
 import ProfileCard from '../../../Compounts/ProfileCard/ProfileCard';
 import { Link, useNavigate } from 'react-router-dom';
 
-const DoctorProfile = () => {
+const DoctorProfile = ({refresh}) => {
  const baseURL = "http://127.0.0.1:8000";
  const navigate = useNavigate();
+ const [Count, setCount] = useState(0)
  const userId = useSelector(state => state.authentication_user.user_id);
  console.log(userId,'uuuuuuuuuuuuuuuuurrrrrrrrrrrrrrrrrrrrrr');
  const dispatch = useDispatch();
@@ -29,36 +30,39 @@ const DoctorProfile = () => {
     profile_picture: null,
  });
 
+ const fetchData = async () => {
+   
+   try {
+     const authToken = localStorage.getItem('access');
+     const response = await axios.get(`${baseURL}/auth/docdetailes/${userId}/`, {
+       headers: { Authorization: `Bearer ${authToken}` },
+     });
+     const { data } = response;
+     setFormData({
+       ...formData,
+       full_name: data.doctor_user.full_name,
+       specializations: data.doctor_user.specializations,
+       consultaion_fees: data.doctor_user.consultaion_fees,
+       consultation_duration: data.doctor_user.consultation_duration,
+       consultation_slots: data.doctor_user.consultation_slots,
+       education: data.doctor_user.education,
+       college_name: data.doctor_user.college_name,
+       consultation_time: data.doctor_user.consultation_time,
+       about_me: data.doctor_user.about_me,
+       Hospital: data.doctor_user.Hospital,
+       rating: data.doctor_user.rating,
+     });
+     
+     localStorage.setItem('Doc_profile_pic', data.profile_picture);
+   } catch (error) {
+     toast.error("Error fetching profile data.");
+   }
+ };
+ 
  useEffect(() => {
-    const fetchData = async () => {
-      
-      try {
-        const authToken = localStorage.getItem('access');
-        const response = await axios.get(`${baseURL}/auth/docdetailes/${userId}/`, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
-        const { data } = response;
-        setFormData({
-          ...formData,
-          full_name: data.doctor_user.full_name,
-          specializations: data.doctor_user.specializations,
-          consultaion_fees: data.doctor_user.consultaion_fees,
-          consultation_duration: data.doctor_user.consultation_duration,
-          consultation_slots: data.doctor_user.consultation_slots,
-          education: data.doctor_user.education,
-          college_name: data.doctor_user.college_name,
-          consultation_time: data.doctor_user.consultation_time,
-          about_me: data.doctor_user.about_me,
-          Hospital: data.doctor_user.Hospital,
-          rating: data.doctor_user.rating,
-        });
-      } catch (error) {
-        toast.error("Error fetching profile data.");
-      }
-    };
 
     fetchData();
- }, [userId]);
+ }, []);
 
  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

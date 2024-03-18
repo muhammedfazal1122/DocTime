@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes for type checking
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -8,19 +9,12 @@ import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Cookies from "js-cookie";
 
+// Import the account details
 import { account } from '../../../../utils/constants/userdetail'; 
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { set_authentication } from '../../../../Redux/AuthanticationUser';
-
-
-
-
-// ----------------------------------------------------------------------
-
-// const dispatch = useDispatch()
 
 const MENU_OPTIONS = [
   {
@@ -37,25 +31,17 @@ const MENU_OPTIONS = [
   },
 ];
 
-// ----------------------------------------------------------------------
-
 export default function AccountPopover() {
-  const navigate=useNavigate()
-  const logout = () =>{
-    // localStorage.clear();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    console.log("rockkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-    // dispatch(
-    //   set_authentication({
-    //     name: null,
-    //     isAuthenticated: false,
-    //     isAdmin:false
-    //   })
-    // );
-    navigate('/admincontrol/login')
+  const logout = () => {
+    // Dispatch logout action here
+    // dispatch(set_authentication({ name: null, isAuthenticated: false, isAdmin: false }));
+    navigate('/admincontrol/login');
+  };
 
-  }
-  const [open, setOpen] = useState(null);
+  const [open, setOpen] = React.useState(null);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -64,6 +50,8 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(null);
   };
+
+  const displayNameInitial = typeof account.displayName === 'string' ? account.displayName.charAt(0).toUpperCase() : '';
 
   return (
     <>
@@ -88,7 +76,7 @@ export default function AccountPopover() {
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {account.displayName.charAt(0).toUpperCase()}
+          {displayNameInitial}
         </Avatar>
       </IconButton>
 
@@ -138,3 +126,11 @@ export default function AccountPopover() {
     </>
   );
 }
+
+AccountPopover.propTypes = {
+  account: PropTypes.shape({
+    displayName: PropTypes.string.isRequired,
+    photoURL: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+  }).isRequired,
+};

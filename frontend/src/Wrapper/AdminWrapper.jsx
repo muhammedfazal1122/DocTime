@@ -19,13 +19,17 @@ const Adminwrapper = () => {
   useEffect(() => {
     const checkAuth = async () => {
       const isAuthenticated = await isAuthAdmin();
+
       dispatch(
         set_authentication({
           name: isAuthenticated.name,
           isAuthenticated: isAuthenticated.isAuthenticated,
-          is_doctor: isAuthenticated.is_doctor,
+          isAdmin: isAuthenticated.isAdmin,
         })
       );
+      if (!isAuthenticated.isAuthenticated && !isAuthenticated.isAdmin) {
+        navigate('login'); // Navigate to login if not authenticated
+      }
     };
 
     if (!authentication_user.name) {

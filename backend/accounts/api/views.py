@@ -19,6 +19,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import RetrieveUpdateAPIView
+from django.db.models import Q
 
 
 
@@ -209,3 +210,19 @@ class KycVerificationUpload(generics.RetrieveUpdateAPIView):
         serializer.save()
         # Return a custom response with success status and message
         return Response({"status": "success", "message": "KYC completed successfully"}, status=status.HTTP_200_OK)
+
+
+class AdminDocVerificationView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = VarificationSerializer
+    lookup_field = 'user_id'
+
+    def get_queryset(self):
+        return 
+        
+
+
+
+
+
+class AdminDoctorApprovalListView(generics.ListAPIView):
+    doctor = User.objects.filter(Q(user_type = "doctor") & ~Q())

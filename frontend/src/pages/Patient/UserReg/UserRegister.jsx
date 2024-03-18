@@ -149,21 +149,23 @@ const UserRegister = () => {
         </span>
       </button>
         
-        <p className="Registsignin">
-          Already have an account? <a href="#">Signin</a>
-        </p>
+      <p className="Registsignin  ">
+  
+      Already have an account?
+
+      <button className=" togButton cta mt-2 " onClick={handleButtonClick}>
+        <span>Patient Login</span>
+        <svg width="15px" height="10px" viewBox="0 0 13 10">
+          <path d="M1,5 L11,5"></path>
+          <polyline points="8 1 12 5 8 9"></polyline>
+        </svg>
+      </button>
+   
+ 
+</p>
+
       </form>
-      <div className='formrelated'>
-        <div className='togButton'>
-          <button className="cta" onClick={handleButtonClick}>
-            <span>Patient Login</span>
-            <svg width="15px" height="10px" viewBox="0 0 13 10">
-              <path d="M1,5 L11,5"></path>
-              <polyline points="8 1 12 5 8 9"></polyline>
-            </svg>
-          </button>
-        </div>
-      </div>
+   
     </div>
   );
 };

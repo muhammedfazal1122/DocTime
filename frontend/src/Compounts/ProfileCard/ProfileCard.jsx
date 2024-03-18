@@ -1,32 +1,44 @@
 
 import React, { useEffect, useState } from 'react';
 import './ProfileCard.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { set_profile } from '../../Redux/UserProfileSlice';
 
 const ProfileCard = () => {
- const baseURL = "http://127.0.0.1:8000";
- const userId = useSelector(state => state.authentication_user.user_id);
- const [doctorDetails, setDoctorDetails] = useState(null);
+const baseURL = "http://127.0.0.1:8000";
+const userId = useSelector(state => state.authentication_user.user_id);
+const [doctorDetails, setDoctorDetails] = useState(null);
+const [profileSucess, setprofileSucess] = useState(0)
+const dispatch = useDispatch()
+
+
+const fetchData = async () => {
+  try {
+    const authToken = localStorage.getItem('access');
+    const fetchDoctorDetails = await axios.get(`${baseURL}/auth/docdetailes/${userId}/`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    });
+    const { data } = fetchDoctorDetails;
+    setDoctorDetails(data);
+    
+    setprofileSucess(profileSucess+1)
+    localStorage.setItem('Doc_profile_pic', doctorDetails.profile_picture);
+    // Dispatch action to set profile data in Redux state
+   
+  } catch (error) {
+    console.error("Error fetching doctor details:", error);
+  }
+  };
 
  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const authToken = localStorage.getItem('access');
-        const fetchDoctorDetails = await axios.get(`${baseURL}/auth/docdetailes/${userId}/`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`
-          }
-        });
-        const { data } = fetchDoctorDetails;
-        setDoctorDetails(data);
-      } catch (error) {
-        console.error("Error fetching doctor details:", error);
-      }
-    };
-
+ 
     fetchData();
- }, [baseURL, userId]); // Removed doctorDetails from the dependency array
+ }, []); // Removed doctorDetails from the dependency array
+
+
 
  return (
     <div className='parentProfileCard'>
@@ -40,7 +52,7 @@ const ProfileCard = () => {
                     <div className="profile-image">
                       {/* Append timestamp to profile picture URL to prevent caching */}
                       <img
-                        src={`${doctorDetails.profile_picture}?${new Date().getTime()}`}
+                        src={doctorDetails.profile_picture}
                         alt="Profile Picture"
                         className="pfp"
                       />
