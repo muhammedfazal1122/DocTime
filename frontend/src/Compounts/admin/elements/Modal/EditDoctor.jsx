@@ -5,41 +5,47 @@ import { toast } from "react-toastify";
 
 function EditDoctor({ doctorId, setIsDataFetched, setEditModalVisible }) {
   const UserFields = [
-    "username",
-    "first_name",
-    "last_name",
-    "gender",
+    "full_name",
+    "consultaion_fees",
+    "consultation_duration",
+    "consultation_slots",
     "phone_number",
-    "date_of_birth",
+    "gender",
+    "education",
     "approval_status",
-    "street",
-    "city",
+    "college_name",
+    "about_me",
     "state",
     "zip_code",
-    "country",
+    "Hospital",
+    "date_of_birth",
     "is_id_verified",
     "is_email_verified",
     "is_active",
   ];
 
   const fieldInputTypes = {
-    username: "text",
-    first_name: "text",
-    last_name: "text",
-    gender: "select",
+
+    full_name: "text",
+    consultaion_fees: "number",
+    consultation_duration: "time",
+    consultation_slots: "number",
     phone_number: "text",
-    date_of_birth: "date",
-    approval_status: "text",
-    street: "text",
-    city: "text",
+    gender: "select",
+    education: "text",
+    approval_status: "select",
+    college_name: "text",
+    about_me: "text",
     state: "text",
     zip_code: "text",
-    country: "text",
+    Hospital: "text",
+    date_of_birth: "date",
     is_id_verified: "checkbox",
-    date_joined: "text",
     is_email_verified: "checkbox",
     is_active: "checkbox",
-    specializations: "text",
+  
+  
+  
   };
 
   const specializationOptions = [
@@ -115,7 +121,7 @@ function EditDoctor({ doctorId, setIsDataFetched, setEditModalVisible }) {
 
     // Make the API request
     axios
-      .patch(baseUrl + `auth/admin/doc/${doctorId}`, formData)
+      .patch(baseUrl + `auth/admin/doc/edit/${doctorId}`, formData)
       .then((res) => {
         console.log("Data updated successfully:", res.data);
         toast.success("Data updated successfully");
@@ -195,6 +201,7 @@ function EditDoctor({ doctorId, setIsDataFetched, setEditModalVisible }) {
                       name={field}
                       value={user[field] || ""}
                       onChange={(e) => handleSelectChange(e, field)}
+                      
                       id={field}
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       required=""
@@ -209,7 +216,20 @@ function EditDoctor({ doctorId, setIsDataFetched, setEditModalVisible }) {
                           {user[field] || ""}
                         </option>
                       )}
+                      {field === "approval_status" ? (
+                        <>
+                 <option value="Pending">Pending</option>
+                 <option value="Approved">Approved</option>
+                 <option value="Rejected">Rejected</option>
+                        </>
+                      ) : (
+                        <option value={user[field] || ""}>
+                          {user[field] || ""}
+                        </option>
+                      )}
                     </select>
+
+                    
                   ) : fieldInputTypes[field] === "checkbox" ? (
                     <div className="flex items-center mt-2">
                       <input

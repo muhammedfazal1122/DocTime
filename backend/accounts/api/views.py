@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, DoctorCustomIDSerializer,OTPModel,Patient,PatientUserSerializer,Doctor
-from .serializers import VarificationSerializer,Verification
+from .serializers import VarificationSerializer,Verification,AdminDocVerificationSerializer,UserDetailsUpdateSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -213,11 +213,13 @@ class KycVerificationUpload(generics.RetrieveUpdateAPIView):
 
 
 class AdminDocVerificationView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = VarificationSerializer
+    serializer_class = AdminDocVerificationSerializer
     lookup_field = 'user_id'
-
+    
     def get_queryset(self):
-        return 
+        user_id = self.kwargs.get('user_id')
+        user_verificaion = get_object_or_404(Verification, user__id = user_id)
+        return Verification.objects.filter(user = user_verificaion.user )
         
 
 
@@ -225,4 +227,21 @@ class AdminDocVerificationView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class AdminDoctorApprovalListView(generics.ListAPIView):
-    doctor = User.objects.filter(Q(user_type = "doctor") & ~Q())
+    queryset = User.objects.filter( Q(user_type='doctor') & ~Q(approval_status='APPROVED'))
+    print(queryset,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [IsAdminUser]
+    serializer_class = UserDetailsUpdateSerializer
+
+
+class AdminDocDelete(generics.RetrieveDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'pk'
+    
+
+class AdminDocEdit(generics.RetrieveUpdateAPIView):
+    queryset = Doctor.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = AdminDocUpdateSerializer
+    lookup_field = 'pk'

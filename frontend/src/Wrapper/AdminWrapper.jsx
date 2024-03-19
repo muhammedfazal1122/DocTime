@@ -52,7 +52,7 @@ const Adminwrapper = () => {
       ),
       children: [
         { path: '/dashbord', element: <Dashboard /> },
-        { path: '/patient', element: <Dashboard /> },
+        { path: '/patient', element: <PatientList /> },
         { path: '/doctor', element: <Dashboard /> },
         { path: '/order', element: <Dashboard /> },
         { path: '/DocVerification', element: <VarificationDoc /> },

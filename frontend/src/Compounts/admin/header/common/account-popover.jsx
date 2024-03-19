@@ -36,8 +36,8 @@ export default function AccountPopover() {
   const dispatch = useDispatch();
 
   const logout = () => {
-    // Dispatch logout action here
-    // dispatch(set_authentication({ name: null, isAuthenticated: false, isAdmin: false }));
+    localStorage.clear();
+    dispatch(set_authentication({ name: null, isAuthenticated: false, isAdmin: false }));
     navigate('/admincontrol/login');
   };
 

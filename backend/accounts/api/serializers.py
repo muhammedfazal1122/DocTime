@@ -116,6 +116,25 @@ class AdminDocVerificationSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+class UserDetailsUpdateSerializer(serializers.ModelSerializer):
+    doctor_user=DoctorCustomIDSerializer(read_only=True)
+    class Meta:
+        model = User
+        exclude = ('password','is_staff','is_superuser','user_type')
+
+class AdminDocUpdateSerializer(serializers.ModelSerializer):
+    user=DOCUserSerializer()
+    class Meta:
+        model = Doctor
+        fields='__all__' 
+        
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', {}) # this is used to pop out the user object and if it is not existing then we will assign a {} to it as default
+        user_serializer = UserSerializer(instance.user, data=user_data, partial=True)
+        if user_serializer.is_valid():
+            user_serializer.save()
+        return super().update(instance, validated_data)
+
 
 
 

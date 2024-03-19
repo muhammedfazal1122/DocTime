@@ -37,6 +37,8 @@ urlpatterns = [
 
     path("admin/doctor/verication/list/", views.AdminDoctorApprovalListView.as_view(), name="admin-verification-doctor-list"),
 
+    path("admin/doc/delete/<str:pk>/", views.AdminDocDelete.as_view(), name="admin-verification-doctor-list"),
+    path("admin/doc/edit/<str:pk>/", views.AdminDocEdit.as_view(), name="admin-verification-doctor-list"),
 
 
 ]

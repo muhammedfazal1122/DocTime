@@ -5,15 +5,45 @@ import { toast } from 'react-toastify';
 
 function DeleteModal({ doctorId,setDeleteModalVisible }) {
   const handleYesClick = () => {
-    // Handle deletion logic here
-    // ...
-    axios.delete(baseUrl+`auth/admin/doc/delete/${doctorId}`).then((res)=>{
-      console.log(res);
-      toast.success("Doctor Deleted Successfully");
-      setDeleteModalVisible(false);
-    })
+    // Construct the URL for the DELETE request
+    const url = `${baseUrl}auth/admin/doc/delete/${doctorId}`;
 
-  };
+    // Send the DELETE request
+    axios.delete(url, { withCredentials: true })
+        .then((res) => {
+            // Log the response
+            console.log(res);
+
+            // Show a success toast message
+            toast.success("Doctor Deleted Successfully");
+
+            // Hide the delete modal
+            setDeleteModalVisible(false);
+        })
+        .catch((error) => {
+            // Log the error
+            console.error("Error deleting doctor:", error);
+
+            // Example of more specific error handling
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.error(error.response.data);
+                console.error(error.response.status);
+                console.error(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.error('Error', error.message);
+            }
+            console.error(error.config);
+
+            // Optionally, show an error toast message
+            toast.error("An error occurred while deleting the doctor.");
+        });
+};
 
   const handleNoClick = () => {
     // Close the modal without performing any action

@@ -26,7 +26,7 @@ const DocBlurCard = () => {
       </div>
 
       <div className="docCard">
-        <div className="docCard docnew" style={{ backgroundImage: `url(${profilePic})` }}>
+        <div className="docCard docnew" style={{ backgroundImage: `url(${profilePic?profilePic : "/src/assets/logo/doctor-offering-medical-teleconsultation.jpg"})` }}>
           <p className="docTextTitle">Update Profile</p>
           <p className="docTextBody">Card Details</p>
         </div>
