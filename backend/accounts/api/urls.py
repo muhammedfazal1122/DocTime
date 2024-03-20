@@ -32,13 +32,19 @@ urlpatterns = [
 
 
     #  ********************************   ADMIN  *****************************
+    path("patient/details/", views.PatientUseDetailsUpdate.as_view(), name="patient-details"),
+    path("admin/client/<str:pk>", views.AdminClientUpdate().as_view(), name="adminClient-Update"),
 
     path('admin/verification/doctor/<str:user__id>/', views.AdminDocVerificationView.as_view(), name='admin-verification-doctor'),
 
     path("admin/doctor/verication/list/", views.AdminDoctorApprovalListView.as_view(), name="admin-verification-doctor-list"),
 
-    path("admin/doc/delete/<str:pk>/", views.AdminDocDelete.as_view(), name="admin-verification-doctor-list"),
-    path("admin/doc/edit/<str:pk>/", views.AdminDocEdit.as_view(), name="admin-verification-doctor-list"),
+    path("admin/doc/delete/<str:pk>/", views.AdminDocDelete.as_view(), name="admin-doctor-delete"),
+    path("admin/doc/edit/<str:pk>/", views.AdminDocEdit.as_view(), name="admin-doctor-edit"),
+    path("admin/doc/<str:pk>/", views.AdminISActive.as_view(), name="admin-doctor-isactive"),
+
+    path("admin/patient-isactive/<str:pk>/", views.AdminISActivePatient.as_view(), name="admin-patient-isactive"),
+
 
 
 ]

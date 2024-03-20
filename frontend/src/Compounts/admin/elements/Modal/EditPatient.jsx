@@ -28,7 +28,7 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
     last_name: "text",
     gender: "select",
     phone_number: "text",
-    date_of_birth: "date",
+    date_of_birth: "text",
     approval_status: "text",
     street: "text",
     city: "text",
@@ -156,22 +156,19 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
                 >
                   Blood Group
                 </label>
-                <select
+                <input
+                readOnly
                   name="blood_group"
                   Value={specializations}
-                  onChange={(e) => handleSelectChange(e, "blood_group")}
-                  id="specializations"
+                  
+                  id="d"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   required=""
                 >
-                  <option value={specializations}>Select blood groups</option>
-                  {blood_groupOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+                                  
+                </input>
               </div>
+              
 
               {UserFields.map((field, index) => (
                 <div key={index} className="col-span-6 sm:col-span-3">
@@ -183,7 +180,8 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
                       field.slice(1).replace("_", " ")}
                   </label>
                   {fieldInputTypes[field] === "select" ? (
-                    <select
+                    <input
+                    readOnly
                       name={field}
                       value={user[field] || ""}
                       onChange={(e) => handleSelectChange(e, field)}
@@ -191,28 +189,18 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       required=""
                     >
-                      {field === "gender" ? (
-                        <>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                        </>
-                      ) : (
-                        <option value={user[field] || ""}>
-                          {user[field] || ""}
-                        </option>
-                      )}
-                    </select>
+                      
+                    </input>
                   ) : fieldInputTypes[field] === "checkbox" ? (
                     <div className="flex items-center mt-2">
                       <input
+                      readOnly
                         type="checkbox"
                         name={field}
                         checked={user[field] || false}
                         id={field}
                         className="form-checkbox h-5 w-5 text-primary-500"
-                        onChange={(e) =>
-                          handleCheckboxChange(field, e.target.checked)
-                        }
+                        
                       />
                       <label
                         htmlFor={field}
@@ -224,6 +212,7 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
                     </div>
                   ) : (
                     <input
+                    readOnly
                       type={fieldInputTypes[field]}
                       name={field}
                       value={user[field] || ""}
@@ -238,12 +227,7 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
               ))}
 
               <div className="col-span-6 sm:col-full">
-                <button
-                  className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                  type="submit"
-                >
-                  Save all
-                </button>
+        
               </div>
             </div>
           </form>

@@ -13,6 +13,7 @@ const DoctorProfile = ({refresh}) => {
  const userId = useSelector(state => state.authentication_user.user_id);
  console.log(userId,'uuuuuuuuuuuuuuuuurrrrrrrrrrrrrrrrrrrrrr');
  const dispatch = useDispatch();
+ const [profile_picture_state, setProfilePicture] = useState(null)
 
  const [formData, setFormData] = useState({
     full_name: '',
@@ -99,11 +100,14 @@ const DoctorProfile = ({refresh}) => {
       },
     });
 
+    setProfilePicture(response.data.profile_picture)
+
     dispatch(set_profile({
       name: response.data.first_name,
-      profile_pic: response.data.profile_pic,
+      profile_pic: response.data.profile_picture,
     }));
     toast.success("Profile picture updated successfully.");
+    console.log(profile_picture_state,'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
   } catch (error) {
     toast.error("Error updating profile picture. Please try again later.");
   }
@@ -116,7 +120,7 @@ const DoctorProfile = ({refresh}) => {
   {/* <div className="max-w-screen-lg flex"> */}
         
   <div className="ProfileCard w-full md:w-1/3 justify-center">
-        <ProfileCard />
+        <ProfileCard profile_pic={profile_picture_state} />
       </div>
 
       <div className="parentfrom2 w-full sm:w-1/3 justify-center mb-8 sm:mb-0">

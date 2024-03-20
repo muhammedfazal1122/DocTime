@@ -19,8 +19,7 @@ function DeleteModal({ doctorId,setDeleteModalVisible }) {
 
             // Hide the delete modal
             setDeleteModalVisible(false);
-        })
-        .catch((error) => {
+        }).catch((error) => {
             // Log the error
             console.error("Error deleting doctor:", error);
 

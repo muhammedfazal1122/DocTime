@@ -22,6 +22,12 @@ class UserSerializer(serializers.ModelSerializer):
         exclude = ('password' ,)
 
 
+class UserIsActiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'doctor_user','is_active']
+
+
 
 class DOCUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,6 +63,8 @@ class PatientSerializer(serializers.ModelSerializer):
 
 
 class PatientUserSerializer(serializers.ModelSerializer):
+    patient_user=PatientSerializer(read_only=True)
+
     class Meta:
         model = User
         exclude = ('password','is_id_verified', 'is_email_verified', 'is_staff', 'is_superuser', 'user_type')
@@ -135,13 +143,31 @@ class AdminDocUpdateSerializer(serializers.ModelSerializer):
             user_serializer.save()
         return super().update(instance, validated_data)
 
+class AdminClientUpdateSerializer(serializers.ModelSerializer):
+    user=DOCUserSerializer()
+    class Meta:
+        model = Patient
+        fields='__all__'
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', {}) # this is used to pop out the user object and if it is not existing then we will assign a {} to it as default
+        user_serializer = UserSerializer(instance.user, data=user_data, partial=True)
+        if user_serializer.is_valid():
+            user_serializer.save()
+        return super().update(instance, validated_data)
 
 
-
-
-
-
-
-
+class AdminPatientUpdateSerializer(serializers.ModelSerializer):
+    user=DOCUserSerializer()
+    class Meta:
+        model = Patient
+        fields='__all__' 
+        
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', {}) # this is used to pop out the user object and if it is not existing then we will assign a {} to it as default
+        user_serializer = UserSerializer(instance.user, data=user_data, partial=True)
+        if user_serializer.is_valid():
+            user_serializer.save()
+        return super().update(instance, validated_data)
 
 

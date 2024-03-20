@@ -124,6 +124,7 @@ class Verification(models.Model):
     aadhaarNumber = models.CharField( max_length=10, blank=True, null=True)
     experience = models.CharField( max_length=10, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+    is_KYC_submitted = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Verification for {self.user.first_name}"

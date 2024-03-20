@@ -4,6 +4,7 @@ import { Outlet, useRoutes, useNavigate } from 'react-router-dom'
 import AdminLogin from '../pages/Admin/AdminLogin'
 import DashboardLayout from '../pages/Admin/DashboardLayout'
 import Dashboard from '../pages/Admin/Dashboard'
+import PatientList from '../pages/Admin/PatientList'
 import Page404 from '../Compounts/Page404'; 
 import { useDispatch, useSelector } from 'react-redux'
 import AdminRoute from '../Private/AdminRoute'

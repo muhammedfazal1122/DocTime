@@ -1,7 +1,8 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, DoctorCustomIDSerializer,OTPModel,Patient,PatientUserSerializer,Doctor
-from .serializers import VarificationSerializer,Verification,AdminDocVerificationSerializer,UserDetailsUpdateSerializer
+from .serializers import VarificationSerializer,Verification,AdminDocVerificationSerializer,UserDetailsUpdateSerializer,AdminDocUpdateSerializer,AdminClientUpdateSerializer
+from .serializers import UserIsActiveSerializer,AdminPatientUpdateSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -244,4 +245,35 @@ class AdminDocEdit(generics.RetrieveUpdateAPIView):
     queryset = Doctor.objects.all()
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = AdminDocUpdateSerializer
+    lookup_field = 'pk'
+
+
+class AdminClientUpdate(generics.RetrieveUpdateAPIView):
+    queryset=Patient.objects.all()
+    serializer_class = AdminClientUpdateSerializer
+    lookup_field = 'pk'
+    
+
+
+    
+class PatientUseDetailsUpdate(generics.ListAPIView):
+    queryset = User.objects.filter(user_type='patient')
+    permission_classes = [IsAdminUser]
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = PatientUserSerializer
+    pagination_class = PageNumberPagination
+    filter_backends = [SearchFilter]
+    search_fields = ['first_name', 'last_name', 'email', 'phone_number']
+
+class AdminISActive(generics.RetrieveUpdateAPIView):
+    queryset = Doctor.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = AdminDocUpdateSerializer
+    lookup_field = 'pk'
+
+
+class AdminISActivePatient(generics.RetrieveUpdateAPIView):
+    queryset = Patient.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = AdminPatientUpdateSerializer
     lookup_field = 'pk'

@@ -26,14 +26,14 @@ function VarificationDoc() {
   const handleCheckboxChange = (docId, currentStatus) => {
     const formData = new FormData();
     formData.append("user.is_active", !currentStatus);
+    console.log('lllllllllllllllll',docId,formData,currentStatus);
 
-    axios
-      .patch(baseUrl + `auth/admin/doc/${docId}`, formData)
-      .then((res) => {
+
+    axios.patch(`${baseUrl}/auth/admin/doc/${docId}/`, formData).then((res) => {
         console.log("Data updated successfully:", res.data);
         toast.success("Data updated successfully");
         // Optionally, you can update the state or handle other actions
-        setChecked(!currentStatus);
+        setChecked(prevChecked => !prevChecked);
       })
       .catch((err) => {
         console.error("Error updating data:", err);
@@ -86,7 +86,7 @@ function VarificationDoc() {
 
   useEffect(() => {
     fetchUsers(`${baseUrl}/auth/admin/doctor/verication/list/`);
-  }, [isEditModalVisible, checked, isDeleteModalVisible, searchQuery]);
+  }, [isEditModalVisible, checked, searchQuery]);
 
   return (
     <>
@@ -358,27 +358,9 @@ function VarificationDoc() {
                                 clipRule="evenodd"
                               />
                             </svg>
-                            Edit user
+                            Give Permission   
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => doctorDelete(item.id)}
-                            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-                          >
-                            <svg
-                              className="w-4 h-4 mr-2"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Delete user
-                          </button>
+                          
                         </td>
                       </tr>
                     );
@@ -431,7 +413,7 @@ function VarificationDoc() {
               {/* Modal header */}
               <div className="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
                 <h3 className="text-xl font-semibold dark:text-white">
-                  Edit user
+                  Give Permission
                 </h3>
                 <button
                   type="button"
@@ -468,14 +450,6 @@ function VarificationDoc() {
 
       {/* ******************************************************User Delete Modal************************************************************* */}
 
-      {isDeleteModalVisible && (
-        <div className="fixed left-0 right-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full">
-          <div className="w-full max-w-md px-4 md:h-auto">
-            <DeleteDoct doctorId={doctEditData} setDeleteModalVisible={setDeleteModalVisible}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 }

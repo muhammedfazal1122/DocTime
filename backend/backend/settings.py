@@ -204,6 +204,11 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ORIGINS = "*"
+CORS_ALLOW_ORIGINS = [
+    "http://localhost:5173", # Adjust this to match your frontend's origin
+]
+CORS_ALLOW_CREDENTIALS = True
 
 
 #SMTP configaration
