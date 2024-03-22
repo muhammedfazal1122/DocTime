@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, DoctorCustomIDSerializer,OTPModel,Patient,PatientUserSerializer,Doctor
 from .serializers import VarificationSerializer,Verification,AdminDocVerificationSerializer,UserDetailsUpdateSerializer,AdminDocUpdateSerializer,AdminClientUpdateSerializer
-from .serializers import UserIsActiveSerializer,AdminPatientUpdateSerializer
+from .serializers import UserIsActiveSerializer,AdminPatientUpdateSerializer,AdminDocVerificationSerializerApprove
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -21,6 +21,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import RetrieveUpdateAPIView
 from django.db.models import Q
+from django.http import Http404
 
 
 
@@ -194,23 +195,34 @@ class ProfilePicUpdate(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-class KycVerificationUpload(generics.RetrieveUpdateAPIView):
+class KycVerificationUpload(APIView):
     serializer_class = VarificationSerializer
-    lookup_field = 'user_id'
 
-    def get_queryset(self):
-        user_id = self.kwargs.get('user_id')
-        return Verification.objects.filter(user_id=user_id)
+    def get_object(self, user_id):
+        try:
+            return Verification.objects.get(user_id=user_id)
+        except Verification.DoesNotExist:
+            return None
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        # Return a custom response with success status and message
-        return Response({"status": "success", "message": "KYC completed successfully"}, status=status.HTTP_200_OK)
+    def post(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        verification = self.get_object(user_id)
+        if verification is None:
+            # If no Verification instance exists for this user_id, create a new one
+            serializer = self.serializer_class(data=request.data, context={'request': request})
+            if serializer.is_valid():
+                serializer.save(user_id=user_id)
+                return Response({"status": "success", "message": "KYC submitted successfully"}, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # If a Verification instance already exists, update it
+            serializer = self.serializer_class(verification, data=request.data, context={'request': request}, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"status": "success", "message": "KYC updated successfully"}, status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AdminDocVerificationView(generics.RetrieveUpdateDestroyAPIView):
@@ -224,11 +236,15 @@ class AdminDocVerificationView(generics.RetrieveUpdateDestroyAPIView):
         
 
 
-
-
-
 class AdminDoctorApprovalListView(generics.ListAPIView):
     queryset = User.objects.filter( Q(user_type='doctor') & ~Q(approval_status='APPROVED'))
+    print(queryset,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [IsAdminUser]
+    serializer_class = UserDetailsUpdateSerializer
+
+class AdminDoctorListView(generics.ListAPIView):
+    queryset = User.objects.filter( Q(user_type='doctor') & Q(approval_status='APPROVED'))
     print(queryset,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAdminUser]
@@ -277,3 +293,10 @@ class AdminISActivePatient(generics.RetrieveUpdateAPIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = AdminPatientUpdateSerializer
     lookup_field = 'pk'
+
+
+class AdminDocVarification(generics.RetrieveUpdateAPIView):
+    queryset = Verification.objects.all()
+    serializer_class = AdminDocVerificationSerializerApprove
+    lookup_field = 'pk'
+

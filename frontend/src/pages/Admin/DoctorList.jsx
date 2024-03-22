@@ -23,29 +23,6 @@ function VarificationDoc() {
   const [searchQuery, setSearchQuery] = useState("");
   const baseUrl = "http://127.0.0.1:8000";
 
-  const handleCheckboxChange = (docId, currentStatus) => {
-    const formData = new FormData();
-    formData.append("user.is_active", !currentStatus);
-    console.log('lllllllllllllllll',docId,formData,currentStatus);
-
-
-    axios.patch(`${baseUrl}/auth/admin/doc/${docId}/`, formData).then((res) => {
-        console.log("Data updated successfully:", res.data);
-        toast.success("Data updated successfully");
-        // Optionally, you can update the state or handle other actions
-        setChecked(prevChecked => !prevChecked);
-      })
-      .catch((err) => {
-        console.error("Error updating data:", err);
-        // Handle the error as needed
-      });
-  };
-
-  const doctorEdit = (user_id) => {
-    console.log(user_id);
-    setEditModalVisible(true);
-    setEditingDoctorId(user_id);
-  };
 
 
   // to fetch the data as per the search query
@@ -74,13 +51,13 @@ function VarificationDoc() {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    fetchUsers(baseUrl + `auth/admin/doctor/verication/list/?search=${query}`);
+    fetchUsers(baseUrl + `auth/admin/doctor/list/?search=${query}`);
   };
 
 
 
   useEffect(() => {
-    fetchUsers(`${baseUrl}/auth/admin/doctor/verication/list/`);
+    fetchUsers(`${baseUrl}/auth/admin/doctor/list/`);
   }, [isEditModalVisible, checked, searchQuery]);
 
   return (
@@ -99,7 +76,6 @@ function VarificationDoc() {
                 <div className="relative mt-1 lg:w-64 xl:w-96">
                   <input
                     type="text"
-                    onChange={(e) => handleSearch(e.target.value)}
                     id="users-search"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Search for users"
@@ -217,7 +193,12 @@ function VarificationDoc() {
                     >
                       Speciality
                     </th>
-                    
+                    <th
+                      scope="col"
+                      className="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
+                    >
+                      Phone number
+                    </th>
                     <th
                       scope="col"
                       className="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
@@ -236,12 +217,7 @@ function VarificationDoc() {
                       (Approved / Pending / Rejected)
                     </th>
 
-                    <th
-                      scope="col"
-                      className="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
-                    >
-                      Actions
-                    </th>
+                   
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -291,7 +267,9 @@ function VarificationDoc() {
                         <td className="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {item.doctor_user && item.doctor_user.specializations ? item.doctor_user.specializations : ""}
                         </td>
-                      
+                        <td className="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          {item.phone_number}
+                        </td>
                         <td className="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
                           <div className="flex items-center">
                             <label className="relative inline-flex items-center cursor-pointer">
@@ -325,31 +303,7 @@ function VarificationDoc() {
                           {item.approval_status}
                         </td>
 
-                        <td className="p-4 space-x-2 whitespace-nowrap">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              doctorEdit(item.id)
-                            }
-                            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                          >
-                            <svg
-                              className="w-4 h-4 mr-2"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                              <path
-                                fillRule="evenodd"
-                                d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Give Permission   
-                          </button>
-                          
-                        </td>
+                     
                       </tr>
                     );
                   })}
@@ -407,7 +361,6 @@ function VarificationDoc() {
                   type="button"
                   className="text-gray-400 bg-transparent  hover:bg-gray-200 hover:text-gray-900 rounded-xl text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-blue-500"
                   onClick={() => {
-                    setEditModalVisible(false);
                   }}
                 >
                   <svg
@@ -425,11 +378,7 @@ function VarificationDoc() {
                 </button>
               </div>
               {/* Modal body */}
-              <div className="p-6 space-y-6">
-                <EditDoctor doctorId={doctEditData} setIsDataFetched={setIsDataFetched} 
-                setEditModalVisible={setEditModalVisible}
-                />
-              </div>
+              
               {/* Modal footer */}
             </div>
           </div>

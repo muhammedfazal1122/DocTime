@@ -99,18 +99,10 @@ class UserDoctorCustomIDSerializer(serializers.ModelSerializer):
         print("After update:", instance.doctor_user)
         return instance
 
-
 class VarificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Verification
-        fields = '__all__'
-
-    def create(self, validated_data):
-        user = self.context['request'].user
-        validated_data['user'] = user
-        return super().create(validated_data)
-
-
+        exclude = ('user',) # Exclude the 'user' field from the serializer
 
 class AdminDocVerificationSerializer(serializers.ModelSerializer):
     docter = DoctorCustomIDSerializer
@@ -171,3 +163,13 @@ class AdminPatientUpdateSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+class AdminDocVerificationSerializerApprove(serializers.ModelSerializer):
+    user=DOCUserSerializer()
+    class Meta:
+        model = Verification
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+        instance.is_KYC_submitted = validated_data.get('is_KYC_submitted', instance.is_KYC_submitted)
+        instance.save()
+        return instance

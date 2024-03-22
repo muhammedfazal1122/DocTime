@@ -6,8 +6,8 @@
   const baseURL = "http://127.0.0.1:8000";
 
   const KYCAuthDoctor = () => {
-  const [certificateImage, setCertificateImage] = useState(null);
-  const [licencecertificateImage, setQualificationImage] = useState(null);
+  const [qualificationImage, setQualificationImage] = useState(null);
+  const [licencecertificateImage, setCertificateImage] = useState(null);
   const [aadhaarNumber, setAadhaarNumber] = useState("");
   const [register_number, setRegister] = useState("");
   const [experience, setExperience] = useState(false);
@@ -45,14 +45,14 @@
   const handleSubmit = async (e) => {
       e.preventDefault();
 
-      if (!certificateImage || !licencecertificateImage || !aadhaarNumber || !register_number ) {
+      if (!qualificationImage || !licencecertificateImage || !aadhaarNumber || !register_number ) {
         setError("Please fill in all fields.");
         return;
       }
 
       try {
         const formData = new FormData();
-        formData.append("certificateImage", certificateImage);
+        formData.append("qualificationImage", qualificationImage);
         formData.append("licencecertificateImage", licencecertificateImage);
         formData.append("aadhaarNumber", aadhaarNumber);
         formData.append("register_number", register_number);
@@ -66,9 +66,7 @@
 
 
         const authToken = localStorage.getItem('access');
-        console.log(authToken,'llllllllllllllllllllllllllllllllllllllllllllllll');
-        console.log(formData,'ffffffffffffffffffffffffff');
-        const response = await axios.patch(`${baseURL}/auth/KycVerification-upload/${userId}/`, formData, {
+        const response = await axios.post(`${baseURL}/auth/KycVerification-upload/${userId}/`, formData, {
           headers: {
               Authorization: `Bearer ${authToken}`,
               // 'Content-Type': 'multipart/form-data',

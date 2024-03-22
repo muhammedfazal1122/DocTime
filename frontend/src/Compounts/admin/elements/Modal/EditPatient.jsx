@@ -194,7 +194,6 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
                   ) : fieldInputTypes[field] === "checkbox" ? (
                     <div className="flex items-center mt-2">
                       <input
-                      readOnly
                         type="checkbox"
                         name={field}
                         checked={user[field] || false}

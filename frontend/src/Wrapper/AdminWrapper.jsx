@@ -11,6 +11,7 @@ import AdminRoute from '../Private/AdminRoute'
 import { set_authentication } from '../Redux/AuthanticationUser'
 import isAuthAdmin from '../utils/isAuthAdmin'
 import VarificationDoc from '../pages/Admin/VarificationDoc'
+import DoctorList from '../pages/Admin/DoctorList'
 
 const Adminwrapper = () => {
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ const Adminwrapper = () => {
       children: [
         { path: '/dashbord', element: <Dashboard /> },
         { path: '/patient', element: <PatientList /> },
-        { path: '/doctor', element: <Dashboard /> },
+        { path: '/doctor', element: <DoctorList /> },
         { path: '/order', element: <Dashboard /> },
         { path: '/DocVerification', element: <VarificationDoc /> },
       ]
