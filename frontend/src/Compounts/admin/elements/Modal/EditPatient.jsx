@@ -128,14 +128,14 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
         setUser({ ...res.data.user }); // Spread the user object to avoid mutation
         setSpecializations(res.data.blood_group || "");
         setDocDetail(res.data);
-        console.log(res.data, "reached to the editing component");
-        setIsDataFetched(true);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err);
-      });
-  }, [doctorId, setIsDataFetched]);
+      console.log(res.data, "reached to the editing component");
+      setIsDataFetched(true);
+    })
+    .catch((err) => {
+      console.log(err);
+      toast.error(err);
+    });
+ }, [doctorId, setIsDataFetched]);
 
   return (
     <>
