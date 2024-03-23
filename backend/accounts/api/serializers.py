@@ -70,6 +70,8 @@ class PatientUserSerializer(serializers.ModelSerializer):
         exclude = ('password','is_id_verified', 'is_email_verified', 'is_staff', 'is_superuser', 'user_type')
 
 class DoctorCustomIDSerializer(serializers.ModelSerializer):
+    user = UserSerializer() # Nested serializer for the User model
+
     class Meta:
         model = Doctor
         fields = '__all__'   
@@ -79,7 +81,7 @@ class UserDoctorCustomIDSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'doctor_user','profile_picture']
+        fields = ['id', 'first_name', 'doctor_user','profile_picture','last_name','phone_number','gender','date_of_birth','state','city','country','zip_code','street']
 
     def update(self, instance, validated_data):
         print("Before update:", instance.doctor_user)

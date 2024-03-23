@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import isAuthUser from '../utils/IsAuthUser';
 import { set_authentication } from '../Redux/AuthanticationUser';
 import UserRoute from '../Private/UserRoute';
+import FAQSection from '../pages/Patient/FAQSection';
+import Footer2 from '../Compounts/Footer2';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -54,7 +56,10 @@ const UserWrapper = () => {
 
       <Outlet/>
      </UserRoute>
-      <Footer/>
+     <FAQSection/>
+
+      <Footer2/>
+      {/* <Footer/> */}
       </>
     ),
     children:[

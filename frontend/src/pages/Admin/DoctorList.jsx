@@ -22,7 +22,23 @@ function VarificationDoc() {
   const [prevPage, setPrevPage] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const baseUrl = "http://127.0.0.1:8000";
+  const handleCheckboxChange = (docId, currentStatus) => {
+    const formData = new FormData();
+    formData.append("user.is_active", !currentStatus);
+    console.log('lllllllllllllllll',docId,formData,currentStatus);
 
+
+    axios.patch(`${baseUrl}/auth/admin/doc/${docId}/`, formData).then((res) => {
+        console.log("Data updated successfully:", res.data);
+        toast.success("Data updated successfully");
+        // Optionally, you can update the state or handle other actions
+        setChecked(prevChecked => !prevChecked);
+      })
+      .catch((err) => {
+        console.error("Error updating data:", err);
+        // Handle the error as needed
+      });
+  };
 
 
   // to fetch the data as per the search query
@@ -282,8 +298,7 @@ function VarificationDoc() {
                                     item.doctor_user.custom_id,
                                     item.is_active
                                   )
-                                }
-                              />
+                                }/>
                               <div
                                 className={`peer ring-0 bg-rose-400 rounded-full outline-none duration-300 after:duration-500 w-8 h-8 shadow-md ${
                                   item.is_active

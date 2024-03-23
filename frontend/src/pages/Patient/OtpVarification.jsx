@@ -14,7 +14,10 @@ const OTPVerificationForm = () => {
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
-    // Fetch the user's email from wherever it's stored (e.g., localStorage)
+    
+    // Fetch the user's email from wherever it's 
+    // stored (e.g., localStorage)
+
     const email = localStorage.getItem('userEmail');
     const user_type = localStorage.getItem('user_type');
     // const 
