@@ -247,7 +247,7 @@ class AdminDoctorListView(generics.ListAPIView):
     queryset = User.objects.filter( Q(user_type='doctor') & Q(approval_status='APPROVED'))
     print(queryset,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     serializer_class = UserDetailsUpdateSerializer
 
 

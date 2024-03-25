@@ -16,6 +16,7 @@ function UserRoute({ children }) {
     const fetchData = async () => {
       const authInfo = await isAuthUser();
       setIsAuthenticated(authInfo.isAuthenticated);
+      console.log(authInfo.isAuthenticated,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       setTimeout(() => setLoading(false), 2000); // Set loading to false after 2 seconds
     };
 
@@ -26,6 +27,10 @@ function UserRoute({ children }) {
     return <Loader/>
   }
 
+  if (!isAuthenticated) {
+    console.log(isAuthenticated,'llllll');
+    return <Navigate to="/auth/login" />;
+  }
 
   return children;
 }

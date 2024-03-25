@@ -3,7 +3,7 @@ import './BlurCard.css';
 
 const BlurCard = () => {
  return (
-    <div className="cards flex flex-wrap justify-center">
+    <div className="cards flex flex-wrap justify-center ">
       <div className="card red w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4 m-4">
         <p className="tip">Book your appointment.</p>
         <p className="second-text">Book an appointment for an in-clinic consultation</p>

@@ -14,6 +14,8 @@ import { set_authentication } from '../Redux/AuthanticationUser';
 import UserRoute from '../Private/UserRoute';
 import FAQSection from '../pages/Patient/FAQSection';
 import Footer2 from '../Compounts/Footer2';
+import DoctorShow from '../pages/Patient/DoctorList/DoctorShow';
+import ViewDocProfile from '../pages/Patient/ViewDocProfile/ViewDocProfile';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -48,23 +50,36 @@ const UserWrapper = () => {
 
 
 
-  const routes = useRoutes([{
+  const routes = useRoutes([
+
+    {
+      element:(
+        <>
+    <Navbar/>
+      <Outlet/>
+    <Footer2/>
+        </>
+      ),children:[
+        {path: "/auth/*", element:<Authenticator/>},
+      ]
+    }
+    ,
+    {
     element: (
       <>
-     <Navbar/>
-     <UserRoute>
+    <Navbar/>
+        <UserRoute>
+          <Outlet/>
+        </UserRoute>
+    <Footer2/>
 
-      <Outlet/>
-     </UserRoute>
-     <FAQSection/>
-
-      <Footer2/>
-      {/* <Footer/> */}
       </>
     ),
     children:[
       {path: "/auth/*", element:<Authenticator/>},
       {path: "/", element: <UserHome/>},    
+      {path: "/DoctorShow", element: <DoctorShow/>},    
+      {path: "/DoctorShow/ViewDocProfile/:id", element: <ViewDocProfile/>},    
 
     ],
   },

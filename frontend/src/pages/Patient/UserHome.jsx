@@ -3,8 +3,18 @@ import BlurCard from '../../Compounts/BlurCards/BlurCards';
 import FAQSection from './FAQSection';
 import HowItWorksSection from './HowItWorksSection';
 import './getstart.scss';
+import { useNavigate } from 'react-router-dom';
+import DoctorCatogoryList from './DoctorList/DoctorCatogoryList';
 
 const UserHome = () => {
+
+
+  const GotoDoctorShow = () => {
+    navigate('/DoctorShow');
+ };
+
+
+  const navigate = useNavigate()
   return (
     <>
       <div className="relative w-full h-screen">
@@ -24,13 +34,13 @@ const UserHome = () => {
           </div>
           <div className="parentgetstart flex justify-start ml-14 mt-12">
             {/* Added flex and justify-start */}
-            <button className="animated-button">
+            <button onClick={GotoDoctorShow} className="animated-button">
               <svg viewBox="0 0 24 24" className="arr-2" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
                 ></path>
               </svg>
-              <span className="text">Get Start</span>
+              <span  className="text">Get Start</span>
               <span className="circle"></span>
               <svg viewBox="0 0 24 24" className="arr-1" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -43,6 +53,8 @@ const UserHome = () => {
       </div>
       <BlurCard />
       <HowItWorksSection />
+      <DoctorCatogoryList/>
+      <FAQSection/>
     </>
   );
 };

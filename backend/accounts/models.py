@@ -144,10 +144,7 @@ class Doctor(models.Model):
         ('Pediatrician', 'Pediatrician'),
         ('Psychiatrist', 'Psychiatrist'),
         ('General', 'General'),
-        ('Rheumatologist', 'Rheumatologist'),
-        ('Hematologist', 'Hematologist'),
-        ('Urologist', 'Urologist'),
-        ('Otolaryngologist', 'Otolaryngologist'),
+        ('gynecologist', 'Gynecologist'),
         ('Radiologist', 'Radiologist'),
     ]
     custom_id = models.CharField(max_length=10, primary_key=True, unique=True, editable=False)
@@ -165,6 +162,7 @@ class Doctor(models.Model):
     about_me = models.CharField(max_length=555, blank=True, null=True , default = "Experienced healthcare provider with 5+ years in delivering quality patient care. Specializes in diagnosis, treatment, and collaboration for enhanced outcomes. Utilizes modern medical technologies and preventive measures.")
     Hospital = models.TextField(max_length=50, blank=True, null=True,default = 'Mother Care Hospital')
     rating = models.IntegerField(default=4)
+    experience = models.IntegerField(default=4)
 
     def save(self, *args, **kwargs) :
         if not self.custom_id:

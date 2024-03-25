@@ -42,8 +42,8 @@ const FAQSection = () => {
  ];
 
  return (
-  <section className="py-6 bg-gray-50 sm:py-16 lg:py-24">
-     <div className="flex flex-col md:flex-row items-center justify-center flex-wrap">
+  <section className="py-6 bg-gray-50 sm:py-16 lg:py-24 mt-[-49px] ">
+     <div className="flex flex-col md:flex-row items-center justify-center flex-wrap ">
        {/* FAQ Section */}
        <div className="w-full md:w-2/3 px-2">
          <div className="max-w-2xl mx-auto text-center">
@@ -55,7 +55,7 @@ const FAQSection = () => {
            {faqData.map((faq, index) => (
              <div
                key={index}
-               className="transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50"
+               className="transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50 "
              >
                <button
                  type="button"

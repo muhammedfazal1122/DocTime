@@ -86,7 +86,7 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
         {navItems.map(item => (
           <li
             key={item.id}
-            className='p-4 hover :bg-[rgb(75,196,217)] rounded-xl m-2 cursor-pointer duration-300 hover:text-black' onClick={GotoHome}
+            className='p-4 hover:bg-[rgb(75,196,217)] rounded-xl m-2 cursor-pointer duration-300 hover:text-black' onClick={GotoHome}
           >
             {item.text}
           </li>
