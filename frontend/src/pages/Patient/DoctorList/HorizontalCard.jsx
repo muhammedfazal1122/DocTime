@@ -10,6 +10,14 @@ export default function HorizontalCard({ doctor }) {
       navigate(`/DoctorShow/ViewDocProfile/${doctor.id}`);
 
     }
+
+    const gotoBookAppoiment = () =>{
+      console.log(doctor.id);
+      navigate(`/DoctorShow/BookAppoiment`);
+
+    }
+
+
     return (
         <Card className="w-full max-w-[48rem] flex-row h-[200px]">
             <CardHeader
@@ -25,7 +33,7 @@ export default function HorizontalCard({ doctor }) {
             </CardHeader>
             <CardBody>
                 <Typography variant="h4" color="gray" className="mb-3 uppercase">
-                    {doctor.doctor_user.full_name} {doctor.last_name}
+                    {doctor.first_name} {doctor.last_name}
                 </Typography>
                 <Typography variant="h6" color="blue-gray" className="mb-2">
                     Specialization: {doctor.doctor_user.specializations}
@@ -36,7 +44,7 @@ export default function HorizontalCard({ doctor }) {
                 {/* Add more doctor information as needed */}
                 <div className="flex justify-between">
                     <a className="inline-block">
-                        <Button variant="text" className="flex items-center bg-slate-300 gap-2">
+                        <Button onClick={gotoBookAppoiment} variant="text" className="flex items-center bg-slate-300 gap-2">
                             Book Appointment
                             {/* Adjust the button as needed */}
                         </Button>

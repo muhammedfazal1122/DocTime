@@ -69,6 +69,8 @@ const UserRegister = () => {
 
   return (
     <div>
+        <div className='registerParantdiv'>
+
       <form className="Registform" onSubmit={handleSubmit}>
         <p className="Registtitle">Patient Register</p>
         <p className="Registmessage">Signup now and get full access to our app.</p>
@@ -166,6 +168,7 @@ const UserRegister = () => {
 
       </form>
    
+    </div>
     </div>
   );
 };

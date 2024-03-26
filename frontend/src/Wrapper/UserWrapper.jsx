@@ -16,6 +16,8 @@ import FAQSection from '../pages/Patient/FAQSection';
 import Footer2 from '../Compounts/Footer2';
 import DoctorShow from '../pages/Patient/DoctorList/DoctorShow';
 import ViewDocProfile from '../pages/Patient/ViewDocProfile/ViewDocProfile';
+import BookAppoiment from '../pages/Patient/Book Appoiment/BookAppoiment';
+import MyProfile from '../pages/Patient/MyProfile/MyProfile';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -61,6 +63,7 @@ const UserWrapper = () => {
         </>
       ),children:[
         {path: "/auth/*", element:<Authenticator/>},
+        {path: "/", element: <UserHome/>},    
       ]
     }
     ,
@@ -77,9 +80,10 @@ const UserWrapper = () => {
     ),
     children:[
       {path: "/auth/*", element:<Authenticator/>},
-      {path: "/", element: <UserHome/>},    
       {path: "/DoctorShow", element: <DoctorShow/>},    
+      {path: "/myprofile", element: <MyProfile/>},    
       {path: "/DoctorShow/ViewDocProfile/:id", element: <ViewDocProfile/>},    
+      {path: "/DoctorShow/BookAppoiment", element: <BookAppoiment/>},    
 
     ],
   },

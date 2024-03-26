@@ -17,73 +17,64 @@ const DoctorProfile = ({refresh}) => {
  const [profile_picture_state, setProfilePicture] = useState(null)
 
 
- const [formData, setFormData] = useState({
-  first_name: '',
-  last_name: '',
-  gender: '',
-  phone_number: '',
-  date_of_birth: '',
-  city: '',
-  state: '',
-  zip_code: '',
-  country: '',
-  profile_picture: null,
-  full_name: '',
-  specializations: '',
-  consultaion_fees: '',
-  consultation_duration: '',
-  consultation_slots: '',
-  education: '',
-  college_name: '',
-  about_me: '',
-  Hospital: '',
-  rating: '',
-  user: {
-     first_name: '',
-     gender: '',
-     phone_number: '',
-     date_of_birth: '',
-     city: '',
-     state: '',
-     zip_code: '',
-     country: '',
-   
-  },
- });
- 
+
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    gender: 'male', // Set a default gender value
+    phone_number: '',
+    date_of_birth: '', // Set a default date format
+    city: '',
+    state: '',
+    zip_code: '',
+    country: '',
+    profile_picture: null,
+    full_name: '',
+    specializations: '',
+    consultaion_fees: '',
+    consultation_time: '',
+    consultation_slots: '',
+    education: '',
+    experience: '',
+    college_name: '',
+    about_me: '',
+    Hospital: '',
+    rating: '',
+  });
 
 const fetchData = async () => {
   try {
     const authToken = localStorage.getItem('access');
-    const response = await axios.get(`${baseURL}/auth/docdetailes/${userId}/`, {
+    const response = await axios.get(`${baseURL}/auth/doctor-update/${userId}/`, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
     console.log(response,'lllllllllllllllllllllllllllllllllll');
     const { data } = response;
     setFormData({
       ...formData,
-      first_name: data.first_name,
-      last_name: data.last_name,
-      gender: data.gender,
-      phone_number: data.phone_number,
-      date_of_birth: data.date_of_birth,
-      city: data.city,
-      state: data.state,
-      zip_code: data.zip_code,
-      country: data.country,
-      full_name: data.doctor_user.full_name,
-      specializations: data.doctor_user.specializations,
-      consultaion_fees: data.doctor_user.consultaion_fees,
-      consultation_duration: data.doctor_user.consultation_duration,
-      consultation_slots: data.doctor_user.consultation_slots,
-      education: data.doctor_user.education,
-      college_name: data.doctor_user.college_name,
-      about_me: data.doctor_user.about_me,
-      Hospital: data.doctor_user.Hospital,
-      rating: data.doctor_user.rating,
+      first_name: data.user.first_name,
+      last_name: data.user.last_name,
+      gender: data.user.gender,
+      phone_number: data.user.phone_number,
+      date_of_birth: data.user.date_of_birth,
+      city: data.user.city,
+      state: data.user.state,
+      zip_code: data.user.zip_code,
+      country: data.user.country,
+      
+      full_name: data.full_name,
+      specializations: data.specializations,
+      consultaion_fees: dataoctor_user.consultaion_fees,
+      consultation_time: data.consultation_time,
+      consultation_slots: data.consultation_slots,
+      education: data.education,
+      experience : data.experience ,
+      college_name: data.college_name,
+      about_me: data.about_me,
+      Hospital: data.Hospital,
+      rating: data.rating,
     });
     localStorage.setItem('Doc_profile_pic', data.profile_picture);
-    console.log(data,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
   } catch (error) {
     toast.error("Error fetching profile data.");
   }
@@ -111,6 +102,7 @@ const handleChange = (e) => {
   }
  };
  
+ 
 
 const handleFileChange = (e) => {
   setFormData({ ...formData, profile_picture: e.target.files[0] });
@@ -125,7 +117,7 @@ const handleSubmit = async (e) => {
 
       headers: { Authorization: `Bearer ${authToken}` },
     });
-    console.log('Form Data:', formData); // Add this line to print the form data
+    console.log('Form Data:::::::::::::::::::::::::::::::::::::::', formData); // Add this line to print the form data
 
     setFormData(response.data)
     toast.success("Profile updated successfully.");
@@ -263,7 +255,9 @@ const uploadProfilePicture = async () => {
                     <input
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       required=""
-                      type="date"
+                      type="
+                      
+                      "
                       name="date_of_birth"
                       id="date_of_birth"
                       value={formData.date_of_birth}
@@ -404,21 +398,7 @@ const uploadProfilePicture = async () => {
 
            
               <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-6">
-                <div>
-                  <label htmlFor="full_name" className="block text-sm font-medium text-gray-700">
-                    Full Name
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      className="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      required=""
-                      type="text"
-                      name="full_name"
-                      id="full_name"
-                      value={formData.full_name}
-                      onChange={handleChange}/>
-                  </div>
-                </div>
+               
       {/* -------------------------------------------------------------------------------- */}
       
                 <div>
@@ -427,7 +407,7 @@ const uploadProfilePicture = async () => {
                   </label>
                   <div className="mt-1">
                     <input
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="appearance-none block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       required=""
                       type="text"
                       name="specializations"
@@ -454,20 +434,37 @@ const uploadProfilePicture = async () => {
                     />
                   </div>
                 </div>
-      {/* ------------------------------------------------------------- */}
-
+      {/* --------------------------------------------------------------------------------- */}
                 <div>
-                  <label htmlFor="consultation_duration" className="block text-sm font-medium text-gray-700">
-                  consultation duration
+                  <label htmlFor="consultaion_fees" className="block text-sm font-medium text-gray-700">
+                  Experience 
                   </label>
                   <div className="mt-1">
                     <input
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       required=""
-                      type="time"
-                      name="consultation_duration"
-                      id="consultation_duration"
-                      value={formData.consultation_duration}
+                      type="text"
+                      name="consultaion_fees"
+                      id="consultaion_fees"
+                      value={formData.experience }
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+      {/* ------------------------------------------------------------- */}
+
+                <div>
+                  <label htmlFor="consultation_time" className="block text-sm font-medium text-gray-700">
+                  Consultation Time
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      className="appearance-none block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      required=""
+                      type="text"
+                      name="consultation_time"
+                      id="consultation_time"
+                      value={formData.consultation_time}
                       onChange={handleChange}
                     />
                   </div>
@@ -498,7 +495,7 @@ const uploadProfilePicture = async () => {
                   </label>
                   <div className="mt-1">
                     <input
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="appearance-none block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       required=""
                       type="text"
                       name="education"
@@ -534,7 +531,7 @@ const uploadProfilePicture = async () => {
       {/* ------------------------------------------------------------- */}
                 <div>
                   <label htmlFor="about_me" className="block text-sm font-medium text-gray-700">
-                  about_me
+                  About Me
                   </label>
                   <div className="mt-1">
                     <input

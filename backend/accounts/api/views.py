@@ -300,3 +300,50 @@ class AdminDocVarification(generics.RetrieveUpdateAPIView):
     serializer_class = AdminDocVerificationSerializerApprove
     lookup_field = 'pk'
 
+
+class UserDetailsUpdate(generics.ListAPIView):
+    queryset = User.objects.filter(user_type='doctor')
+    permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = UserDetailsUpdateSerializer
+    pagination_class = PageNumberPagination
+    filter_backends = [SearchFilter]
+    search_fields = ['first_name', 'last_name', 'email', 'phone_number']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        # Filter based on gender
+        gender = self.request.query_params.get('gender', None)
+        if gender:
+            queryset = queryset.filter(gender=gender)
+
+        # Filter based on specialization
+        specialization = self.request.query_params.get('specialization', None)
+        if specialization:
+            queryset = queryset.filter(doctor_user__specializations__icontains=specialization)
+
+        return queryset
+
+
+
+class AdminDocUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Doctor.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = AdminDocUpdateSerializer
+    lookup_field = 'pk'
+
+class ClientDetailsUpdate(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = PatientUserSerializer
+    lookup_field = 'pk'    
+
+
+
+class DocDetailsUpdate(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = UserDetailsUpdateSerializer
+    lookup_field = 'pk'
+    

@@ -36,6 +36,10 @@ const DocBlurCard = () => {
     navigate('/doctor/Docprofile');
  };
 
+ const goTocreateSloat = () =>{
+  navigate('/doctor/createSloat');
+}
+
  return (
     <div className="docCards">
       <div className="docCard docRed">
@@ -53,7 +57,7 @@ const DocBlurCard = () => {
       )}
 
       <div className="docCard docGreen">
-        <p className="docTip">Update Availability</p>
+        <p  onClick={goTocreateSloat}  className="docTip">Update Availability</p>
       </div>
     </div>
  );

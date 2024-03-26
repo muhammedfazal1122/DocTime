@@ -23,6 +23,7 @@ from django.conf import settings
 urlpatterns = [ 
     path('admin/', admin.site.urls),
     path('auth/', include("accounts.api.urls")),
+    path('appointment/', include("booking.api.urls")),
     
 
 ]  

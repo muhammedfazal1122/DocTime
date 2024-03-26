@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { set_authentication } from '../Redux/AuthanticationUser';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import UserProfileBox from '../pages/Patient/UserProfile/UserProfileBox';
 import axios from 'axios'; // Import axios
+import { jwtDecode } from 'jwt-decode';
 
 const Navbar = () => {
   // State to manage the navbar's visibility on smaller screens
@@ -17,15 +17,47 @@ const Navbar = () => {
   const navigate = useNavigate()
   const [showProfileBox, setShowProfileBox] = useState(false); 
   const [Dp, setDp] = useState("")
-
+  const [profilepic, setprofilepic] = useState('')
   const { name, isAuthenticated } = useSelector((state) => state.authentication_user);
+  
+
+  const baseURL = "http://127.0.0.1:8000";
+  const [doctorDetails, setDoctorDetails] = useState(null);
+  const [profileSucess, setprofileSucess] = useState(0)
+  console.log(profileSucess);
+  if (isAuthenticated){
+
+  
+  const authToken = localStorage.getItem('access')
+  const decoder = jwtDecode(authToken)
+  const userId = decoder.user_id
+  
+  console.log(userId,'yheaaaaaaaaaaaaaaa'); 
+  }
+
 
   const GotoHome = () =>{ 
     navigate('/')
   }
   const handleAvatarClick = () => {
-    setShowProfileBox(!showProfileBox);
+
+    navigate('/myprofile')
   }
+
+// *************************  PROFILE PIC SHOW ******************************************************************
+
+const showProfile = async () => {
+  try {
+    console.log(userId, 'uuuuuuuuuuuuuuuuuu');
+     const response = await axios.get(`${baseURL}/auth/doc/update/${userId}`);
+     // Assuming setprofilepic is a state setter function
+     // You might need to adjust this line based on how you're managing state
+     setprofilepic(response.data.profile_picture);
+  } catch (error) {
+     console.log(error, "error in show profile");
+  }
+ };
+ 
 
 
 
@@ -59,18 +91,11 @@ const Navbar = () => {
   ];
 
 
-  const baseURL = "http://127.0.0.1:8000";
-  const userId = useSelector(state => state.authentication_user.user_id);
-  const [doctorDetails, setDoctorDetails] = useState(null);
-  const [profileSucess, setprofileSucess] = useState(0)
-  console.log(profileSucess);
 
-
-const profilepic = localStorage.getItem('Doc_profile_pic')
 
   useEffect(() => {
-     
-    
+
+    showProfile()
   }, [profilepic]); 
  
   return (
@@ -141,7 +166,7 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
             <div className='flex-grow'></div> {/* Empty flex-grow to push items to the right */}
             <div className='Buttonparant'>
               {/* Searchbar */}
-              <div className="input-wrapper">
+              {/* <div className="input-wrapper">
                 <button className="icon">
                  <svg
                     width="20px"
@@ -167,7 +192,7 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
                  </svg>
                 </button>
                 <input type="text" name="text" className="input" placeholder="search.." />
-              </div>
+              </div> */}
             </div>
 
             {/* Avatar */}

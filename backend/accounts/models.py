@@ -73,7 +73,7 @@ class User(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     first_name = models.CharField( max_length=50)
     last_name = models.CharField( max_length=50, blank = True)
-    phone_number = models.CharField(max_length=12,unique=True)
+    phone_number = models.CharField(max_length=12)
     email = models.EmailField(max_length=100,unique = True)
     gender = models.CharField(max_length=10, choices=gender_type, default='male')
     date_of_birth = models.DateField(null=True, blank=True)
@@ -156,7 +156,7 @@ class Doctor(models.Model):
     consultation_slots = models.IntegerField(default=5)
     education = models.TextField(max_length=50,blank=True, null=True,default = 'MBBS,MD')
     college_name = models.CharField(max_length=50, default="Not Available")   
-    
+    consultation_time=models.TextField(max_length=50,default="10AM to 5PM")
     consultation_time_start = models.TimeField(auto_now=False, auto_now_add=False, default=time(10, 0))
     consultation_time_end = models.TimeField(auto_now=False, auto_now_add=False, default=time(12, 0))
     about_me = models.CharField(max_length=555, blank=True, null=True , default = "Experienced healthcare provider with 5+ years in delivering quality patient care. Specializes in diagnosis, treatment, and collaboration for enhanced outcomes. Utilizes modern medical technologies and preventive measures.")

@@ -17,6 +17,16 @@ urlpatterns = [
     path('login',views.UserLogin.as_view(), name="user-user-login"),
     path('logout', views.UserLogout.as_view(), name='user-logout'),
     path('verify-otp', views.OTPVerificationView.as_view(), name='verify-otp'),
+    #  ********************************    USER Profile *****************************
+
+    path("patient/list/<str:pk>", views.ClientDetailsUpdate().as_view(), name="patient-list"),
+
+    path("doc/update/<str:pk>", views.DocDetailsUpdate().as_view(), name="doc-update"),
+
+
+
+    
+
 
     #  ********************************    Doctor Profile *****************************
     path("user/details/", views.UserDetails.as_view(), name="user-details"),
@@ -47,5 +57,12 @@ urlpatterns = [
     path("admin/patient-isactive/<str:pk>/", views.AdminISActivePatient.as_view(), name="admin-patient-isactive"),
 
     path("admin/doc/edit-varification/<str:pk>/", views.AdminDocVarification.as_view(), name="admin-doctor-varification-view"),
+
+    path("doctors/details/", views.UserDetailsUpdate.as_view(), name="doctors-details"),
+# -------this is for doctor profile updating in doctor profile-----------------------------------------------------
+    path("admin/doc/<str:pk>", views.AdminDocUpdate().as_view(), name="adminDoc-update"),
+
+
+
 
 ]

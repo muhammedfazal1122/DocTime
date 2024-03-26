@@ -26,14 +26,7 @@ const DoctorCatogoryList = () => {
       title: 'Neurologist',
       imageUrl: Neurologist,
     },
-    {
-      title: 'Neurologist',
-      imageUrl: Neurologist,
-    },
-    {
-      title: 'Neurologist',
-      imageUrl: Neurologist,
-    },
+
     // Add more card objects here if needed
   ];
 

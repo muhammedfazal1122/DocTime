@@ -61,7 +61,7 @@ export default function MultiLevelSidebar() {
                   <PresentationChartBarIcon className="h-5 w-5" />
                 </ListItemPrefix>
                 <Typography color="blue-gray" className="mr-auto font-normal">
-                  Dashboard
+                Specialization
                 </Typography>
               </AccordionHeader>
             </ListItem>
@@ -71,7 +71,7 @@ export default function MultiLevelSidebar() {
                   <ListItemPrefix>
                     <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                   </ListItemPrefix>
-                  Analytics
+                General
                 </ListItem>
                 {/* Add more list items as needed */}
               </List>

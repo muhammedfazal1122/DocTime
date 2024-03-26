@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import Navbar from '../Compounts/Navbar';
-import Footer from '../Compounts/Footer';
+import React, { useEffect ,useState} from 'react';
 import { Outlet, useRoutes } from 'react-router-dom';
 import DocHome from '../pages/Doctor/DocHome';
 import Page404 from '../Compounts/Page404';
@@ -13,10 +11,14 @@ import { set_profile } from '../Redux/UserProfileSlice';
 import axios from 'axios'; // Don't forget to import axios
 import KYCAuthDoctor from '../pages/Doctor/DoctorProfile/KYCAuthDoctor';
 import {  NavbarWithSearch } from '../pages/Doctor/DocNavbar/Docnavbar';
+import CreateSloat from '../pages/Doctor/Sloat/CreateSloat';
+import Footer2 from '../Compounts/Footer2';
+import Navbar2 from '../Compounts/Navbar2';
 
 const DoctorWrapper = () => {
   const dispatch = useDispatch();
   const userId = useSelector(state => state.authentication_user.user_id); // Move useSelector inside DoctorWrapper
+  const [errors, setErrors] = useState({});
 
 
   const checkLocal = () =>{
@@ -82,18 +84,19 @@ const DoctorWrapper = () => {
     {
       element: (
         <>
-        <Navbar/>
+        <Navbar2/>
       {/* <NavbarWithSearch/> */}
           <DoctorRoute>
             <Outlet />
           </DoctorRoute>
-          <Footer />
+          <Footer2 />
         </>
       ),
       children: [
         { path: '/DocHome', element: <DocHome /> },
         { path: '/Docprofile', element: <DoctorProfile /> },
-        { path: '/Docprofile/KYC', element: <KYCAuthDoctor /> }
+        { path: '/Docprofile/KYC', element: <KYCAuthDoctor /> },
+        { path: '/createSloat', element: <CreateSloat /> },
       ]
     },
     { element: <Page404 />, path: '*' }
