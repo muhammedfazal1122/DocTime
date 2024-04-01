@@ -99,7 +99,7 @@ const fetchData = async () => {
     </div> 
     </div> 
     
-    </div>
+    </div> 
     </div>
   );
 };

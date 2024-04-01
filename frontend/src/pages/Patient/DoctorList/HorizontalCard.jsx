@@ -10,10 +10,10 @@ export default function HorizontalCard({ doctor }) {
       navigate(`/DoctorShow/ViewDocProfile/${doctor.id}`);
 
     }
-
+    console.log(doctor.doctor_user.custom_id,'llllllllllllllllllllllllllllllllll');
     const gotoBookAppoiment = () =>{
       console.log(doctor.id);
-      navigate(`/DoctorShow/BookAppoiment`);
+      navigate(`/DoctorShow/BookAppoiment/${doctor.doctor_user.custom_id}`);
 
     }
 
@@ -32,14 +32,17 @@ export default function HorizontalCard({ doctor }) {
                 />
             </CardHeader>
             <CardBody>
-                <Typography variant="h4" color="gray" className="mb-3 uppercase">
+                <Typography variant="h4" color="gray" className="mb-1 uppercase">
                     {doctor.first_name} {doctor.last_name}
                 </Typography>
-                <Typography variant="h6" color="blue-gray" className="mb-2">
+                <Typography variant="h6" color="blue-gray" className="mb-1">
                     Specialization: {doctor.doctor_user.specializations}
                 </Typography>
-                <Typography variant=" h8" color="blue-gray" className="mb-2">
+                <Typography variant=" h8" color="blue-gray" className="mb-1">
                     Education: {doctor.doctor_user.education} 
+                </Typography>
+                <Typography variant=" h8" color="blue-gray" className="mb-1 ">
+                bookingFees : ₹{doctor.doctor_user.consultaion_fees} 
                 </Typography>
                 {/* Add more doctor information as needed */}
                 <div className="flex justify-between">

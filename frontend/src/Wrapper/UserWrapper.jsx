@@ -83,7 +83,7 @@ const UserWrapper = () => {
       {path: "/DoctorShow", element: <DoctorShow/>},    
       {path: "/myprofile", element: <MyProfile/>},    
       {path: "/DoctorShow/ViewDocProfile/:id", element: <ViewDocProfile/>},    
-      {path: "/DoctorShow/BookAppoiment", element: <BookAppoiment/>},    
+      {path: "/DoctorShow/BookAppoiment/:custom_id", element: <BookAppoiment/>},    
 
     ],
   },

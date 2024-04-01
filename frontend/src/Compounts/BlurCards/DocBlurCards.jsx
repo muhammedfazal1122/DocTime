@@ -23,6 +23,8 @@ const DocBlurCard = () => {
       setDoctorDetails(data);
       setProfilepicure(data.profile_picture);
       localStorage.setItem('Doc_profile_pic', data.profile_picture);
+      localStorage.setItem('custom_id', data.doctor_user.custom_id);
+      console.log(data.doctor_user.custom_id,'ppppppppppppppppppppppppppppp');
     } catch (error) {
       console.error("Error fetching doctor details:", error);
     }

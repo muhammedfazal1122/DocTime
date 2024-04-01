@@ -1,6 +1,81 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import TextField from '@mui/material/TextField';
+import { baseUrl } from '../../../utils/constants/Constants';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function BookAppoiment() {
+ const [selectedDate, setSelectedDate] = useState(dayjs());
+ const [slots, setSlots] = useState([]); // State to store fetched slots
+ const [selectedSlot, setSelectedSlot] = useState(null); // State to track the selected slot
+ const { custom_id } = useParams(); // Extract the doctor's ID from the URL
+ const [ShowPaymet, setShowPaymet] = useState(false)
+
+ useEffect(() => {
+    // Fetch slots for the doctor
+    fetchSlots();
+ }, [custom_id, selectedDate]); // Depend on custom_id and selectedDate to refetch if they change
+
+ const fetchSlots = async () => {
+    try {
+      // Format the selected date as a string in the format "YYYY-MM-DD"
+      const dateString = selectedDate.format('YYYY-MM-DD');
+      const response = await axios.get(`${baseUrl}appointment/patient/slotsview/${custom_id}/${dateString}/`);
+      setSlots(response.data);
+    } catch (error) {
+      console.error('Failed to fetch slots:', error);
+      // Check if the error response contains a message and display it
+      if (error.response && error.response.data && error.response.data.error) {
+          toast.error(error.response.data.error);
+      } else {
+          // Fallback error message
+          toast.error('An unexpected error occurred. Please try again later.');
+      }}
+ };
+
+ const bookSlot = async (slotId) => {
+    console.log(`Booking slot with ID: ${slotId}`);
+    // Here you would typically send a request to your backend to update the database
+    // For example:
+    // try {
+    //   await axios.post(`${baseUrl}appointment/book`, { slotId });
+    //   alert('Slot booked successfully!');
+    // } catch (error) {
+    //   console.error('Failed to book slot:', error);
+    // }
+ };
+
+ const handleSlotSelect = (slot) => {
+   
+    handleBookNow()
+    setSelectedSlot(slot);
+ };
+
+ const handleBookNow = () => {
+    if (selectedSlot) {
+      bookSlot(selectedSlot.id);
+      setShowPaymet(true)
+
+    }
+ };
+
+ const handleDateChange = (newDate) => {
+    setSelectedDate(newDate);
+    setShowPaymet(false)
+ }
+
+const handleGotoPayment = ()=>{
+
+}
+
+
+
   return (
     <div>
             <div>
@@ -12,62 +87,100 @@ function BookAppoiment() {
   </div>
 
   <div class="mx-auto grid max-w-screen-lg px-6 pb-20">
-    <div class="">
-      <p class="font-serif text-xl font-bold text-blue-900">Select a service</p>
-      <div class="mt-4 grid max-w-3xl gap-x-4 gap-y-3 sm:grid-cols-2 md:grid-cols-3">
-        <div class="relative">
-          <input class="peer hidden" id="radio_1" type="radio" name="radio" />
-          <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-cyan-400"></span>
-          <label class="flex h-full cursor-pointer flex-col rounded-lg p-4 shadow-lg shadow-slate-100 peer-checked:bg-cyan-600 peer-checked:text-white" for="radio_1">
-            <span class="mt-2- font-medium">Financial Planning</span>
-            <span class="text-xs uppercase">1 Hour</span>
-          </label>
-        </div>
-        <div class="relative">
-          <input class="peer hidden" id="radio_2" type="radio" name="radio" />
-          <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-cyan-400"></span>
 
-          <label class="flex h-full cursor-pointer flex-col rounded-lg p-4 shadow-lg shadow-slate-100 peer-checked:bg-cyan-600 peer-checked:text-white" for="radio_2">
-            <span class="mt-2 font-medium">Retirement Planning</span>
-            <span class="text-xs uppercase">1 Hour</span>
-          </label>
-        </div>
-       
-      </div>
-    </div>
+ 
 
     <div class="">
+
+      <div class="">
       <p class="mt-8 font-serif text-xl font-bold text-blue-900">Select a date</p>
       <div class="relative mt-4 w-56">
         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg aria-hidden="true" class="h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-        </div>
-        <input datepicker="" datepicker-orientation="bottom" autofocus="autofocus" type="text" class="datepicker-input block w-full rounded-lg border border-cyan-300 bg-cyan-50 p-2.5 pl-10 text-cyan-800 outline-none ring-opacity-30 placeholder:text-cyan-800 focus:ring focus:ring-cyan-300 sm:text-sm" placeholder="Select date" />
+          <svg aria-hidden="true" class="h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+      </div>  
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+ <div>
+    <div className="relative mt-4 w-56">
+      <DatePicker
+        label="Select a date"
+        value={selectedDate}
+        onChange={handleDateChange}
+        components={{
+          TextField: (params) => <TextField {...params} />,
+        }}
+      />
+    </div>
+ </div>
+</LocalizationProvider>
+
+    </div>
+    <p class="mt-8 font-serif text-xl font-bold text-blue-900">Select a time</p>
+
+
+    <div class="mt-4 grid grid-cols-4 gap-2 lg:max-w-xl">
+    {slots.map((slot, index) => (
+              <button
+                key={index}
+                className={`rounded-lg px-19 py-6 font-medium text-cyan-900 active:scale-95  w-full  ${selectedSlot === slot ? 'bg-cyan-700 text-white' : 'bg-cyan-100'}`}
+                onClick={() => handleSlotSelect(slot)}
+                
+              >
+                {dayjs(slot.start_time).format('HH:mm')} - {dayjs(slot.end_time).format('HH:mm')}
+              </button>
+            ))} 
       </div>
     </div>
 
-    <div class="">
-      <p class="mt-8 font-serif text-xl font-bold text-blue-900">Select a time</p>
-      <div class="mt-4 grid grid-cols-4 gap-2 lg:max-w-xl">
-        <button class="rounded-lg bg-cyan-100 px-4 py-2 font-medium text-cyan-900 active:scale-95">12:00</button>
-        <button class="rounded-lg bg-cyan-100 px-4 py-2 font-medium text-cyan-900 active:scale-95">14:00</button>
-        <button class="rounded-lg bg-cyan-700 px-4 py-2 font-medium text-white active:scale-95">09:00</button>
-        <button class="rounded-lg bg-cyan-100 px-4 py-2 font-medium text-cyan-900 active:scale-95">12:00</button>
-        <button class="rounded-lg bg-cyan-100 px-4 py-2 font-medium text-cyan-900 active:scale-95">15:00</button>
-        <button class="rounded-lg bg-cyan-100 px-4 py-2 font-medium text-cyan-900 active:scale-95">12:00</button>
-        <button class="rounded-lg bg-cyan-100 px-4 py-2 font-medium text-cyan-900 active:scale-95">14:00</button>
-        <button class="rounded-lg bg-cyan-100 px-4 py-2 font-medium text-cyan-900 active:scale-95">12:00</button>
-      </div>
-    </div>
 
-    <button class="mt-8 w-56 rounded-full border-8 border-cyan-500 bg-cyan-600 px-10 py-4 text-lg font-bold text-white transition hover:translate-y-1">Book Now</button>
+
+{ShowPaymet &&
+  <div>
+    <p class="mt-8 text-lg font-medium">Payment Methods</p>
+    <form class="mt-5 grid gap-6">
+      <div class="relative">
+        <input class="peer hidden" id="radio_1" type="radio" name="radio"  />
+        <span class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-cyan-500 bg-white"></span>
+        <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-cyan-500 flex cursor-pointer select-none rounded-lg border border-cyan-500 p-4" for="radio_1">
+          <img class="w-14 object-contain" src="/images/naorrAeygcJzX0SyNI4Y0.png" alt="" />
+          <div class="ml-5">
+            <span class="mt-2 font-semibold">Online Payment</span>
+            <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
+          </div>
+        </label>
+      </div>
+      <div class="relative">
+        <input class="peer hidden" id="radio_2" type="radio" name="radio"  />
+        <span class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-cyan-500 bg-white"></span>
+        <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-cyan-500 flex cursor-pointer select-none rounded-lg border border-cyan-500 p-4" for="radio_2">
+          <img class="w-14 object-contain" src="/images/oG8xsl3xsOkwkMsrLGKM4.png" alt="" />
+          <div class="ml-5">
+            <span class="mt-2 font-semibold">Wallet</span>
+            <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
+          </div>
+        </label>
+      </div>
+    </form>
+    <button class="mt-8 w-56 rounded-full border-8 border-cyan-500 bg-cyan-600 px-10 py-4 text-lg font-bold text-white transition hover:translate-y-1" 
+    onClick={handleGotoPayment}
+    disabled={!selectedSlot}
+    >Confirm Time</button>
+</div>
+
+}  
   </div>
+
 </div>
 <script src="https://unpkg.com/flowbite@1.5.2/dist/datepicker.js"></script>
 
+
+
+
+
+
     </div>
-
-
     </div>
   )
 }

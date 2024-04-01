@@ -15,7 +15,7 @@ export default function ViewDocProfile() {
   const navigate = useNavigate()
     const gotoBookAppoiment = () =>{
       console.log(doctor.id);
-      navigate(`/DoctorShow/BookAppoiment`);
+      navigate(`/DoctorShow/BookAppoiment/${doctor.doctor_user.custom_id}`);
 
     }
 

@@ -2,10 +2,16 @@ from django.urls import path
 from . import views
 
 
+
 urlpatterns = [
 
+# -----------------------------------------Doctor------------------------------------------------------#
 
-    path('create-slots/', views.CreateSlotsView.as_view(), name='create_slots'),
+    path('doctors/<str:custom_id>/slots/', views.DoctorSlotListCreateView.as_view(), name='doctor-slots-create'),    
+
+# -----------------------------------------Patient-------------------------------------------------------#
+
+path('patient/slotsview/<str:custom_id>/<str:date>/', views.PatientSlotView.as_view(), name='doctor-slots-view'),
 
 
 ]
