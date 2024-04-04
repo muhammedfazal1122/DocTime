@@ -20,4 +20,10 @@ urlpatterns = [
 
     path('complete-order/', TransactionAPIView.as_view(), name='complete_order'),
 
+    
+    # for getting the booking details for the perticular patient for Patient side listing
+
+    path('booking/details/patient/<str:patient_id>', views.PatientBookingDetailsAPIView, name='booking-details'),
+
+
 ]

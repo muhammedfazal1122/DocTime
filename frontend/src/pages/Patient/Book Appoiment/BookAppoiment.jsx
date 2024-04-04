@@ -411,15 +411,23 @@ const removeDuplicates = (slots) => {
 
     <div class="mt-4 grid grid-cols-4 gap-2 lg:max-w-xl">
     {slots.map((slot, index) => (
-              <button
-                key={index}
-                className={`rounded-lg px-19 py-6 font-medium text-cyan-900 active:scale-95  w-full  ${selectedSlot === slot ? 'bg-cyan-700 text-white' : 'bg-cyan-100'}`}
-                onClick={() => handleSlotSelect(slot)}
-                
-              >
-                {dayjs(slot.start_time).format('HH:mm')} - {dayjs(slot.end_time).format('HH:mm')}
-              </button>
-            ))} 
+ <button
+    key={index}
+    className={`rounded-lg px-19 py-6 font-medium text-cyan-900 active:scale-95 w-full ${
+      selectedSlot === slot ? 'bg-cyan-700 text-white' : 'bg-cyan-100'
+    } ${slot.is_booked ? 'bg-cyan-400 text-white' : ''}`}
+    onClick={() => handleSlotSelect(slot)}
+ >
+    {dayjs(slot.start_time).format('HH:mm')} - {dayjs(slot.end_time).format('HH:mm')}
+    {slot.is_booked && (
+      <div>
+
+        <span className="text-xs text-black">Booked ✔</span>
+      </div>
+    )}
+ </button>
+))}
+
       </div>
     </div>
 

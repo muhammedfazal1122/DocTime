@@ -356,3 +356,4 @@ class DocDetailsUpdate(generics.RetrieveUpdateAPIView):
     serializer_class = UserDetailsUpdateSerializer
     lookup_field = 'pk'
     
+

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from booking.models import Slot
 from accounts.models import Doctor,Patient
-from .serializers import SlotSerializer,RazorpayOrderSerializer,TranscationModelSerializer
+from .serializers import SlotSerializer,RazorpayOrderSerializer,TranscationModelSerializer,Transaction,TranscationModelList
 from rest_framework import generics
 from rest_framework import status
 from django.utils.dateparse import parse_date
@@ -159,3 +159,20 @@ class TransactionAPIView(APIView):
                 "error": transaction_serializer.errors
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+@api_view(['GET'])
+def PatientBookingDetailsAPIView(request, patient_id):
+    try:
+        transactions = Transaction.objects.filter(patient_id=patient_id)
+        serializer = TranscationModelList(transactions, many=True)
+        response = {
+                "status_code": status.HTTP_200_OK,
+                "data": serializer.data
+            }
+        return Response(response, status=status.HTTP_200_OK)
+    except Transaction.DoesNotExist:
+        return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)
+

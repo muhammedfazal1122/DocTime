@@ -19,6 +19,7 @@ import ViewDocProfile from '../pages/Patient/ViewDocProfile/ViewDocProfile';
 import BookAppoiment from '../pages/Patient/Book Appoiment/BookAppoiment';
 import MyProfile from '../pages/Patient/MyProfile/MyProfile';
 import PaymentSuccess from '../Compounts/PaymentSuccess';
+import BookingDetailes from '../pages/Patient/Book Appoiment/BookingDetailes';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -86,6 +87,7 @@ const UserWrapper = () => {
       {path: "/DoctorShow/ViewDocProfile/:id", element: <ViewDocProfile/>},    
       {path: "/DoctorShow/BookAppoiment/:custom_id", element: <BookAppoiment/>},    
       {path: "/DoctorShow/BookAppoiment/success-page", element: <PaymentSuccess/>},    
+      {path: "/DoctorShow/BookAppoiment/booking-detailes", element: <BookingDetailes/>},    
 
     ],
   },
