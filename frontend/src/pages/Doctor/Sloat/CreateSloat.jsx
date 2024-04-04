@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
@@ -9,10 +9,35 @@ import { baseUrl } from '../../../utils/constants/Constants';
 
 function CreateSlot() {
  const [selectedDate, setSelectedDate] = useState(dayjs());
+ const [selectedDate2, setSelectedDate2] = useState(dayjs());
  const [availableSlots, setAvailableSlots] = useState([]);
  const [selectedSlots, setSelectedSlots] = useState([]);
  const [selectedService, setSelectedService] = useState('');
+ const [existingSlots, setExistingSlots] = useState([]);
+ const [slots2, setSlots2] = useState([]); // State to store fetched slots
+ const [selectedSlot2, setSelectedSlot2] = useState(null); // State to track the selected slot
 
+ useEffect(() => {
+   fetchSlots()
+
+ }, [selectedDate2])
+ 
+
+ const fetchExistingSlots = async (date) => {
+  try {
+    const custom_id = localStorage.getItem('custom_id'); // Retrieve custom_id from localStorage
+
+     const response = await axios.get(`${baseUrl}appointment/doctors/${custom_id}/slots/`, {
+       params: {
+         date: date.format('YYYY-MM-DD'),
+       },
+     });
+     setExistingSlots(response.data.slots);
+  } catch (error) {
+     console.error("Error fetching existing slots:", error);
+  }
+ };
+ 
  // Updated function to accept start and end times, and break duration
  const createTimeSlots = (date, startHour, endHour, breakDuration) => {
     const startTime = new Date(date);
@@ -38,16 +63,51 @@ function CreateSlot() {
  const handleServiceChange = (event) => {
     setSelectedService(event.target.value);
  };
-
- const handleDateChange = (date) => {
-    setSelectedDate(date);
-    // Manually set start and end times, and break duration
-    const startHour = 9; // Start time
-    const endHour = 17; // End time
-    const breakDuration = 60; // Break duration in minutes
-    setAvailableSlots(createTimeSlots(date, startHour, endHour, breakDuration));
-    setSelectedSlots([]); // Clear selected slots when date changes
+ const handleServiceChange1 = (event) => {
+  fetchSlots()
+    setSelectedService(event.target.value);
  };
+
+
+
+ 
+ const handleDateChange2 = (date) => {
+  setSelectedDate2(date);
+}
+
+
+
+const handleDateChange = async (date) => {
+  // Check if the selected date is before today
+  if (date.isBefore(dayjs().startOf('day'))) {
+     setAvailableSlots([]);
+     setSelectedSlots([]);
+     toast.error("You cannot select a date before today.");
+     return; // Exit the function early
+  }
+
+  
+
+  
+  setSelectedDate(date);
+  // Fetch existing slots for the selected date
+  await fetchExistingSlots(date);
+  // Generate available slots excluding existing ones
+  const startHour = 9; // Start time
+  const endHour = 17; // End time
+  const breakDuration = 0; // Break duration in minutes
+  const allSlots = createTimeSlots(date, startHour, endHour, breakDuration);
+  // Adjusted comparison logic
+  const availableSlots = allSlots.filter(slot => !existingSlots.some(es => {
+     // Convert both to local date-time strings without time zone information
+     const esLocal = new Date(es.start_time).toLocaleString();
+     const slotLocal = slot.toLocaleString();
+     return esLocal === slotLocal;
+  }));
+  setAvailableSlots(availableSlots);
+  setSelectedSlots([]); // Clear selected slots when date changes
+ };
+ 
 
  const handleSlotChange = (slot) => {
     setSelectedSlots((prevSlots) => {
@@ -93,6 +153,49 @@ function CreateSlot() {
 
 
 
+ const fetchSlots = async () => {
+  try {
+    const custom_id = localStorage.getItem('custom_id')
+    // Format the selected date as a string in the format "YYYY-MM-DD"
+    const dateString = selectedDate2.format('YYYY-MM-DD');
+    const response = await axios.get(`${baseUrl}appointment/patient/slotsview/${custom_id}/${dateString}/`);
+    const uniqueSlots = removeDuplicates(response.data);
+    setSlots2(uniqueSlots);
+  } catch (error) {
+    console.error('Failed to fetch slots:', error);
+    // Check if the error response contains a message and display it
+    if (error.response && error.response.data && error.response.data.error) {
+      setSlots2([]);
+      toast.error(error.response.data.error);
+    } else {
+      // Fallback error message
+      toast.error('An unexpected error occurred. Please try again later.');
+    }
+  }
+};
+
+
+
+const removeDuplicates = (slots) => {
+  const uniqueSlots = [];
+  const slotTimes = new Set();
+
+  for (const slot of slots) {
+    const slotTime = dayjs(slot.start_time).format('HH:mm');
+    if (!slotTimes.has(slotTime)) {
+      uniqueSlots.push(slot);
+      slotTimes.add(slotTime);
+    }
+  }
+
+  return uniqueSlots;
+};
+
+
+const handleSlotSelect = (slot) => {
+   
+  setSelectedSlot2(slot);
+};
 
 
  return (
@@ -129,6 +232,19 @@ function CreateSlot() {
           <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-teal-400"></span>
                   <label htmlFor="radio_2" class="flex h-full cursor-pointer flex-col rounded-lg p-4 shadow-lg shadow-slate-100 peer-checked:bg-teal-600 peer-checked:text-white">
         <span class="mt-2 font-medium">Bulk Slot</span>
+        <span class="text-xs uppercase">1 Hour</span>
+        </label>
+        </div>
+       
+        <div class="relative">
+          <input class="peer hidden" id="radio_3" type="radio"  name="service"
+            value="mySlot"   
+            checked={selectedService === 'mySlot'}
+            onChange={handleServiceChange1}
+            />
+          <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-teal-400"></span>
+                  <label htmlFor="radio_3" class="flex h-full cursor-pointer flex-col rounded-lg p-4 shadow-lg shadow-slate-100 peer-checked:bg-teal-600 peer-checked:text-white">
+        <span class="mt-2 font-medium">Show My Slot</span>
         <span class="text-xs uppercase">1 Hour</span>
         </label>
         </div>
@@ -240,6 +356,61 @@ function CreateSlot() {
     </div>
  </>
 )}
+
+
+{/* --------------------------------------------MYYYYYSLOTTTT---------------------------------------------------------------- */}
+
+      {selectedService === 'mySlot' && (
+
+      <div class="">
+
+      <div class="">
+      <p class="mt-8 font-serif text-xl font-bold text-blue-900">Select a date</p>
+      <div class="relative mt-4 w-56">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg aria-hidden="true" class="h-5 w-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+      </div>  
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <div>
+      <div className="relative mt-4 w-56">
+      <DatePicker
+        label="Select a date"
+        value={selectedDate2}
+        onChange={handleDateChange2}
+        components={{
+          TextField: (params) => <TextField {...params} />,
+        }}
+      />
+      </div>
+      </div>
+      </LocalizationProvider>
+
+      </div>
+      <p class="mt-8 font-serif text-xl font-bold text-blue-900">Select a time</p>
+
+
+      <div class="mt-4 grid grid-cols-4 gap-2 lg:max-w-xl">
+      {slots2.map((slot, index) => (
+              <button
+                key={index}
+                className={`rounded-lg px-19 py-6 font-medium text-cyan-900 active:scale-95  w-full  ${selectedSlot2 === slot ? 'bg-cyan-700 text-white' : 'bg-cyan-100'}`}
+                onClick={() => handleSlotSelect(slot)}
+                
+              >
+                {dayjs(slot.start_time).format('HH:mm')} - {dayjs(slot.end_time).format('HH:mm')}
+              </button>
+            ))} 
+      </div>
+      </div>
+
+
+
+
+)}
+
       </div>
     </div>
     </div>

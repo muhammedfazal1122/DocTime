@@ -220,3 +220,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS =  True
 EMAIL_HOST_USER = 'ecomm.apps.info@gmail.com'
 EMAIL_HOST_PASSWORD =  'wkvimegxjdohfjbg'
+
+
+
+RAZORPAY_KEY_ID = "rzp_test_qKaBFzO61y6fU4"
+RAZORPAY_KEY_SECRET = "GcRVRc33TFHblux2NhOFwMGe"

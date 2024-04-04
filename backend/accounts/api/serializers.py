@@ -172,6 +172,19 @@ class AdminDocVerificationSerializerApprove(serializers.ModelSerializer):
         fields = '__all__'
 
     def update(self, instance, validated_data):
+        # Update Verification model fields
         instance.is_KYC_submitted = validated_data.get('is_KYC_submitted', instance.is_KYC_submitted)
+        # Access the nested User instance and update its fields
+        user_data = validated_data.pop('user', {})  # Extract user data from validated_data
+        user_instance = instance.user  # Access the nested User instance
+
+        # Update User model fields
+        user_instance.approval_status = user_data.get('approval_status', user_instance.approval_status)
+        print("User data:", user_data) # Debugging line
+        print("User approval_status before save:", user_instance.approval_status) # Debugging line
+
+        # Save both instances
         instance.save()
+        user_instance.save()
+
         return instance

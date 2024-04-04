@@ -203,6 +203,15 @@ class KycVerificationUpload(APIView):
             return Verification.objects.get(user_id=user_id)
         except Verification.DoesNotExist:
             return None
+        
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        verification = self.get_object(user_id)
+        if verification is None:
+            return Response({"status": "error", "message": "No KYC data found for this user"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.serializer_class(verification)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
     def post(self, request, *args, **kwargs):
         user_id = kwargs.get('user_id')
@@ -237,10 +246,10 @@ class AdminDocVerificationView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class AdminDoctorApprovalListView(generics.ListAPIView):
-    queryset = User.objects.filter( Q(user_type='doctor') & ~Q(approval_status='APPROVED'))
+    queryset = User.objects.filter( Q(user_type='doctor') )
     print(queryset,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
     parser_classes = (MultiPartParser, FormParser)
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     serializer_class = UserDetailsUpdateSerializer
 
 class AdminDoctorListView(generics.ListAPIView):
@@ -302,7 +311,7 @@ class AdminDocVarification(generics.RetrieveUpdateAPIView):
 
 
 class UserDetailsUpdate(generics.ListAPIView):
-    queryset = User.objects.filter(user_type='doctor')
+    queryset = User.objects.filter( Q(user_type='doctor') & Q(approval_status='APPROVED'))
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = UserDetailsUpdateSerializer

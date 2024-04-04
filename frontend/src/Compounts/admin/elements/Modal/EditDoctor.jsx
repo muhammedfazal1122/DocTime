@@ -55,15 +55,17 @@ const HandleStatus = (value) => {
   const newStatus = value;
   setNewValue(newStatus)
   
-  console.log(newStatus,'lllllllllllllllllllllllllll');
+  console.log(newStatus,doctorId,'lllllllllllllllllllllllllll');
 
   const newStatusres = {
-    approval_status: newStatus,
-  };
+    user: {
+      approval_status: newStatus,
+    },
+ };
 
   axios.patch(`${baseUrl}auth/admin/doc/edit-varification/${doctorId}/`, newStatusres,)
     .then((res) => {
-      console.log("Backend updated successfully:", res.data);
+      console.log("Backend updated successfully:", res.data.user.approval_status);
       setUser({ ...res.data.user });
       // Handle success as needed
     })

@@ -1,4 +1,4 @@
-  import React, { useState } from 'react';
+  import React, { useEffect, useState } from 'react';
   import axios from 'axios';
   import { Link, useNavigate } from 'react-router-dom';
   import { toast } from 'react-toastify';
@@ -6,18 +6,41 @@
   const baseURL = "http://127.0.0.1:8000";
 
   const KYCAuthDoctor = () => {
+    const [kycData, setKycData] = useState(null);
+    const [error, setError] = useState(null);
   const [qualificationImage, setQualificationImage] = useState(null);
   const [licencecertificateImage, setCertificateImage] = useState(null);
   const [aadhaarNumber, setAadhaarNumber] = useState("");
   const [register_number, setRegister] = useState("");
   const [experience, setExperience] = useState(false);
-  const [yearsOfExperience, setYearsOfExperience] = useState(0);
-  const [error, setError] = useState("");
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
   const baseURL = "http://127.0.0.1:8000";
 
   const userId = useSelector(state => state.authentication_user.user_id);
+
+
+  useEffect(() => {
+    const fetchKYCData = async () => {
+      try {
+        const response = await axios.get(`${baseURL}/auth/KycVerification-upload/${userId}/`);
+        console.log(response,'rrrrrrrrrrrrrrrrrrrrreeeeeeeeeeeeeeeeeee');
+        setQualificationImage(response.data.qualificationImage);
+        setCertificateImage(response.data.licencecertificateImage);
+        setAadhaarNumber(response.data.aadhaarNumber);
+        setRegister(response.data.register_number);
+        setExperience(response.data.experience);
+    } catch (error) {
+     console.log('no data');
+      }
+    };
+
+    fetchKYCData();
+ }, [userId]);
+
+
+
+
 
 
   const handleInputChange = (e) => {
@@ -31,11 +54,9 @@
           setRegister(value);
           break;
         case "experience":
-          setExperience(checked);
+          setExperience(value);
           break;
-        case "years":
-          setYearsOfExperience(parseInt(value, 10));
-          break;
+ 
      
         default:
           break;
@@ -57,7 +78,7 @@
         formData.append("aadhaarNumber", aadhaarNumber);
         formData.append("register_number", register_number);
         formData.append("experience", String(experience));
-        formData.append("yearsOfExperience", String(yearsOfExperience));
+
 
         for (let [key, value] of formData.entries()) {
           console.log(`${key}: ${value}`);
@@ -191,29 +212,18 @@
 
           <div className="flex items-center mb-6">
             <label htmlFor="experience" className="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Are you experienced?
+           Experience
             </label>
             <input
-              type="checkbox"
+              type="number"
               id="experience"
               className="ml-2"
-              checked={experience}
+              value={experience}
               onChange={handleInputChange}
             />
           </div>
 
-          <div className="flex items-center mb-6">
-            <label htmlFor="years" className="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Years of Experience:
-            </label>
-            <input
-              type="number"
-              id="years"
-              className="border border-gray-300 p-2"
-              value={yearsOfExperience}
-              onChange={handleInputChange}
-            />
-          </div>
+
 
      
 
