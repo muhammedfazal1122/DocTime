@@ -12,6 +12,7 @@ import { set_authentication } from '../Redux/AuthanticationUser'
 import isAuthAdmin from '../utils/isAuthAdmin'
 import VarificationDoc from '../pages/Admin/VarificationDoc'
 import DoctorList from '../pages/Admin/DoctorList'
+import TransactionHistory from '../pages/Admin/TransactionHistory'
 
 const Adminwrapper = () => {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ const Adminwrapper = () => {
         { path: '/dashbord', element: <Dashboard /> },
         { path: '/patient', element: <PatientList /> },
         { path: '/doctor', element: <DoctorList /> },
-        { path: '/order', element: <Dashboard /> },
+        { path: '/order', element: <TransactionHistory /> },
         { path: '/DocVerification', element: <VarificationDoc /> },
       ]
     },

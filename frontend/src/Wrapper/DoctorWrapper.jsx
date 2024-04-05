@@ -14,6 +14,7 @@ import {  NavbarWithSearch } from '../pages/Doctor/DocNavbar/Docnavbar';
 import CreateSloat from '../pages/Doctor/Sloat/CreateSloat';
 import Footer2 from '../Compounts/Footer2';
 import Navbar2 from '../Compounts/Navbar2';
+import DocVideoCall from '../pages/Doctor/DocVideocall';
 
 const DoctorWrapper = () => {
   const dispatch = useDispatch();
@@ -97,6 +98,8 @@ const DoctorWrapper = () => {
         { path: '/Docprofile', element: <DoctorProfile /> },
         { path: '/Docprofile/KYC', element: <KYCAuthDoctor /> },
         { path: '/createSloat', element: <CreateSloat /> },
+        { path: '/docvideocall/:roomId', element: <DocVideoCall /> },
+
       ]
     },
     { element: <Page404 />, path: '*' }
