@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import TransactionAPIView
+from .views import TransactionAPIView,TrasactionListAPIView,TrasactionRetriveAPIView
 
 
 
@@ -24,6 +24,13 @@ urlpatterns = [
     # for getting the booking details for the perticular patient for Patient side listing
 
     path('booking/details/patient/<str:patient_id>', views.PatientBookingDetailsAPIView, name='booking-details'),
+
+# ---------------------------------------------ADMIN--------------------------------------------------------
+
+    path('detail/transaction/list/', TrasactionListAPIView.as_view(), name='doctor-slots-api'),
+
+    path('detail/transaction/<str:pk>', TrasactionRetriveAPIView.as_view(), name='doctor-slots-api'),
+
 
 
 ]

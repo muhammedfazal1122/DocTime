@@ -13,7 +13,9 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 import pytz
-
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 
 
 
@@ -176,3 +178,22 @@ def PatientBookingDetailsAPIView(request, patient_id):
     except Transaction.DoesNotExist:
         return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
+
+
+# ----------------------------------------------ADMIN------------------------------------------------------
+
+
+class TrasactionListAPIView(generics.ListAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TranscationModelList
+    pagination_class = PageNumberPagination    
+    filter_backends = [SearchFilter]
+    permission_classes=[IsAdminUser]
+    search_fields = ['transaction_id', 'doctor_id','patient_id', 'booked_date']
+
+
+class TrasactionRetriveAPIView(generics.RetrieveAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TranscationModelList
+    lookup_field = 'pk'
