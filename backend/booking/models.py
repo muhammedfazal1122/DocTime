@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import Doctor
+from accounts.models import Doctor,Patient
 import datetime
 
 class Slot(models.Model):
@@ -41,7 +41,8 @@ class Transaction(models.Model):
     end_time = models.DateTimeField() # Changed from TimeField to DateTimeField
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='COMPLETED')
     created_at = models.DateTimeField(auto_now_add=True)
-
+    is_consultency_completed = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    
     def save(self, *args, **kwargs):
         if not self.transaction_id:
             # Auto-generate transaction ID greater than the last one
@@ -56,3 +57,14 @@ class Transaction(models.Model):
 
     def __str__(self):
         return str(self.transaction_id)
+    
+class Review(models.Model):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='patient_reviews')
+    rating = models.IntegerField()
+    comment = models.TextField()
+    subject = models.TextField(default="Visited For Heart Surgery")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.patient.full_name} reviewed {self.doctor.full_name}"

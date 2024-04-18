@@ -1,9 +1,9 @@
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from booking.models import Slot
+from booking.models import Slot,Review
 from accounts.models import Doctor,Patient
-from .serializers import SlotSerializer,RazorpayOrderSerializer,TranscationModelSerializer,Transaction,TranscationModelList
+from .serializers import SlotSerializer,RazorpayOrderSerializer,TranscationModelSerializer,Transaction,TranscationModelList,ReviewSerializer
 from rest_framework import generics
 from rest_framework import status
 from django.utils.dateparse import parse_date
@@ -116,6 +116,11 @@ class RazorpayOrderAPIView(APIView):
                 "error": razorpay_order_serializer.errors
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+
+
     
 class TransactionAPIView(APIView):
     """This API will complete order and save the transaction"""
@@ -165,6 +170,28 @@ class TransactionAPIView(APIView):
 
 
 
+class UpdateOrderAPIView(APIView):
+
+
+    def patch(self, request, transaction_id):
+        # Retrieve the order object using the transaction_id
+        order = get_object_or_404(Transaction, transaction_id=transaction_id)
+
+        # Update the order's status
+        order.is_consultency_completed = 'COMPLETED' # Assuming 'completed' is a valid status
+        order.save()
+
+        # Serialize the updated order
+        serializer = TranscationModelList(order)
+
+        # Return the serialized order data
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+
+
+
+
 @api_view(['GET'])
 def PatientBookingDetailsAPIView(request, patient_id):
     try:
@@ -177,9 +204,23 @@ def PatientBookingDetailsAPIView(request, patient_id):
         return Response(response, status=status.HTTP_200_OK)
     except Transaction.DoesNotExist:
         return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)
+    
 
+# ----------------------------------------------Doctor------------------------------------------------------
 
-
+@api_view(['GET'])
+def DoctorBookingDetailsAPIView(request, doctor_id):
+    try:
+        transactions = Transaction.objects.filter(doctor_id=doctor_id)
+        serializer = TranscationModelList(transactions, many=True)
+        response = {
+                "status_code": status.HTTP_200_OK,
+                "data": serializer.data
+            }
+        return Response(response, status=status.HTTP_200_OK)
+    except Transaction.DoesNotExist:
+        return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)
+    
 
 # ----------------------------------------------ADMIN------------------------------------------------------
 
@@ -197,3 +238,15 @@ class TrasactionRetriveAPIView(generics.RetrieveAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TranscationModelList
     lookup_field = 'pk'
+
+
+class ReviewCreateView(generics.CreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+class ReviewListView(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        doctor_id = self.kwargs['doctor_id']
+        return Review.objects.filter(doctor_id=doctor_id)

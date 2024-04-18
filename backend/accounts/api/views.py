@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, DoctorCustomIDSerializer,OTPModel,Patient,PatientUserSerializer,Doctor
 from .serializers import VarificationSerializer,Verification,AdminDocVerificationSerializer,UserDetailsUpdateSerializer,AdminDocUpdateSerializer,AdminClientUpdateSerializer
-from .serializers import UserIsActiveSerializer,AdminPatientUpdateSerializer,AdminDocVerificationSerializerApprove
+from .serializers import UserIsActiveSerializer,AdminPatientUpdateSerializer,AdminDocVerificationSerializerApprove,DoctorSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -22,7 +22,8 @@ from rest_framework.filters import SearchFilter
 from rest_framework.generics import RetrieveUpdateAPIView
 from django.db.models import Q
 from django.http import Http404
-
+from rest_framework import generics, permissions, filters
+           
 
 
 class RegisterView(APIView):
@@ -357,3 +358,29 @@ class DocDetailsUpdate(generics.RetrieveUpdateAPIView):
     lookup_field = 'pk'
     
 
+class PatientDetailList(generics.RetrieveAPIView):
+    queryset = Patient.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = AdminPatientUpdateSerializer
+    lookup_field = 'pk'
+
+
+class DoctorListSpecialization(generics.ListAPIView):
+    serializer_class = DoctorCustomIDSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['user__first_name', 'user__last_name', 'user__email', 'user__phone_number']
+
+    def get_queryset(self):
+        queryset = Doctor.objects.filter(user__user_type='doctor', user__approval_status='APPROVED')
+
+        # Filter based on gender
+        gender = self.request.query_params.get('gender', None)
+        if gender:
+            queryset= queryset.filter(user__gender=gender)
+
+        # Use the specialization from the URL path
+        specialization = self.kwargs.get('specialization', None)
+        if specialization:
+            queryset = queryset.filter(specializations__icontains=specialization)
+
+        return queryset

@@ -42,9 +42,13 @@ const DocBlurCard = () => {
   navigate('/doctor/createSloat');
 }
 
+ const GotobookingDetailes = () =>{
+  navigate('/doctor/BookingDetailes');
+}
+
  return (
     <div className="docCards">
-      <div className="docCard docRed">
+      <div onClick={GotobookingDetailes} className="docCard docRed">
         <p className="docTip">View your Appointment.</p>
       </div>
 

@@ -68,8 +68,8 @@ const UserLogin = () => {
   };
 
   return (
-    <div>
-      <div className='Login'>
+    <div className='mt-8 mb-8'>
+      <div className='Login '>
         <div className="container">
           <div className="heading">Patient Sign In</div>
           <form onSubmit={handleSubmit} className="form">

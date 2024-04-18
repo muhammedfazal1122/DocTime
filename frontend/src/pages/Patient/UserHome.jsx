@@ -5,6 +5,7 @@ import HowItWorksSection from './HowItWorksSection';
 import './getstart.scss';
 import { useNavigate } from 'react-router-dom';
 import DoctorCatogoryList from './DoctorList/DoctorCatogoryList';
+import ReviewForm from './ReviewForm';
 
 const UserHome = () => {
 
@@ -54,7 +55,9 @@ const UserHome = () => {
       <BlurCard />
       <HowItWorksSection />
       <DoctorCatogoryList/>
+
       <FAQSection/>
+      {/* <ReviewForm/> */}
     </>
   );
 };

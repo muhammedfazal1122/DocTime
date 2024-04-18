@@ -25,9 +25,44 @@ const BookingDetails = () => {
  const [doctorDetails, setDoctorDetails] = useState({});
 
  const navigate = useNavigate()
+ const [ws, setWs] = useState(null);
+
+ 
+
+
+ useEffect(() => {
+     const websocket = new WebSocket('ws://localhost:8000/ws/notifications/');
+
+     websocket.onopen = () => {
+         console.log('WebSocket Client Connected');
+     };
+
+     websocket.onmessage = (message) => {
+         console.log('Received:', message.data);
+         // Here you can handle the notification, e.g., show an alert or update the UI
+     };
+
+     websocket.onclose = () => {
+         console.log('WebSocket connection closed');
+     };
+
+     setWs(websocket);
+
+     return () => {
+         websocket.close();
+     };
+ }, []);
+
+ const sendNotification = () => {
+     if (ws) {
+         ws.send(JSON.stringify({ message: 'Video call initiated' }));
+     }
+ };
+
 
  const videocall = (transaction_id) => {
   const roomId = transaction_id;
+  // initiateVideoCall()
   navigate(`/DoctorShow/videocall/${roomId}`);
  };
  
@@ -52,7 +87,7 @@ const BookingDetails = () => {
     } catch (error) {
       console.log(error, 'errorrrrrrrrrrrr');
       return null;
-    }
+    }  
  };
 
  useEffect(() => {
@@ -117,16 +152,37 @@ const BookingDetails = () => {
     const dateTime = new Date(dateTimeString);
     return dateTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
  };
-const VideoCallIcon = () => (
- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-10 w-10 text-blue-500">
-    <path d="M15 12.432l-1.447-1.447-4.545 4.545-4.545-4.545-1.447 1.447 4.545 4.545-4.545 4.545 1.447 1.447 4.545-4.545 4.545 4.545 1.447-1.447-4.545-4.545z"></path>
-    <path d="M17 12.432l-1.447-1.447-4.545 4.545-4.545-4.545-1.447 1.447 4.545 4.545-4.545 4.545 1.447 1.447 4.545-4.545 4.545 4.545 1.447-1.447-4.545-4.545z"></path>
-    <path d="M12 12.432l-1.447-1.447-4.545 4.545-4.545-4.545-1.447 1.447 4.545 4.545-4.545 4.545 1.447 1.447 4.545-4.545 4.545 4.545 1.447-1.447-4.545-4.545z"></path>
- </svg>
-);
+
+
+
+  // Function to check if the booking is today or in the future
+  const isBookingTodayOrFuture = (bookingDate) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset hours, minutes, seconds, and milliseconds
+    const booking = new Date(bookingDate);
+    return booking >= today;
+ };
+
+ // Function to check if the current time is within the booking start time
+ const isCurrentTimeWithinBookingTime = (bookingStartTime) => {
+    const now = new Date();
+    const bookingStart = new Date(bookingStartTime);
+    return now >= bookingStart;
+ };
+
+ const getColor = (status) => {
+  if (status === "COMPLETED") {
+    return "green";
+  } else if (status === "PENDING") {
+    return "blue";
+  } else {
+    return "black"; // Default color if status is neither "COMPLETED" nor "PENDING"
+  }
+};
 
  return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
+        
       {error && <div className="text-red-500">{error}</div>}
       {booking.length > 0 ? (
         booking.map((transaction, index) => (
@@ -134,9 +190,12 @@ const VideoCallIcon = () => (
             <CardHeader color="transparent" floated={false} shadow={false} className="mx-0 flex items-center gap-4 pt-0 pb-8">
               <Avatar className="max-w-[8rem] ml-7" size="lg" variant="circular" alt="Doctor" src={doctorDetails[transaction.transaction_id]?.profile_picture} />
               <div className="flex w-full flex-col gap-0.5">
+              {/* <button onClick={sendNotification}>Initiate Video Call</button> */}
+                 <div>
+
+              </div>
                 <div className="flex items-center justify-between">
                  <Typography variant="h5" color="blue-gray">
-
                     <div>{`${doctorDetails[transaction.transaction_id]?.doctor_user.full_name} `}</div>
                  </Typography>
                 </div>
@@ -161,15 +220,20 @@ const VideoCallIcon = () => (
               </Typography>
               <div className="mt-4">
                 <p className="text-gray-700 dark:text-gray-300">Transaction ID: <span className="font-medium text-gray-900 dark:text-white">{transaction.transaction_id}</span></p>
+                <p className="text-gray-700 dark:text-gray-300">Consultency Status: <span className={`font-medium ${transaction.is_consultency_completed === "COMPLETED" ? "text-green-500" : transaction.is_consultency_completed === "PENDING" ? "text-blue-500" : "text-gray-900"} dark:text-white`}>{transaction.is_consultency_completed}</span></p>
                 <p className="text-gray-700 dark:text-gray-300">Date: <span className="font-medium text-gray-900 dark:text-white">{formatDate(transaction.day)}</span></p>
                 <p className="text-gray-700 dark:text-gray-300">Start Time: <span className="font-medium text-gray-900 dark:text-white">{formatDateTime(transaction.start_time)}</span></p>
                 <p className="text-gray-700 dark:text-gray-300">End Time: <span className="font-medium text-gray-900 dark:text-white">{formatDateTime(transaction.end_time)}</span></p>
               </div>
             </CardBody>
-            <div className="absolute top-0 right-0 mt-4 mr-4"> {/* Positioned in the top right corner */}
+            <div className="absolute top-0 right-0 mt-4 mr-4">
+              {/* Only show the FcVideoCall icon if the booking is today or in the future and the current time is within the booking start time */}
+              {isBookingTodayOrFuture(transaction.day) && (transaction.start_time) && (
+                <FcVideoCall onClick={() => videocall(transaction.transaction_id)} className="h-10 w-10 text-blue-500" />
+              )}
             
-              <FcVideoCall    onClick={() => videocall(transaction.transaction_id)} className="h-10 w-10 text-blue-500" /> {/* Adjusted size and color */}
             </div>
+
           </Card>
         ))
       ) : (

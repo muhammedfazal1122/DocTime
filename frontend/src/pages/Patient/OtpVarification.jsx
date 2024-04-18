@@ -4,6 +4,7 @@ import Navbar from '../../Compounts/Navbar'; // Assuming the correct path to Nav
 import Footer from '../../Compounts/Footer'; // Assuming the correct path to Footer
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {  toast } from 'react-toastify'; // Import the 'toast' function from react-toastify
 
 const OTPVerificationForm = () => {
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
@@ -53,12 +54,16 @@ const OTPVerificationForm = () => {
           console.log("Doctor Successfully logined");
           navigate('/auth/doctor/login')
         }else{
+
           console.log("other error");
         }
       }
       return res;
     } catch (error) {  
+      
       console.log(error);
+      toast.error("OTP doesn't match");
+      toast.error(error.data);
       console.log("Error");
     }
     

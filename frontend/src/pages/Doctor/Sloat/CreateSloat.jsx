@@ -16,6 +16,7 @@ function CreateSlot() {
  const [existingSlots, setExistingSlots] = useState([]);
  const [slots2, setSlots2] = useState([]); // State to store fetched slots
  const [selectedSlot2, setSelectedSlot2] = useState(null); // State to track the selected slot
+ const [someArray, setSomeArray] = useState([]);
 
  useEffect(() => {
    fetchSlots()
@@ -72,44 +73,44 @@ function CreateSlot() {
 
  
  const handleDateChange2 = (date) => {
+  setSelectedSlots([]); 
   setSelectedDate2(date);
 }
-
 
 
 const handleDateChange = async (date) => {
   // Check if the selected date is before today
   if (date.isBefore(dayjs().startOf('day'))) {
-     setAvailableSlots([]);
-     setSelectedSlots([]);
-     toast.error("You cannot select a date before today.");
-     return; // Exit the function early
+      setAvailableSlots([]);
+      setSelectedSlots([]);
+      toast.error("You cannot select a date before today.");
+      return; // Exit the function early
   }
-
-  
-
-  
+ 
   setSelectedDate(date);
   // Fetch existing slots for the selected date
   await fetchExistingSlots(date);
+ 
   // Generate available slots excluding existing ones
   const startHour = 9; // Start time
   const endHour = 17; // End time
   const breakDuration = 0; // Break duration in minutes
   const allSlots = createTimeSlots(date, startHour, endHour, breakDuration);
-  // Adjusted comparison logic
-  const availableSlots = allSlots.filter(slot => !existingSlots.some(es => {
-     // Convert both to local date-time strings without time zone information
-     const esLocal = new Date(es.start_time).toLocaleString();
+ 
+  // Filter out existing slots and your slots from available slots
+  const availableSlots = allSlots.filter(slot => {
      const slotLocal = slot.toLocaleString();
-     return esLocal === slotLocal;
-  }));
+     const existingSlot = existingSlots?.find(es => new Date(es.start_time).toLocaleString() === slotLocal);
+     const yourSlot = slots2?.find(s => new Date(s.start_time).toLocaleString() === slotLocal);
+     return !existingSlot && !yourSlot;
+  });
+ 
   setAvailableSlots(availableSlots);
   setSelectedSlots([]); // Clear selected slots when date changes
  };
  
-
  const handleSlotChange = (slot) => {
+  
     setSelectedSlots((prevSlots) => {
       const slotTime = slot.getTime();
       if (prevSlots.some(s => s.getTime() === slotTime)) {
@@ -223,7 +224,7 @@ const handleSlotSelect = (slot) => {
         <span class="text-xs uppercase">1 Hour</span>
         </label>
         </div>
-        <div class="relative">
+        {/* <div class="relative">
           <input class="peer hidden" id="radio_2" type="radio"  name="service"
             value="bulkSlot"   
             checked={selectedService === 'bulkSlot'}
@@ -234,7 +235,7 @@ const handleSlotSelect = (slot) => {
         <span class="mt-2 font-medium">Bulk Slot</span>
         <span class="text-xs uppercase">1 Hour</span>
         </label>
-        </div>
+        </div> */}
        
         <div class="relative">
           <input class="peer hidden" id="radio_3" type="radio"  name="service"

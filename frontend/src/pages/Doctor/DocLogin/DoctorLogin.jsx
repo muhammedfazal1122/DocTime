@@ -59,8 +59,8 @@ const DoctorLogin = () => {
   };
 
   return (
-    <div>
-      <div className='Login'>
+    <div className='mt-5 mr-4 ml-4'>
+      <div className='Login mt-6 mb-8 '>
         <div className="container">
           <div className="heading">Doctor Sign In</div>
           <form onSubmit={handleSubmit} className="form">

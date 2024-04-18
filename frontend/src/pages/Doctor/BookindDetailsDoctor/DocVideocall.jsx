@@ -23,7 +23,7 @@ const DocVideoCall = () => {
 
    
     const handleLeaveRoom = () => {
-        navigate(`/DoctorShow/BookAppoiment/booking-detailes`);
+        navigate(`/doctor/BookingDetailes`);
     }
 
     useEffect(() => {

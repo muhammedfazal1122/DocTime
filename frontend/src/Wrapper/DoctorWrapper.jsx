@@ -14,7 +14,8 @@ import {  NavbarWithSearch } from '../pages/Doctor/DocNavbar/Docnavbar';
 import CreateSloat from '../pages/Doctor/Sloat/CreateSloat';
 import Footer2 from '../Compounts/Footer2';
 import Navbar2 from '../Compounts/Navbar2';
-import DocVideoCall from '../pages/Doctor/DocVideocall';
+import DocVideoCall from '../pages/Doctor/BookindDetailsDoctor/DocVideocall';
+import BookingDetailesDoc from '../pages/Doctor/BookindDetailsDoctor/BookingDetailesDoc';
 
 const DoctorWrapper = () => {
   const dispatch = useDispatch();
@@ -97,12 +98,13 @@ const DoctorWrapper = () => {
         { path: '/DocHome', element: <DocHome /> },
         { path: '/Docprofile', element: <DoctorProfile /> },
         { path: '/Docprofile/KYC', element: <KYCAuthDoctor /> },
-        { path: '/createSloat', element: <CreateSloat /> },
-        { path: '/docvideocall/:roomId', element: <DocVideoCall /> },
+        { path: '/createSloat', element: <CreateSloat/> },
+        { path: '/BookingDetailes', element: <BookingDetailesDoc/> },
+        { path: '/docvideocall/:roomId', element: <DocVideoCall/> },
 
       ]
     },
-    { element: <Page404 />, path: '*' }
+    { element: <Page404 />, path: '*' } 
   ]);
 
   return route;

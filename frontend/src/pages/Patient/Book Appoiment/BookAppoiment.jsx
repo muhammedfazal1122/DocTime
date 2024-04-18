@@ -30,7 +30,7 @@ function BookAppoiment() {
  const { custom_id } = useParams(); // Extract the doctor's ID from the URL
  const [ShowPaymet, setShowPaymet] = useState(false)
  const [patientID, setPatientID] = useState(null)
-const [Fees, setFees] = useState(0)
+const [Fees, setFees] = useState(300)
 const [id, setId] = useState(null);
  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('online');
  const [DoctorData, setDoctorData] = useState({
@@ -47,6 +47,7 @@ const doctorId = custom_id
 const handleRazorpay = () =>{
 
   const fees = DoctorData.doctor_user.consultaion_fees
+  console.log(fees);
   setFees(fees)
 
 
@@ -238,6 +239,7 @@ const fetchPatientCustomId =async ()=>{
        const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id === custom_id);
        if (doctor) {
          setDoctorData(doctor);
+         setFees(doctor.doctor.doctor_user.consultaion_fees);
          console.log(doctor.doctor_user.consultaion_fees,'fee');
 
        } else {
@@ -320,10 +322,17 @@ const removeDuplicates = (slots) => {
  };
 
  const handleDateChange = (newDate) => {
-    setSelectedDate(newDate);
-    setShowPaymet(false)
- }
+  if (newDate.isBefore(dayjs().startOf('day'))) {
+    setSlots([])
+    toast.error("You cannot select a date before today.");
+     return; // Exit the function early
+  }
+  setSelectedDate(newDate);
+  setShowPaymet(false)
 
+  // Optionally, you can setShowPaymet(false) here if you want to hide the payment UI for dates other than today
+ };
+ 
 
  const handlePaymentMethodChange = (event) => {
   setSelectedPaymentMethod(event.target.value);

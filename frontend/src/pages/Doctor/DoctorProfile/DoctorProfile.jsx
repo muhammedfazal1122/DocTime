@@ -607,22 +607,14 @@ const uploadProfilePicture = async () => {
               </form>
                 </div>
                  {/* <button className="reserntclasssname" onClick={() => (navigate('KYC'))}>
-                Update KYC
-              </button> */}
-
-              
+                Update KYC    
+              </button> */}    
             </div>
           </div>
         </div>
       </div>
       </div>
-      
-
-    
-    
-    
     </div>
-
       </>
     );
   };

@@ -63,6 +63,13 @@ urlpatterns = [
     path("admin/doc/<str:pk>", views.AdminDocUpdate().as_view(), name="adminDoc-update"),
 
 
+    #  to get the single Patient details based on the custom id
+    path("detail/patient/<str:pk>", views.PatientDetailList().as_view(), name="Doc-list"),
+
+    path('doctors/specialization/<str:specialization>/', views.DoctorListSpecialization.as_view(), name='doctor-list'),
+
+
+
 
 
 ]

@@ -6,7 +6,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import time
-
+from django.utils import timezone
+from datetime import date
 # Create your models here.
 
 
@@ -114,7 +115,17 @@ class User(AbstractBaseUser):
 
     def is_doctor(self):
         return self.user_type == 'doctor'
-    
+
+    def calculate_age(self):
+        today = timezone.now().date() # Get the current date
+        birth_date = self.date_of_birth # Get the user's date of birth
+
+        # Calculate the difference in years
+        age = today.year - birth_date.year
+        if (today.month, today.day) < (birth_date.month, birth_date.day):
+            age -= 1 # Subtract one year if the user hasn't had their birthday this year
+
+        return age
 
 class Verification(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,related_name='doc_verification')

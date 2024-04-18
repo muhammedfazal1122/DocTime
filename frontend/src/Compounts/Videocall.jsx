@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRef, useEffect } from 'react'; // Import useRef and useEffect
 import { jwtDecode } from "jwt-decode";
+import axios from 'axios';
+import { baseUrl } from '../utils/constants/Constants';
 
 // frontend\public\assets\catogory\videocall.jpg
 const VideoCall = () => {
@@ -10,7 +12,7 @@ const VideoCall = () => {
     let { roomId } = useParams();
     const containerRef = useRef(null);
 
-
+    const trainsactionId = roomId
     const accessToken = localStorage.getItem("access");
     const decoded = jwtDecode(accessToken);
     const userID = decoded.user_id;
@@ -19,10 +21,25 @@ const VideoCall = () => {
       console.log(  userID,userName,'ppppppppp'
   );
 
-   
-    const handleLeaveRoom = () => {
+  const handleLeaveRoom = async () => {
+    try {
+        console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+
+        // Use async/await to wait for the axios.patch request to complete
+        const response = await axios.patch(`${baseUrl}appointment/update-order/${trainsactionId}/`);
+        console.log(response,'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
+        console.log(response.data);
+
+        // Navigate to the specified route after the update
         navigate(`/DoctorShow/BookAppoiment/booking-detailes`);
+    } catch (error) {
+        // Handle any errors that occur during the request
+        console.error("Error updating status:", error);
+        // Optionally, show an error message to the user
+        toast.error("An error occurred while updating the status. Please try again later.");
     }
+};
+
 
     useEffect(() => {
         const MyVideoCallMeet = async () => { 

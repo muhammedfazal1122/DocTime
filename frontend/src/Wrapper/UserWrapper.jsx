@@ -21,6 +21,7 @@ import MyProfile from '../pages/Patient/MyProfile/MyProfile';
 import PaymentSuccess from '../Compounts/PaymentSuccess';
 import BookingDetailes from '../pages/Patient/Book Appoiment/BookingDetailes';
 import Videocall from '../Compounts/Videocall';
+import SpecialisationShow from '../pages/Patient/SpecialisationShow';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -83,13 +84,15 @@ const UserWrapper = () => {
     ),
     children:[
       {path: "/auth/*", element:<Authenticator/>},
-      {path: "/DoctorShow", element: <DoctorShow/>},    
+      {path: "/DoctorShow/", element: <DoctorShow/>},    
+      {path: "/DoctorShow/:specialization", element: <SpecialisationShow/>},    
       {path: "/myprofile", element: <MyProfile/>},    
       {path: "/DoctorShow/ViewDocProfile/:id", element: <ViewDocProfile/>},    
       {path: "/DoctorShow/BookAppoiment/:custom_id", element: <BookAppoiment/>},    
       {path: "/DoctorShow/BookAppoiment/success-page", element: <PaymentSuccess/>},    
       {path: "/DoctorShow/BookAppoiment/booking-detailes", element: <BookingDetailes/>},    
       {path: "/DoctorShow/videocall/:roomId", element: <Videocall/>},    
+      // {path: "/DoctorShow/", element: <Videocall/>},    
 
     ],
   },

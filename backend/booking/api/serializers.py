@@ -1,6 +1,6 @@
 # slots/serializers.py
 from rest_framework import serializers
-from booking.models import Slot,Transaction
+from booking.models import Slot,Transaction,Review
 from accounts.models import Doctor
 
 
@@ -35,3 +35,12 @@ class TranscationModelList(serializers.ModelSerializer):
         model = Transaction
         fields = '__all__'
 
+
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    patient_full_name = serializers.CharField(source='patient.full_name', read_only=True)
+
+    class Meta:
+        model = Review
+        fields = ['id', 'doctor', 'patient', 'rating', 'comment', 'created_at', 'patient_full_name','subject']

@@ -7,6 +7,7 @@ import { AcademicCapIcon } from "@heroicons/react/24/solid";
 import { BriefcaseIcon } from "@heroicons/react/24/solid";
 import { ClockIcon } from "@heroicons/react/24/solid";
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
+import ReviewFormForDr from '../ReviewFormForDr';
 
 export default function ViewDocProfile() {
     const { id } = useParams(); // Extract the doctor's ID from the URL
@@ -79,6 +80,9 @@ export default function ViewDocProfile() {
       ];  
   
     return (
+      <div>
+
+      
         <div className="grid grid-cols-1 md:grid-cols-2 gap-1 justify-items-center mt-[90px] mb-[90px]">
             {/* Profile Card */}
             <div className="group before:hover:scale-95 before:hover:h-72 before:hover:w-80 before:hover:h-44 before:hover:rounded-b-2xl before:transition-all before:duration-500 before:content-[''] before:w-80 before:h-24 before:rounded-t-2xl before:bg-gradient-to-bl from-sky-200 via-orange-200 to-orange-700 before:absolute before:top-0 w-80 h-72 relative bg-slate-50 flex flex-col items-center justify-center gap-2 text-center rounded-2xl overflow-hidden shadow rounded-2xl">
@@ -221,6 +225,10 @@ export default function ViewDocProfile() {
     </div>
 </div>
 
+    </div>
+    {doctor && doctor.doctor_user && (
+    <ReviewFormForDr doctorId={doctor.doctor_user.custom_id || "Ddddd"} />
+)}
 
     </div>
 );

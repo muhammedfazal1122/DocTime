@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import faqImage from '../../../src/assets/FAQ1.jpg';
+import ReviewForm from './ReviewForm';
 
 const FAQSection = () => {
  const [isOpen, setIsOpen] = useState([false, false, false]);
@@ -43,6 +44,7 @@ const FAQSection = () => {
 
  return (
   <section className="py-6 bg-gray-50 sm:py-16 lg:py-24 mt-[-49px] ">
+           
      <div className="flex flex-col md:flex-row items-center justify-center flex-wrap ">
        {/* FAQ Section */}
        <div className="w-full md:w-2/3 px-2">
@@ -100,10 +102,13 @@ const FAQSection = () => {
            </span>
          </p>
        </div>
+       <div>
+       </div>
  
        {/* Aside Image */}
       
      </div>
+
   </section>
  );
  

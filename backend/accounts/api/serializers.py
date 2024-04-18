@@ -22,6 +22,20 @@ class UserSerializer(serializers.ModelSerializer):
         exclude = ('password' ,)
 
 
+class DoctorCustomIDSerializer(serializers.ModelSerializer):
+    user = UserSerializer( read_only=True) 
+
+    class Meta:
+        model = Doctor
+        fields = '__all__'   
+
+
+
+class DoctorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields = '__all__'
+
 class UserIsActiveSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -62,6 +76,9 @@ class PatientSerializer(serializers.ModelSerializer):
 
 
 
+
+
+
 class PatientUserSerializer(serializers.ModelSerializer):
     patient_user=PatientSerializer(read_only=True)
 
@@ -69,12 +86,6 @@ class PatientUserSerializer(serializers.ModelSerializer):
         model = User
         exclude = ('password','is_id_verified', 'is_email_verified', 'is_staff', 'is_superuser', 'user_type')
 
-class DoctorCustomIDSerializer(serializers.ModelSerializer):
-    user = UserSerializer() # Nested serializer for the User model
-
-    class Meta:
-        model = Doctor
-        fields = '__all__'   
 
 class UserDoctorCustomIDSerializer(serializers.ModelSerializer):
     doctor_user = DoctorCustomIDSerializer()  
@@ -152,7 +163,7 @@ class AdminClientUpdateSerializer(serializers.ModelSerializer):
 
 
 class AdminPatientUpdateSerializer(serializers.ModelSerializer):
-    user=DOCUserSerializer()
+    user=UserSerializer()
     class Meta:
         model = Patient
         fields='__all__' 
@@ -188,3 +199,6 @@ class AdminDocVerificationSerializerApprove(serializers.ModelSerializer):
         user_instance.save()
 
         return instance
+
+
+
