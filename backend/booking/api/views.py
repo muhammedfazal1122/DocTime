@@ -208,19 +208,27 @@ def PatientBookingDetailsAPIView(request, patient_id):
 
 # ----------------------------------------------Doctor------------------------------------------------------
 
+
+
 @api_view(['GET'])
-def DoctorBookingDetailsAPIView(request, doctor_id):
+def DoctorBookingDetailsAPIView(request, doctor_id, patient_id):
     try:
-        transactions = Transaction.objects.filter(doctor_id=doctor_id)
+        print(doctor_id,patient_id,'kooooooooooooooooooooooooiiiiiiiiiiiiiiiii')
+        # Filter transactions by both doctor_id and patient_id
+        transactions = Transaction.objects.filter(doctor_id=doctor_id, patient_id=patient_id)
+        print(transactions,'ooooooooooooooooooooooooooooooooooooo')
+        if not transactions.exists():
+            # If no transactions are found, return a custom message
+            return Response({"message": "You have to consult this doctor at least once!"}, status=status.HTTP_404_NOT_FOUND)
+        
         serializer = TranscationModelList(transactions, many=True)
         response = {
-                "status_code": status.HTTP_200_OK,
-                "data": serializer.data
-            }
+            "status_code": status.HTTP_200_OK,
+            "data": serializer.data
+        }
         return Response(response, status=status.HTTP_200_OK)
     except Transaction.DoesNotExist:
         return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)
-    
 
 # ----------------------------------------------ADMIN------------------------------------------------------
 

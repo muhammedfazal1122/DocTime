@@ -25,6 +25,7 @@ urlpatterns = [
     path('auth/', include("accounts.api.urls")),
     path('appointment/', include("booking.api.urls")),
     path('notifications/', include('notifications.api.urls')),
+    path('chat/', include('chat.api.urls')),
 
 
 ]  

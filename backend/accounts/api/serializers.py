@@ -202,3 +202,14 @@ class AdminDocVerificationSerializerApprove(serializers.ModelSerializer):
 
 
 
+class PatientCustomIDSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = ['custom_id']    
+
+        
+class UserPatientCustomIDSerializer(serializers.ModelSerializer):
+    patient_user=PatientCustomIDSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ['id','first_name','patient_user']

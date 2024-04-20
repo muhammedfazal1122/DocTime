@@ -8,17 +8,27 @@ import { BriefcaseIcon } from "@heroicons/react/24/solid";
 import { ClockIcon } from "@heroicons/react/24/solid";
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
 import ReviewFormForDr from '../ReviewFormForDr';
+import PatientChat from '../../../Compounts/chat/PatientChat';
 
 export default function ViewDocProfile() {
     const { id } = useParams(); // Extract the doctor's ID from the URL
+    const [showPatientChat, setShowPatientChat] = useState(false);
+    const doctorId = id;
 
     const [doctor, setDoctor] = useState(null); // Use a single doctor object instead of an array
+
   const navigate = useNavigate()
     const gotoBookAppoiment = () =>{
       console.log(doctor.id);
       navigate(`/DoctorShow/BookAppoiment/${doctor.doctor_user.custom_id}`);
 
     }
+    
+    const gotoChatToDoctor = () =>{
+      setShowPatientChat(!showPatientChat);
+
+    }
+
 
     useEffect(() => {
         const fetchDoctorDetails = async () => {
@@ -96,8 +106,32 @@ export default function ViewDocProfile() {
                     <p>{doctor?.doctor_user?.specializations || ''}</p>
                     {console.log(doctor?.doctor_user?.specializations|| 'no','lllllllllllllllllllllllll')}
                 </div>
-                <label onClick={gotoBookAppoiment} className="bg-blue-700 px-4 py-1 text-slate-50 rounded-md z-10 hover:scale-125 transition-all duration-500 hover:bg-blue-500" >Book Now</label>
+               
+                <div className="flex items-center">
+                    <label
+                      onClick={gotoBookAppoiment}
+                      className="bg-blue-700 px-4 py-1 text-slate-50 rounded-md z-10 hover:scale-125 transition-all duration-500 hover:bg-blue-500 ml-9"
+                    >
+                      Book Now
+                    </label>
+                    <label
+                      onClick={gotoChatToDoctor}
+                      className="bg-blue-700 px-4 py-1 text-slate-50 rounded-md z-10 hover:scale-125 transition-all duration-500 hover:bg-blue-500 ml-8"
+                    >
+                      Message
+                    </label>
+                  </div>
+
             </div>
+
+            {showPatientChat  && (
+ <div className="fixed bottom-4 right-8 z-50">
+    
+    <PatientChat doctorId={doctorId} doctorCustomId={doctor.doctor_user.custom_id} />
+
+ </div>
+)}
+
 {/* About Me Card */}
 <div className="col-span-full md:col-span-1   mr-[20px]">
     <div className="bg-white shadow rounded-lg p-4 max-w-[950px] mx-auto"> {/* Increase the width of the card */}
@@ -224,6 +258,7 @@ export default function ViewDocProfile() {
         </div>
     </div>
 </div>
+
 
     </div>
     {doctor && doctor.doctor_user && (

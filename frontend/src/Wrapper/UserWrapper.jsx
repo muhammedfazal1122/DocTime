@@ -22,6 +22,7 @@ import PaymentSuccess from '../Compounts/PaymentSuccess';
 import BookingDetailes from '../pages/Patient/Book Appoiment/BookingDetailes';
 import Videocall from '../Compounts/Videocall';
 import SpecialisationShow from '../pages/Patient/SpecialisationShow';
+import PatientChat from '../Compounts/chat/PatientChat';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -91,6 +92,7 @@ const UserWrapper = () => {
       {path: "/DoctorShow/BookAppoiment/:custom_id", element: <BookAppoiment/>},    
       {path: "/DoctorShow/BookAppoiment/success-page", element: <PaymentSuccess/>},    
       {path: "/DoctorShow/BookAppoiment/booking-detailes", element: <BookingDetailes/>},    
+      {path: "/DoctorShow/BookAppoiment/Chat-to-doctor", element: <PatientChat/>},    
       {path: "/DoctorShow/videocall/:roomId", element: <Videocall/>},    
       // {path: "/DoctorShow/", element: <Videocall/>},    
 

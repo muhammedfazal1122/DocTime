@@ -26,7 +26,7 @@ urlpatterns = [
 
     path('booking/details/patient/<str:patient_id>', views.PatientBookingDetailsAPIView, name='booking-details'),
 
-    path('booking/details/doctor/<str:doctor_id>', views.DoctorBookingDetailsAPIView, name='booking-details'),
+    path('booking/details/doctor/<str:doctor_id>/patient/<str:patient_id>', views.DoctorBookingDetailsAPIView, name='booking-details'),
 
 # ---------------------------------------------ADMIN--------------------------------------------------------
 
