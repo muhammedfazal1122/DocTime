@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef  } from 'react';
 import io from 'socket.io-client';
 import { baseUrl } from '../../utils/constants/Constants';
 import axios from 'axios';
@@ -19,6 +19,8 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
   const [doct, setdoct] = useState("");
   console.log("CLIENT:", client);
   console.log("BOOKINGS:", bookings);
+  const chatContainerRef = useRef(null);
+  const [transactionId, setTransactionId] = useState(null); // State to hold the transaction ID
 
   // const doctorId = doctor_id;
   // const doctorCustomId = doctor_custom_id;
@@ -43,37 +45,39 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
     };
 
 
-
-  const fetchBookingDetails = async (doctorCustomId,patientId) => {
-    try {   
-      console.log(doctorCustomId,patientId,'iiiiiiiiiiiiiiggggggggggggggggggggggg');
-       const response = await axios.get(`${baseUrl}appointment/booking/details/doctor/${doctorCustomId}/patient/${patientId}`);
-       if (response.data.message) {
-           // Display the custom error message
-           console.error(response.data.message);
-           // Optionally, show an alert or update the UI to inform the user
-           toast.error(response.data.message);
-           return; // Exit the function early if there's no data to process
-       }
-       setBookings(response.data);
-       // Assuming each booking has a transaction_id, fetch patient details after setting booking
-   
-       // Extract the transaction_id from the first booking in the response data
-       const appointmentId = response.data.data[0].transaction_id;
-       console.log("Transaction ID:", appointmentId);
-   
-       // Now you can use the transactionId as needed, for example:
-       connectToWebSocket(appointmentId);
-   
-    } catch (error) {
-       console.error("Error fetching booking details:", error);
-       // Optionally, handle other types of errors here
-    }
-};
+    const fetchBookingDetails = async (doctorCustomId, patientId) => {
+      try {
+        console.log(doctorCustomId, patientId, 'iiiiiiiiiiiiiiggggggggggggggggggggggg');
+         const response = await axios.get(`${baseUrl}appointment/booking/details/doctor/${doctorCustomId}/patient/${patientId}`);
+     
+         setBookings(response.data);
+     
+         // Extract the transaction_id from the first booking in the response data
+         const appointmentId = response.data.data[0].transaction_id;
+         setTransactionId(appointmentId);
+         console.log("Transaction IiiiiiiiiiiiiiiiiiiiiiiiiiiiiD:", appointmentId);
+     
+         // Now you can use the transactionId as needed, for example:
+         connectToWebSocket(appointmentId);
+      } catch (error) {
+         console.error("Error fetching booking details:", error);
+         // Log additional details about the error
+         if (error.response) {
+           console.error("Error response:", error.response);
+         } else if (error.request) {
+           console.error("Error request:", error.request);
+         } else {
+           console.error("Error message:", error.message);
+         }
+         // Provide more specific feedback based on the error
+         toast.error("An connect To WebSocket error occurred. Please try again.");
+      }
+     };
+     
 
  
   const connectToWebSocket = (appointmentId) => {
-    console.log(appointmentId,'appointmentId');
+    console.log(appointmentId,'appointmentIiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiid');
     if (!appointmentId) return;
 
     console.log('pppppppppppppppppppppppppppppppppppp');
@@ -87,12 +91,15 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
     };
 
 
-    
+
     newClient.onmessage = (message) => {
       const data = JSON.parse(message.data);
-      setChatMessages((prevMessages) => [...prevMessages, data]);
-    };
-
+      // Check if the message already exists in the state
+      if (!chatMessages.some(msg => msg.message === data.message)) {
+         setChatMessages((prevMessages) => [...prevMessages, data]);
+      }
+     };
+     
 
 
     const fetchExistingMessages = async () => {
@@ -129,6 +136,11 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
       newClient.close();
     };
   };
+ useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+ }, [chatMessages]);
 
 
  useEffect(() => {
@@ -144,10 +156,13 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
  }, [socket]);
 
  const sendMessage = () => {
+  if (!client || client.readyState !== client.OPEN) {
+    console.error("WebSocket is not open");
+    return;
+  }
 
-console.log('fdasfgajhdhsajdfhasdfasdfasdfasf');
   const sendername = doct.first_name;
-  console.log("SENDER NAME:", sendername,doct);
+  console.log("SENDER NAME:", sendername);
 
   const messageData = { message, sendername };
   const messageString = JSON.stringify(messageData);
@@ -189,7 +204,7 @@ console.log('fdasfgajhdhsajdfhasdfasdfasdfasf');
     ))} 
  </div>
 </div>
-    
+                      
 <div className="p-4 border-t flex">
  <label htmlFor="file-upload" className="cursor-pointer mx-2 flex items-center">
     <input id="file-upload" type="file" accept="image/, video/" style={{ display: 'none' }} />

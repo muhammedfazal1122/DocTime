@@ -16,6 +16,7 @@ import Footer2 from '../Compounts/Footer2';
 import Navbar2 from '../Compounts/Navbar2';
 import DocVideoCall from '../pages/Doctor/BookindDetailsDoctor/DocVideocall';
 import BookingDetailesDoc from '../pages/Doctor/BookindDetailsDoctor/BookingDetailesDoc';
+import DoctorChat from '../Compounts/chat/DoctorChat';
 
 const DoctorWrapper = () => {
   const dispatch = useDispatch();
@@ -100,6 +101,7 @@ const DoctorWrapper = () => {
         { path: '/Docprofile/KYC', element: <KYCAuthDoctor /> },
         { path: '/createSloat', element: <CreateSloat/> },
         { path: '/BookingDetailes', element: <BookingDetailesDoc/> },
+        { path: '/DoctorChat', element: <DoctorChat/> },
         { path: '/docvideocall/:roomId', element: <DocVideoCall/> },
 
       ]

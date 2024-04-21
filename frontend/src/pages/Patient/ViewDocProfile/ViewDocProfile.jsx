@@ -9,13 +9,19 @@ import { ClockIcon } from "@heroicons/react/24/solid";
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
 import ReviewFormForDr from '../ReviewFormForDr';
 import PatientChat from '../../../Compounts/chat/PatientChat';
+import { jwtDecode } from 'jwt-decode';
+import { toast } from 'react-toastify';
 
 export default function ViewDocProfile() {
     const { id } = useParams(); // Extract the doctor's ID from the URL
     const [showPatientChat, setShowPatientChat] = useState(false);
     const doctorId = id;
-
+    const [hasError, setHasError] = useState(false); // State to track if there's an error
+    const [doct, setdoct] = useState("");
     const [doctor, setDoctor] = useState(null); // Use a single doctor object instead of an array
+    const [patientId, setPatientID] = useState(null);
+    const [bookings, setBookings] = useState([]);
+    const [transactionId, setTransactionId] = useState(null); // State to hold the transaction ID
 
   const navigate = useNavigate()
     const gotoBookAppoiment = () =>{
@@ -23,8 +29,54 @@ export default function ViewDocProfile() {
       navigate(`/DoctorShow/BookAppoiment/${doctor.doctor_user.custom_id}`);
 
     }
+
+
+    const authToken = localStorage.getItem('access')
+    const decoder = jwtDecode(authToken)
+    const userId = decoder.user_id
+    
+  
+  
+      const fetchDoctorID = async () => {
+        try {
+          const response = await axios.get(`${baseUrl}auth/custom-id/patient/${userId}`);
+          setdoct(response.data);
+          setPatientID(response.data.patient_user.custom_id);
+          console.log(response.data.patient_user.custom_id, 'fetchDoctorIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
+          // Now that patientId is set, fetch booking details
+          await fetchBookingDetails(doctor.doctor_user.custom_id, response.data.patient_user.custom_id);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+  
+
+      const fetchBookingDetails = async (doctorCustomId, patientId) => {
+        try {
+           const response = await axios.get(`${baseUrl}appointment/booking/details/doctor/${doctorCustomId}/patient/${patientId}`);
+       
+           setBookings(response.data);
+       
+           // Extract the transaction_id from the first booking in the response data
+           const appointmentId = response.data.data[0].transaction_id;
+           setTransactionId(appointmentId);
+       
+           // Now you can use the transactionId as needed, for example:
+        } catch (error) {
+           console.error("Error fetching booking details:", error);
+           // Provide more specific feedback based on the error
+           if (error.response && error.response.status === 404) {
+             toast.error("You have to consult this doctor at least once!");
+           } else {
+             toast.error("An connect To WebSocket error occurred. Please try again.");
+           }
+        }
+       };
+       
+
     
     const gotoChatToDoctor = () =>{
+      fetchDoctorID()
       setShowPatientChat(!showPatientChat);
 
     }
@@ -48,6 +100,7 @@ export default function ViewDocProfile() {
         };
 
         fetchDoctorDetails();
+        fetchDoctorID()
     }, [id]); // Depend on the ID to refetch if it changes
 
     // Only create doctorDetails if doctor is not null
@@ -127,8 +180,9 @@ export default function ViewDocProfile() {
             {showPatientChat  && (
  <div className="fixed bottom-4 right-8 z-50">
     
-    <PatientChat doctorId={doctorId} doctorCustomId={doctor.doctor_user.custom_id} />
-
+    {!hasError && transactionId && showPatientChat && (
+                <PatientChat doctorId={doctorId} doctorCustomId={doctor.doctor_user.custom_id} />
+            )}
  </div>
 )}
 

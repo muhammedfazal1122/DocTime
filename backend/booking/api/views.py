@@ -224,7 +224,8 @@ def DoctorBookingDetailsAPIView(request, doctor_id, patient_id):
         serializer = TranscationModelList(transactions, many=True)
         response = {
             "status_code": status.HTTP_200_OK,
-            "data": serializer.data
+            "data": serializer.data,
+            "message": "transactions.exists"
         }
         return Response(response, status=status.HTTP_200_OK)
     except Transaction.DoesNotExist:
