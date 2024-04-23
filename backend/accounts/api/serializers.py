@@ -22,6 +22,12 @@ class UserSerializer(serializers.ModelSerializer):
         exclude = ('password' ,)
 
 
+
+class DoctorCustomIDSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields = ['custom_id']       
+        
 class DoctorCustomIDSerializer(serializers.ModelSerializer):
     user = UserSerializer( read_only=True) 
 
@@ -85,6 +91,14 @@ class PatientUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ('password','is_id_verified', 'is_email_verified', 'is_staff', 'is_superuser', 'user_type')
+
+class UserDoctorCustomIDSerializer2(serializers.ModelSerializer):
+    doctor_user=DoctorCustomIDSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ['id','first_name','doctor_user']     
+
+
 
 
 class UserDoctorCustomIDSerializer(serializers.ModelSerializer):

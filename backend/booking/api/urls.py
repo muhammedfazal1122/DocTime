@@ -26,18 +26,25 @@ urlpatterns = [
 
     path('booking/details/patient/<str:patient_id>', views.PatientBookingDetailsAPIView, name='booking-details'),
 
-    path('booking/details/doctor/<str:doctor_id>/patient/<str:patient_id>', views.DoctorBookingDetailsAPIView, name='booking-details'),
+    path('booking/details/doctor/<str:doctor_id>', views.DoctorBookingDetailsAPIView, name='booking-details'),
 
+    path('booking/details/doctor/<str:doctor_id>/patient/<str:patient_id>', views.DoctorBookingDetailsAPIViewChat, name='booking-details'),
 # ---------------------------------------------ADMIN--------------------------------------------------------
 
     path('detail/transaction/list/', TrasactionListAPIView.as_view(), name='doctor-slots-api'),
 
     path('detail/transaction/<str:pk>', TrasactionRetriveAPIView.as_view(), name='doctor-slots-api'),
 
+    path('api/patient-transactions/', views.PatientTransactionsAPIView.as_view(), name='patient-transactions'),
+
 
     #  to get the single Patient details based on the custom id
 
     path('reviews/create/', views.ReviewCreateView.as_view(), name='review-create'),
     path('reviews/<str:doctor_id>/', views.ReviewListView.as_view(), name='review-list'),
+
+
+
+    path('api/doctor-transactions/', views.DoctorTransactionsAPIView.as_view(), name='doctor-transactions'),
 
 ]

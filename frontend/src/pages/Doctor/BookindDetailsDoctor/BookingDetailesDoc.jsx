@@ -99,7 +99,17 @@ const formatDateTime = (dateTimeString) => {
               </Typography>
             <CardHeader color="transparent" floated={false} shadow={false} className="mx-0 flex items-center gap-4 pt-0 pb-8">
               
-              <Avatar className="max-w-[8rem] ml-7" size="lg" variant="circular" alt="Patient" src={PatientData[transaction.patient_id]?.user?.profile_picture} />
+            <Avatar
+                  className="max-w-[8rem] ml-7"
+                  size="lg"
+                  variant="circular"
+                  alt="Patient"
+                  src={
+                      PatientData[transaction.patient_id]?.user?.profile_picture
+                        ? PatientData[transaction.patient_id]?.user?.profile_picture
+                        : "/public/assets/avatar/avatar_6.jpg"
+                  }
+                  />
               <div className="flex w-full flex-col gap-0.5">
                 <div className="flex items-center justify-between">
                  <Typography variant="h5" color="blue-gray">
@@ -125,11 +135,12 @@ const formatDateTime = (dateTimeString) => {
               </div>
             </CardBody>
             <div className="absolute top-0 right-0 mt-4 mr-4">
-            
-              <FcVideoCall onClick={() => videocall(transaction.transaction_id)} className="h-10 w-10 text-blue-500" />
-              {/* <FcEndCall className="h-10 w-10 text-blue-500" /> */}
-
+            {transaction.is_consultency_completed !== "COMPLETED" && (
+                <FcVideoCall onClick={() => videocall(transaction.transaction_id)} className="h-10 w-10 text-blue-500" />
+            )}
+            {/* <FcEndCall className="h-10 w-10 text-blue-500" /> */}
             </div>
+
           </Card>
         ))
       ) : (

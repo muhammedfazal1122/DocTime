@@ -1,97 +1,131 @@
-import React, { useState, useEffect, useRef } from 'react';
-import io from 'socket.io-client';
-import { baseUrl } from '../../utils/constants/Constants';
-import axios from 'axios';
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
-import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { jwtDecode } from 'jwt-decode';
-import { toast } from 'react-toastify';
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { baseUrl } from "../../utils/constants/Constants";
+import { jwtDecode } from "jwt-decode";
+const DoctorChat = () => {
+  const chatContainerRef = useRef();
+  const [message, setMessage] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  console.log("BOOKINGS:", bookings);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [client, setClient] = useState(null);
+  console.log("CLIENT:", client);
+  // const salonUser = useSelector(state => state.salon)
+  // console.log('salonUser:', salonUser)
+  // const salonId = salonUser.salonUser.id
+  // console.log('salonID:', salonId)
 
-const DoctorChat = ({  }) => {
- const [socket, setSocket] = useState(null);
- const [message, setMessage] = useState('');
- const [messages, setMessages] = useState([]);
- const [chatMessages, setChatMessages] = useState([]);
- const [bookings, setBookings] = useState([]);
- const [selectedAppointment, setSelectedAppointment] = useState(null);
- const [client, setClient] = useState(null);
- const [patientId, setPatientID] = useState(null);
- const [doct, setdoct] = useState("");
- const chatContainerRef = useRef(null);
- const [transactionId, setTransactionId] = useState(null);
- const  doctorCustomId = localStorage.getItem('custom_id')
- const authToken = localStorage.getItem('access');
- const decoder = jwtDecode(authToken);
- const userId = decoder.user_id;
+  const [patient_id, setPatientID] = useState(null);
+  const [doct, setdoct] = useState("");
 
- useEffect(() => {
-    fetchDoctorID();
- }, []);
 
- const fetchDoctorID = async () => {
+  const fetchBookings = async (id) => {
     try {
-      const response = await axios.get(`${baseUrl}auth/custom-id/patient/${userId}`);
-      console.log('rrrrrrrrrreeeeeeeeeeessssssssssssssss',response);
-      if (response.data && response.data.patient_user) {
-        setdoct(response.data);
-        setPatientID(response.data.patient_user.custom_id);
-        console.log(response.data.patient_user.custom_id,'userIduserId');
-
-        await fetchBookingDetails(doctorCustomId, response.data.patient_user.custom_id);
-      } else {
-        console.error("Unexpected response structure:", response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
- };
-
- const fetchBookingDetails = async (doctorCustomId, patientId) => {
-
-    try {
-      
-      const response = await axios.get(`${baseUrl}appointment/booking/details/doctor/${doctorCustomId}/patient/${patientId}`);
+      const response = await axios.get(
+        `${baseUrl}appointment/api/doctor-transactions/?doctor_id=${id}`
+      );
       setBookings(response.data);
-      const appointmentId = response.data.data[0].transaction_id;
-      setTransactionId(appointmentId);
-      connectToWebSocket(appointmentId);
+      console.log(response.data);
     } catch (error) {
-      console.error("Error fetching booking details:", error);
-      toast.error("An error occurred. Please try again.");
+      console.error("Error fetching bookings", error);
     }
- };
+  };
 
- const connectToWebSocket = (appointmentId) => {
-  console.log(appointmentId,'aaaaaaaappppppppppppppppooooooooooooooooooo');
+
+  const fetchDoctorID = (id) => {
+    axios
+      .get(baseUrl + `auth/custom-id/doctor/${id}`)
+      .then((res) => {
+        setdoct(res.data);
+        console.log(res.data.doctor_user.custom_id,'DOCTOR_custom_id');
+        fetchBookings(res.data.doctor_user.custom_id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchUserID = () => {
+    const token = localStorage.getItem("access");
+    const decoded = jwtDecode(token);
+    fetchDoctorID(decoded.user_id);
+  };
+
+  useEffect(() => {
+    fetchUserID();
+  }, []);
+
+
+  useEffect(() => {
+    // Function to scroll to the bottom of the chat container
+    const scrollToBottom = () => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+    };
+
+    // Scroll to bottom whenever new messages are added
+    scrollToBottom();
+  }, [chatMessages]);
+
+  useLayoutEffect(() => {
+    // Function to scroll to the bottom of the chat container
+    const scrollToBottom = () => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+    };
+
+    // Scroll to bottom after the DOM has been updated
+    scrollToBottom();
+  }, [chatMessages]);
+  const connectToWebSocket = (appointmentId) => {
     if (!appointmentId) return;
 
-    const newClient = new W3CWebSocket(`ws://127.0.0.1:8000/ws/chat/${appointmentId}/`);
+    const newClient = new W3CWebSocket(
+      `ws://127.0.0.1:8000/ws/chat/${appointmentId}/`
+    );
     setClient(newClient);
 
     newClient.onopen = () => {
       console.log("WebSocket Client Connected");
     };
+newClient.onmessage = (message) => {
+ const data = JSON.parse(message.data);
+ console.log("Incoming message:", data);
+ console.log("Current chatMessages:", chatMessages);
+ // Update logic here
+ console.log("Updated chatMessages:", [...chatMessages, data]);
+};
 
-    newClient.onmessage = (message) => {
-      const data = JSON.parse(message.data);
-      if (!chatMessages.some(msg => msg.message === data.message)) {
-        setChatMessages((prevMessages) => [...prevMessages, data]);
-      }
-    };
 
+     
     const fetchExistingMessages = async () => {
       try {
-        const response = await fetch(`${baseUrl}chat/chat-messages/transaction/${appointmentId}/`);
+        const response = await fetch(
+          `${baseUrl}chat/chat-messages/transaction/${appointmentId}/`
+        );
+
         if (!response.ok) {
-          console.error("Error fetching existing messages. Status:", response.status);
+          console.error(
+            "Error fetching existing messages. Status:",
+            response.status
+          );
           return;
         }
+
         const data = await response.json();
+
         const messagesTextArray = data.map((item) => ({
           message: item.message,
           sendername: item.sendername,
         }));
+
         setChatMessages(messagesTextArray);
+        console.log("Chat messages:", messagesTextArray);
       } catch (error) {
         console.error("Error fetching existing messages:", error);
       }
@@ -102,15 +136,15 @@ const DoctorChat = ({  }) => {
     return () => {
       newClient.close();
     };
- };
+  };
 
- useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }
- }, [chatMessages]);
+  const handleAppointmentClick = (booking) => {
+    setSelectedAppointment(booking);
+    setChatMessages([]);
+    connectToWebSocket(booking.transaction_id);
+  };
 
- const sendMessage = () => {
+  const sendMessage = () => {
     if (!client || client.readyState !== client.OPEN) {
       console.error("WebSocket is not open");
       return;
@@ -125,9 +159,13 @@ const DoctorChat = ({  }) => {
     console.log("Sending Message:", messageString);
 
     client.send(messageString);
-    setChatMessages((prevMessages) => [...prevMessages, messageData]);
     setMessage("");
- };
+  };
+
+
+
+
+
  return (
 <div>
   
@@ -148,38 +186,35 @@ const DoctorChat = ({  }) => {
               <div className="ml-2 font-bold text-2xl">QuickChat</div>
             </div>
             {/* User Profile */}
-            <div className="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg">
-              {/* User Avatar */}
-              <div className="h-20 w-20 rounded-full border overflow-hidden">
-                <img src="https://avatars3.githubusercontent.com/u/2763884?s=128" alt="Avatar" className="h-full w-full" />
-              </div>
-              <div className="text-sm font-semibold mt-2">Aminos Co.</div>
-              <div className="text-xs text-gray-500">Lead UI/UX Designer</div>
-              {/* Status */}
-              <div className="flex flex-row items-center mt-3">
-                <div className="flex flex-col justify-center h-4 w-8 bg-indigo-500 rounded-full">
-                  <div className="h-3 w-3 bg-white rounded-full self-end mr-1"></div>
-                </div>
-                <div className="leading-none ml-1 text-xs">Active</div>
-              </div>
-            </div>
+
             {/* Conversations */}
             <div className="flex flex-col mt-8">
               {/* Active Conversations */}
               <div className="flex flex-row items-center justify-between text-xs">
                 <span className="font-bold">Active Conversations</span>
-                <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">4</span>
+                {/* <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">4</span> */}
               </div>
               {/* Conversation List */}
-              <div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
-                {/* Conversation Item */}
-                <button className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2">
-                  <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">H</div>
-                  <div className="ml-2 text-sm font-semibold">Henry Boyd</div>
-                </button>
-                {/* Add more conversation items as needed */}
-              </div>
-   
+{/* Conversation List */}
+<div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
+ {bookings.map((booking, index) => (
+    <button
+      key={index}
+      className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2"
+      onClick={() => handleAppointmentClick(booking)}
+    >
+      <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+        {/* Display the first letter of the patient's name */}
+        {booking.patient_name ? booking.patient_name.charAt(0).toUpperCase() : 'N/A'}
+      </div>
+      <div className="ml-2 text-sm font-semibold">
+        {booking.patient_name ? booking.patient_name : 'No Patient Name'}
+      </div>
+
+    </button>
+  ))}
+</div>
+
   
             </div>
           </div>
@@ -189,24 +224,29 @@ const DoctorChat = ({  }) => {
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
               {/* Message List */}
 {/* Message List */}
-    <div className="flex flex-col h-full overflow-x-auto mb-4" ref={chatContainerRef}>
-    {/* Message Item */}
-    <div className="grid grid-cols-12 gap-y-2">
-        {chatMessages.map((message, index) => (
-          <div key={index} className="col-span-12 p-2 rounded-lg">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                {/* You can add an avatar or initials here */}
-                <span className="text-xs font-medium text-gray-900">{message.sendername}</span>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-900">{message.message}</p>
-              </div>
+<div className="flex flex-col h-full overflow-x-auto mb-4" ref={chatContainerRef}>
+ {/* Message Item */}
+ <div className="grid grid-cols-12 gap-y-2">
+    {chatMessages.map((message, index) => (
+      <div key={index} className={`col-span-12 p-2 rounded-lg ${message.sendername === doct.first_name ? 'self-end' : 'self-start'}`}>
+        <div className={`flex items-center ${message.sendername === doct.first_name ? 'justify-end' : 'justify-start'}`}>
+          {/* Display an icon instead of the sender's name */}
+          <div className="flex-shrink-0">
+            <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+              {/* Display the first letter of the sender's name as an icon */}
+              {message.sendername ? message.sendername.charAt(0).toUpperCase() : 'N/A'}
             </div>
           </div>
-        ))}
-    </div>
-    </div>
+          <div className={`ml-3 ${message.sendername === doct.first_name ? 'bg-indigo-200' : 'bg-gray-200'} rounded-lg p-2`}>
+            <p className="text-sm font-medium text-gray-900">{message.message}</p>
+          </div>
+        </div>
+      </div>
+    ))}
+ </div>
+</div>
+
+
 
               {/* Message Input */}
               <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">

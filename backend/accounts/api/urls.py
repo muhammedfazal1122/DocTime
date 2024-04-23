@@ -71,6 +71,7 @@ urlpatterns = [
 
     path("custom-id/patient/<str:pk>",views.PatientCustomIdView.as_view(),name="custom-id-patient"),
 
+    path("custom-id/doctor/<str:pk>",views.DoctorCustomIdView.as_view(),name="custom-id-doctor"),
 
 
 ]

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, DoctorCustomIDSerializer,OTPModel,Patient,PatientUserSerializer,Doctor
 from .serializers import VarificationSerializer,Verification,AdminDocVerificationSerializer,UserDetailsUpdateSerializer,AdminDocUpdateSerializer,AdminClientUpdateSerializer
-from .serializers import UserIsActiveSerializer,AdminPatientUpdateSerializer,AdminDocVerificationSerializerApprove,DoctorSerializer,UserPatientCustomIDSerializer
+from .serializers import UserIsActiveSerializer,AdminPatientUpdateSerializer,AdminDocVerificationSerializerApprove,DoctorSerializer,UserPatientCustomIDSerializer,UserDoctorCustomIDSerializer2
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -390,3 +390,9 @@ class PatientCustomIdView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserPatientCustomIDSerializer
     lookup_field = 'pk'    
+
+
+class DoctorCustomIdView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserDoctorCustomIDSerializer2
+    lookup_field = 'pk' 

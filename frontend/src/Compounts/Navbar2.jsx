@@ -26,6 +26,11 @@ const Navbar2 = () => {
   const GotoKYC = () =>{ 
     navigate('/doctor/Docprofile/kyc')
   }
+  const GotoChat = () =>{ 
+    navigate('/doctor/doctorChat')
+  }
+
+  
   const handleAvatarClick = () => {
     setShowProfileBox(!showProfileBox);
   }
@@ -98,6 +103,9 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
           </li>
           <li onClick={GotoKYC} className='p-4   border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'>
           Update KYC
+          </li>
+          <li onClick={GotoChat} className='p-4   border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'>
+          Chat 
           </li>
       </ul>
 

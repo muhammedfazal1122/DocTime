@@ -16,6 +16,7 @@ import pytz
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
+from django.http import Http404
 
 
 
@@ -210,8 +211,22 @@ def PatientBookingDetailsAPIView(request, patient_id):
 
 
 
+
 @api_view(['GET'])
-def DoctorBookingDetailsAPIView(request, doctor_id, patient_id):
+def DoctorBookingDetailsAPIView(request, doctor_id):
+    try:
+        transactions = Transaction.objects.filter(doctor_id=doctor_id)
+        serializer = TranscationModelList(transactions, many=True)
+        response = {
+                "status_code": status.HTTP_200_OK,
+                "data": serializer.data
+            }
+        return Response(response, status=status.HTTP_200_OK)
+    except Transaction.DoesNotExist:
+        return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['GET'])
+def DoctorBookingDetailsAPIViewChat(request, doctor_id, patient_id):
     try:
         print(doctor_id,patient_id,'kooooooooooooooooooooooooiiiiiiiiiiiiiiiii')
         # Filter transactions by both doctor_id and patient_id
@@ -259,3 +274,92 @@ class ReviewListView(generics.ListAPIView):
     def get_queryset(self):
         doctor_id = self.kwargs['doctor_id']
         return Review.objects.filter(doctor_id=doctor_id)
+    
+class PatientTransactionsAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        patient_id = request.query_params.get('patient_id', None)
+        doctor_custom_id = request.query_params.get('doctor_custom_id', None)
+
+        if not patient_id or not doctor_custom_id:
+            return Response({'error': 'Patient ID and Doctor Custom ID are required in query parameters'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            patient = Patient.objects.get(custom_id=patient_id)
+            doctor = Doctor.objects.get(custom_id=doctor_custom_id)
+        except (Patient.DoesNotExist, Doctor.DoesNotExist, ValueError):
+            raise Http404("Patient or Doctor not found or invalid ID")
+
+        # Find the common transaction between the patient and doctor
+        common_transaction = Transaction.objects.filter(patient_id=patient_id, doctor_id=doctor_custom_id, status='COMPLETED').first()
+        print(common_transaction,'cccccoooooooooooooooooo')
+
+        if not common_transaction:
+            return Response({'error': 'No completed transaction found between this patient and doctor'}, status=status.HTTP_404_NOT_FOUND)
+
+        transaction_data = {
+            "transaction_id": common_transaction.transaction_id,
+            "payment_id": common_transaction.payment_id,
+            "order_id": common_transaction.order_id,
+            "signature": common_transaction.signature,
+            "amount": common_transaction.amount,
+            "doctor_id": common_transaction.doctor_id,
+            "patient_id": common_transaction.patient_id,
+            "doctor_name": doctor.user.first_name,
+            "doctor_profile_picture": (
+                request.build_absolute_uri('/')[:-1] + doctor.user.profile_picture.url
+            ) if doctor.user.profile_picture else "",
+            "booked_date": common_transaction.day,
+            "booked_from_time": common_transaction.start_time,
+            "booked_to_time": common_transaction.end_time,
+            "status": common_transaction.status,
+            "created_at": common_transaction.created_at,
+        }
+
+        return Response(transaction_data, status=status.HTTP_200_OK)
+
+class DoctorTransactionsAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        doctor_id = request.query_params.get('doctor_id', None)
+
+        if not doctor_id:
+            return Response({'error': 'Doctor ID is required in query parameters'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            doctor = Doctor.objects.get(custom_id=doctor_id)
+        except (Doctor.DoesNotExist, ValueError):
+            raise Http404("Doctor not found or invalid ID")
+
+        transactions = Transaction.objects.filter(doctor_id=doctor_id, status='COMPLETED')
+
+        processed_patient_ids = set()
+        data = []
+
+        for transaction in transactions:
+            # Check if the patient ID has been processed before
+            if transaction.patient_id in processed_patient_ids:
+                continue
+
+            patient = Patient.objects.get(custom_id=transaction.patient_id)
+            transaction_data = {
+                "transaction_id": transaction.transaction_id,
+                "payment_id": transaction.payment_id,
+                "order_id": transaction.order_id,
+                "signature": transaction.signature,
+                "amount": transaction.amount,
+                "doctor_id": transaction.doctor_id,
+                "patient_id": transaction.patient_id,
+                "patient_name": patient.user.first_name,
+                "patient_profile_picture": (
+                    request.build_absolute_uri('/')[:-1] + patient.user.profile_picture.url
+                ) if patient.user.profile_picture else None,
+                "booked_date": transaction.day,
+                "booked_from_time": transaction.start_time,
+                "booked_to_time": transaction.end_time,
+                "status": transaction.status,
+                "created_at": transaction.created_at,
+            }
+
+            processed_patient_ids.add(transaction.patient_id)
+            data.append(transaction_data)
+
+        return Response(data, status=status.HTTP_200_OK)

@@ -20,8 +20,7 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
   console.log("CLIENT:", client);
   console.log("BOOKINGS:", bookings);
   const chatContainerRef = useRef(null);
-  const [transactionId, setTransactionId] = useState(null); // State to hold the transaction ID
-
+  const [appointmentId, setTransactionId] = useState(null); // State to hold the transaction ID
   // const doctorId = doctor_id;
   // const doctorCustomId = doctor_custom_id;
   
@@ -44,43 +43,51 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
       }
     };
 
-
     const fetchBookingDetails = async (doctorCustomId, patientId) => {
       try {
         console.log(doctorCustomId, patientId, 'iiiiiiiiiiiiiiggggggggggggggggggggggg');
-         const response = await axios.get(`${baseUrl}appointment/booking/details/doctor/${doctorCustomId}/patient/${patientId}`);
+        const response = await axios.get(`${baseUrl}appointment/api/patient-transactions/`, {
+          params: {
+              patient_id: patientId,  
+              doctor_custom_id: doctorCustomId
+          }
+      });     
+          setBookings(response.data);
      
-         setBookings(response.data);
+          // Check if response.data is defined and has at least one element
+          if (response.data ) {
+            // Extract the transaction_id from the first booking in the response data
+            const appointmentId = response.data.transaction_id;
+            setTransactionId(appointmentId);
      
-         // Extract the transaction_id from the first booking in the response data
-         const appointmentId = response.data.data[0].transaction_id;
-         setTransactionId(appointmentId);
-         console.log("Transaction IiiiiiiiiiiiiiiiiiiiiiiiiiiiiD:", appointmentId);
+            console.log("Transaction ddddddddd:", appointmentId);
      
-         // Now you can use the transactionId as needed, for example:
-         connectToWebSocket(appointmentId);
+            // Now you can use the transactionId as needed, for example:
+            connectToWebSocket(appointmentId);
+          } else {
+            console.error("No booking details found for the patient.");
+            // Handle the case where no booking details are found
+            toast.error("No booking details found for the patient. Please try again.");
+          }
       } catch (error) {
-         console.error("Error fetching booking details:", error);
-         // Log additional details about the error
-         if (error.response) {
-           console.error("Error response:", error.response);
-         } else if (error.request) {
-           console.error("Error request:", error.request);
-         } else {
-           console.error("Error message:", error.message);
-         }
-         // Provide more specific feedback based on the error
-         toast.error("An connect To WebSocket error occurred. Please try again.");
+          console.error("Error fetching booking details:", error);
+          // Log additional details about the error
+          if (error.response) {
+            console.error("Error response:", error.response);
+          } else if (error.request) {
+            console.error("Error request:", error.request);
+          } else {
+            console.error("Error message:", error.message);
+          }
+          // Provide more specific feedback based on the error
+          toast.error("An error occurred while fetching booking details. Please try again.");
       }
      };
      
-
  
   const connectToWebSocket = (appointmentId) => {
-    console.log(appointmentId,'appointmentIiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiid');
     if (!appointmentId) return;
 
-    console.log('pppppppppppppppppppppppppppppppppppp');
     const newClient = new W3CWebSocket(
       `ws://127.0.0.1:8000/ws/chat/${appointmentId}/`
     ); 
@@ -95,11 +102,12 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
     newClient.onmessage = (message) => {
       const data = JSON.parse(message.data);
       // Check if the message already exists in the state
+
       if (!chatMessages.some(msg => msg.message === data.message)) {
          setChatMessages((prevMessages) => [...prevMessages, data]);
       }
      };
-     
+
 
 
     const fetchExistingMessages = async () => {
@@ -136,12 +144,17 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
       newClient.close();
     };
   };
+
+
+ // Scroll to bottom of chat container when new messages arrive
  useEffect(() => {
+  const scrollToBottom = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
- }, [chatMessages]);
-
+  };
+  scrollToBottom();
+}, [chatMessages]);
 
  useEffect(() => {
     fetchDoctorID()
@@ -193,18 +206,50 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
     </svg>
  </button>
 </div>
+<div id="chatbox" className="p-4 h-80 overflow-y-auto" ref={chatContainerRef}>
 
-<div id="chatbox" className="p-4 h-80 overflow-y-auto">
- <div className="h-[450px] overflow-scroll overflow-x-hidden">
-    {chatMessages.map((message, index) => (
 
-      <div key={index} className={`message p-2 rounded-lg mb-2 ${message.sendername === 'User' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-        <p className="text-sm">{message.sendername}: {message.message}</p>
-      </div>
-    ))} 
+{chatMessages.map((message, index) => (
+ <div key={index} className={`col-span-12 p-2 rounded-lg ${message.sendername === doct.first_name ? 'self-end' : 'self-start'}`}>
+    <div className={`flex items-center ${message.sendername === doct.first_name ? 'justify-end' : 'justify-start'}`}>
+      {/* Conditionally render the icon and message container based on the sender */}
+      {message.sendername === doct.first_name ? (
+        <>
+          <div className={`ml-3 ${message.sendername === doct.first_name ? 'bg-gray-300' : 'bg-gray-300'} rounded-lg p-2`}>
+            <p className="text-sm font-medium text-gray-900">{message.message}</p>
+          </div>
+          <div className="flex-shrink-0">
+            {/* Display the first letter of the sender's name or a default icon if the name is not available */}
+            <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+              {message.sendername ? message.sendername.charAt(0).toUpperCase() : 'N/A'}
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex-shrink-0">
+            {/* Display the first letter of the sender's name or a default icon if the name is not available */}
+            <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+              {message.sendername ? message.sendername.charAt(0).toUpperCase() : 'N/A'}
+            </div>
+          </div>
+          <div className={`ml-3 ${message.sendername === doct.first_name ? 'bg-indigo-200' : 'bg-gray-300'} rounded-lg p-2`}>
+            <p className="text-sm font-medium text-gray-900">{message.message}</p>
+          </div>
+        </>
+      )}
+    </div>
  </div>
+))}
+
+
+
+
 </div>
-                      
+
+
+
+
 <div className="p-4 border-t flex">
  <label htmlFor="file-upload" className="cursor-pointer mx-2 flex items-center">
     <input id="file-upload" type="file" accept="image/, video/" style={{ display: 'none' }} />
@@ -231,47 +276,3 @@ export default PatientChat;
 
 
 
-
-// <div id="chat-container" className="  bottom-16  w-full ">
-//                 <div className="bg-white shadow-md rounded-lg  w-full">
-//                     <div className="p-4 border-b bg-teal-700 text-white rounded-t-lg flex justify-between items-center">
-//                         <p className="text-lg font-semibold">Chat</p>
-//                         <button onClick={handleClose} id="close-chat" className="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400">
-//                             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-//                             </svg>
-//                         </button>
-//                     </div>
-//                     <div id="chatbox" className="p-4 h-80 overflow-y-auto">
-
-//                         <div className="h-[450px] overflow-scroll overflow-x-hidden ">
-//                             {mediaPreview ? (
-//                                 <>
-//                                     <div className='cursor-pointer' onClick={() => { setMediaPreview(null); setMediaFile(null); }}>
-//                                         close
-//                                     </div>
-//                                     <img src={mediaPreview} alt="Media Preview" className="w-[80%] h-[80%] mr-2" />
-//                                 </>
-
-//                             ) : (
-//                                 <>
-//                                     {message.map((m, index) => (
-//                                         <div key={index} ref={index === message.length - 1 ? scrollRef : null}>
-//                                             <Message message={m} own={m.senderId === userInfo?._id} sender={userInfo} />
-//                                         </div>
-//                                     ))}
-//                                 </>
-//                             )}
-//                         </div>
-
-//                     </div>
-//                     <div className="p-4 border-t flex">
-//                         <label htmlFor="file-upload" className="cursor-pointer mx-2 flex items-center">
-//                             <FaImage size={25} />
-//                             <input id="file-upload" type="file" onChange={handleFileChange} accept="image/, video/" style={{ display: 'none' }} />
-//                         </label>
-//                         <input id="user-input" type="text" placeholder="Type a message" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} className="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-//                         <button id="send-button" className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 transition duration-300" onClick={handleSubmit}>Send</button>
-//                     </div>
-//                 </div>
-//             </div>
