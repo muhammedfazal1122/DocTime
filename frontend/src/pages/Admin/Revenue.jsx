@@ -7,7 +7,7 @@ import avatar from "../../../public/assets/avatar/avatar_6.jpg";
 
 import DocCrump from "../../Compounts/admin/elements/BreadCrumps/DocCrump";
 
-function TransactionHistory() {
+function Revenue() {
   const [nextPage, setNextPage] = useState(null);
   const [prevPage, setPrevPage] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,13 +19,10 @@ function TransactionHistory() {
     "amount",
     "doctor_id",
     "patient_id",
-    "day",
-    "start_time",
-    "end_time",
-    "status",
-    // "created_at",
-  ];
-
+    "doctor_commission", // Add this line
+    "admin_commission", // Add this line
+   ];
+   
   const FieldInputTypes = {
     transaction_id: "number",
     payment_id: "text",
@@ -52,7 +49,41 @@ function TransactionHistory() {
         },
       })
       .then((req) => {
-        setTrasaction(req.data.results);
+        const transactions = req.data.results;
+        // Calculate commissions for each transaction
+        const transactionsWithCommissions = transactions.map(transaction => {
+          const doctorCommission = transaction.amount * 0.8; // 80% of amount
+          const adminCommission = transaction.amount * 0.2; // 20% of amount
+          return {
+            ...transaction,
+            doctor_commission: doctorCommission,
+            admin_commission: adminCommission,
+          };
+        });
+  
+        // Save commissions to the transactionCommission table
+        transactionsWithCommissions.forEach(transaction => {
+          const commissionData = {
+            transaction: transaction.transaction_id,
+            doctor_commission: transaction.doctor_commission,
+            admin_commission: transaction.admin_commission,
+          };
+          // Assuming you have an endpoint to save commissions
+          axios.post(`${baseUrl}appointment/transactionCommission/`, commissionData, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }).then(response => {
+            console.log('Commission saved successfully:', response.data);
+          }).catch(error => {
+            console.error('Error saving commission:', error);
+          });
+        });
+  
+        setTrasaction(transactionsWithCommissions);
+       
         setNextPage(req.data.next);
         setPrevPage(req.data.previous);
         console.log(req.data.results);
@@ -86,6 +117,7 @@ function TransactionHistory() {
    };
    
 
+   
   return (
     <>
       {/* ************************************************search bar*********************************************** */}
@@ -181,74 +213,59 @@ function TransactionHistory() {
       </div>
 
       {/* ****************************************************************table ***************************************************** */}
-      <div className="flex flex-col">
-  <div className="overflow-x-auto">
-    <div className="inline-block min-w-full align-middle">
-      <div className="overflow-hidden shadow-lg rounded-md">
-        <table className="min-w-full divide-y divide-black table-fixed dark:divide-black-600">
-          <thead className="bg-gradient-to-r from-blue-500 to-blue-700 text-white">
-            <tr>
-              {TransactionFields.map((field) => (
-                <th
-                  key={field}
-                  scope="col"
-                  className="p-4 text-sm font-semibold text-left uppercase tracking-wider"
-                >
-                  {field.replace(/_/g, " ")}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-black dark:bg-gray-800 dark:divide-black-700">
-            {transactionData.map((item, index) => (
-              <tr 
-                key={item.transaction_id}
-                className="hover:bg-gray-100 dark:hover:bg-gray-700"
+
+      <div className="flex flex-col bg-white shadow-lg rounded-lg my-6 overflow-x-auto">
+  <div className="min-w-full">
+    <table className="min-w-full divide-y divide-gray-200">
+      <thead className="bg-gradient-to-r from-blue-500 to-blue-700 text-white">
+        <tr>
+          <th scope="col" className="px-6 py-3">
+            {/* Checkbox */}
+          </th>
+          {TransactionFields.map((field) => (
+            <th
+              key={field}
+              scope="col"
+              className="px-6 py-3 text-sm font-semibold uppercase tracking-wider"
+            >
+              {field.replace(/_/g, " ")}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody className="bg-white divide-y divide-gray-200">
+        {transactionData.map((item, index) => (
+          <tr 
+            key={item.transaction_id}
+            className={`hover:bg-gray-100 ${index % 2 === 0 ? 'bg-gray-50' : ''}`}
+          >
+            <td className="px-6 py-4">
+              {/* Checkbox */}
+            </td>
+            {TransactionFields.map((field) => (
+              <td
+                key={field}
+                className={`px-6 py-4 ${
+                  field === "status"
+                  ? "text-base font-medium whitespace-nowrap text-gray-900"
+                  : "text-sm text-gray-800"
+                }`}
               >
-                {TransactionFields.map((field) => (
-                  <td
-                    key={field}
-                    className={`p-4 ${
-                      field === "status"
-                        ? "text-base font-normal whitespace-nowrap dark:text-white"
-                        : ""
-                    }`}
-                  >
-                    {field === "day" || field === "start_time" || field === "end_time" ? formatDateTime(item[field]) : item[field]}
-                  </td>
-                ))}
-              </tr>
+                {field === "doctor_commission" || field === "admin_commission" ? item[field].toFixed(2) : item[field]}
+              </td>
             ))}
-          </tbody>
-        </table>
-        {/* Pagination section */}
-        <nav className="mt-4 flex justify-between">
-          <button
-            className={`px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded ${
-              !prevPage ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            disabled={!prevPage}
-            onClick={() => fetchTransactions(prevPage)}
-          >
-            Previous
-          </button>
-          <button
-            className={`px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded ${
-              !nextPage ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            disabled={!nextPage}
-            onClick={() => fetchTransactions(nextPage)}
-          >
-            Next
-          </button>
-        </nav>
-      </div>
-    </div>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    {/* Pagination */}
   </div>
 </div>
+
+
 
     </>
   );
 }
 
-export default TransactionHistory;
+export default Revenue;

@@ -29,7 +29,7 @@ const VideoCall = () => {
         const response = await axios.patch(`${baseUrl}appointment/update-order/${trainsactionId}/`);
         console.log(response,'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
         console.log(response.data);
-
+        fetchTransactions(trainsactionId)
         // Navigate to the specified route after the update
         navigate(`/DoctorShow/BookAppoiment/booking-detailes`);
     } catch (error) {
@@ -40,6 +40,61 @@ const VideoCall = () => {
     }
 };
 
+
+  // to fetch the data as per the search query
+  const fetchTransactions = (trainsactionId) => {
+    const accessToken = localStorage.getItem("access");
+    console.log(accessToken, "this portion for the access token");
+    axios
+       .get(baseUrl + `appointment/geting/transaction/${trainsactionId}/`, {
+         headers: {
+           Authorization: `Bearer ${accessToken}`,
+           Accept: "application/json",
+           "Content-Type": "application/json",
+         },
+       })
+       .then((req) => {
+        console.log("Raw transactions data:", req.data); // Log raw data for debugging
+        // Directly access the transaction object
+        const transaction = req.data;
+        console.log(transaction.amount, 'AAAMOOOUUUNNTTT'); // Access the amount directly
+    
+        // Calculate commissions for the transaction
+        const doctorCommission = transaction.amount * 0.8; // 80% of amount
+        const adminCommission = transaction.amount * 0.2; // 20% of amount
+    
+        // Add commissions to the transaction object
+        const transactionWithCommissions = {
+            ...transaction,
+            doctor_commission: doctorCommission,
+            admin_commission: adminCommission,
+        };
+    
+        console.log("Transaction with commissions:", transactionWithCommissions);
+       
+                   
+           // Save commissions to the transactionCommission table
+   // Assuming you have an endpoint to get or create commissions
+   const commissionData = {
+    transaction: transactionWithCommissions.transaction_id,
+    doctor_commission: transactionWithCommissions.doctor_commission,
+    admin_commission: transactionWithCommissions.admin_commission,
+};
+     axios.post(`${baseUrl}appointment/transactionCommission/`, commissionData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+     })   
+       
+         })
+         .catch((err) => {
+           console.log(err);
+         });
+     };
+   
+     
 
     useEffect(() => {
         const MyVideoCallMeet = async () => { 

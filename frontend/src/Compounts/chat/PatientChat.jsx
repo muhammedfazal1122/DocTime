@@ -28,7 +28,12 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
   const decoder = jwtDecode(authToken)
   const userId = decoder.user_id
   
-
+  const [isChatVisible, setIsChatVisible] = useState(true); // Step 1: Add state for chat visibility
+ 
+  // Step 2: Function to toggle chat visibility
+  const toggleChatVisibility = () => {
+     setIsChatVisible(!isChatVisible);
+  };
 
     const fetchDoctorID = async () => {
       try {
@@ -170,7 +175,7 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
 
  const sendMessage = () => {
   if (!client || client.readyState !== client.OPEN) {
-    console.error("WebSocket is not open");
+    toast.error("WebSocket is not open")
     return;
   }
 
@@ -186,93 +191,75 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
   setMessage("");
 };
 
-
- return (
-    <div>
-       <div className="flex justify-end rounded-3xl">
-         
+return (
+  <>
+     {isChatVisible && (
+       <div>
+         <div className="flex justify-end rounded-3xl">
            <div className='fixed bottom-10 right-8 bg-sky-100 md:w-[35%] z-50'>
            </div>
-    
-       </div>
-      
-       <div id="chat-container" className="fixed bottom-10 right-8 bg-white shadow-lg rounded-lg w-full md:w-[35%] z-50">
+         </div>
+         <div id="chat-container" className="fixed bottom-10 right-8 bg-white shadow-lg rounded-lg w-full md:w-[35%] z-50">
            <div className="bg-white shadow-md rounded-lg w-full">
-           <div className="p-4 border-b bg-teal-700 text-white rounded-t-lg flex justify-between items-center">
- <p className="text-lg font-semibold">Chat</p>
- <button id="close-chat" className="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400">
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-    </svg>
- </button>
-</div>
-<div id="chatbox" className="p-4 h-80 overflow-y-auto" ref={chatContainerRef}>
-
-
-{chatMessages.map((message, index) => (
- <div key={index} className={`col-span-12 p-2 rounded-lg ${message.sendername === doct.first_name ? 'self-end' : 'self-start'}`}>
-    <div className={`flex items-center ${message.sendername === doct.first_name ? 'justify-end' : 'justify-start'}`}>
-      {/* Conditionally render the icon and message container based on the sender */}
-      {message.sendername === doct.first_name ? (
-        <>
-          <div className={`ml-3 ${message.sendername === doct.first_name ? 'bg-gray-300' : 'bg-gray-300'} rounded-lg p-2`}>
-            <p className="text-sm font-medium text-gray-900">{message.message}</p>
-          </div>
-          <div className="flex-shrink-0">
-            {/* Display the first letter of the sender's name or a default icon if the name is not available */}
-            <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
-              {message.sendername ? message.sendername.charAt(0).toUpperCase() : 'N/A'}
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="flex-shrink-0">
-            {/* Display the first letter of the sender's name or a default icon if the name is not available */}
-            <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
-              {message.sendername ? message.sendername.charAt(0).toUpperCase() : 'N/A'}
-            </div>
-          </div>
-          <div className={`ml-3 ${message.sendername === doct.first_name ? 'bg-indigo-200' : 'bg-gray-300'} rounded-lg p-2`}>
-            <p className="text-sm font-medium text-gray-900">{message.message}</p>
-          </div>
-        </>
-      )}
-    </div>
- </div>
-))}
-
-
-
-
-</div>
-
-
-
-
-<div className="p-4 border-t flex">
- <label htmlFor="file-upload" className="cursor-pointer mx-2 flex items-center">
-    <input id="file-upload" type="file" accept="image/, video/" style={{ display: 'none' }} />
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15.5C4 17.92 5.08 20 7 20M12 15.5C12 17.92 13.08 20 15 20M20 15.5C20 17.92 18.92 20 17 20M12 12.5C12 10.08 13.08 8 15 8M20 12.5C20 10.08 18.92 8 17 8M12 7.5C12 5.08 13.08 4 15 4M20 7.5C20 5.08 18.92 4 17 4M12 2.5C12 0.92 13.08 0 15 0M20 2.5C20 0.92 18.92 0 17 0"></path>
-    </svg>
- </label>
- <input id="user-input" type="text" placeholder="Type a message" value={message} onChange={(e) => setMessage(e.target.value)} className="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
- <button id="send-button" className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 transition duration-300" onClick={sendMessage}>Send</button>
-</div>
-
+             <div className="p-4 border-b bg-teal-700 text-white rounded-t-lg flex justify-between items-center">
+               <p className="text-lg font-semibold">Chat</p>
+               <button id="close-chat" className="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400" onClick={toggleChatVisibility}>
+                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                 </svg>
+               </button>
+             </div>
+             <div id="chatbox" className="p-4 h-80 overflow-y-auto md:h-64" ref={chatContainerRef}>
+               {chatMessages.map((message, index) => (
+                 <div key={index} className={`col-span-12 p-2 rounded-lg ${message.sendername === doct.first_name ? 'self-end' : 'self-start'}`}>
+                  <div className={`flex items-center ${message.sendername === doct.first_name ? 'justify-end' : 'justify-start'}`}>
+                     {/* Conditionally render the icon and message container based on the sender */}
+                     {message.sendername === doct.first_name ? (
+                       <>
+                         <div className={`ml-3 ${message.sendername === doct.first_name ? 'bg-gray-300' : 'bg-gray-300'} rounded-lg p-2`}>
+                           <p className="text-sm font-medium text-gray-900">{message.message}</p>
+                         </div>
+                         <div className="flex-shrink-0">
+                           {/* Display the first letter of the sender's name or a default icon if the name is not available */}
+                           <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+                             {message.sendername ? message.sendername.charAt(0).toUpperCase() : 'N/A'}
+                           </div>
+                         </div>
+                       </>
+                     ) : (
+                       <>
+                         <div className="flex-shrink-0">
+                           {/* Display the first letter of the sender's name or a default icon if the name is not available */}
+                           <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+                             {message.sendername ? message.sendername.charAt(0).toUpperCase() : 'N/A'}
+                           </div>
+                         </div>
+                         <div className={`ml-3 ${message.sendername === doct.first_name ? 'bg-indigo-200' : 'bg-gray-300'} rounded-lg p-2`}>
+                           <p className="text-sm font-medium text-gray-900">{message.message}</p>
+                         </div>
+                       </>
+                     )}
+                  </div>
+                 </div>
+               ))}
+             </div>
+             <div className="p-4 border-t flex">
+               <label htmlFor="file-upload" className="cursor-pointer mx-2 flex items-center">
+                 <input id="file-upload" type="file" accept="image/, video/" style={{ display: 'none' }} />
+                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15.5C4 17.92 5.08 20 7 20M12 15.5C12 17.92 13.08 20 15 20M20 15.5C20 17.92 18.92 20 17 20M12 12.5C12 10.08 13.08 8 15 8M20 12.5C20 10.08 18.92 8 17 8M12 7.5C12 5.08 13.08 4 15 4M20 7.5C20 5.08 18.92 4 17 4M12 2.5C12 0.92 13.08 0 15 0M20 2.5C20 0.92 18.92 0 17 0"></path>
+                 </svg>
+               </label>
+               <input id="user-input" type="text" placeholder="Type a message" value={message} onChange={(e) => setMessage(e.target.value)} className="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+               <button id="send-button" className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 transition duration-300" onClick={sendMessage}>Send</button>
+             </div>
            </div>
-         </div> 
-    </div>
-   );
-   
+         </div>
+       </div>
+     )}
+  </>
+ );
+ 
 };
 
 export default PatientChat;
-
-
-
-
-
-
-

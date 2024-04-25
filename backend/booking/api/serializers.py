@@ -1,6 +1,6 @@
 # slots/serializers.py
 from rest_framework import serializers
-from booking.models import Slot,Transaction,Review
+from booking.models import Slot,Transaction,Review,Prescription,TransactionCommission
 from accounts.models import Doctor
 
 
@@ -44,3 +44,25 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'doctor', 'patient', 'rating', 'comment', 'created_at', 'patient_full_name','subject']
+
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = ['transaction_id', 'prescription_file']
+
+# class PrescriptionSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Prescription
+#         fields = '__all__'
+
+class PrescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Prescription
+        fields = '__all__'
+
+class TransactionCommissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransactionCommission
+        fields = '__all__'

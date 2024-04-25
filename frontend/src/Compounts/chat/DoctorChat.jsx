@@ -164,139 +164,106 @@ newClient.onmessage = (message) => {
 
 
 
-
-
  return (
-<div>
-  
-  
-    <div className='ml-8 mr-5 mb-5 mt-3'>
-      <div className="flex h-screen antialiased text-gray-800">
-        <div className="flex flex-row h-full w-full overflow-x-hidden">
-          {/* Sidebar */}
-          <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0">
-            {/* Header */}
-            <div className="flex flex-row items-center justify-center h-12 w-full">
-              <div className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10">
-                {/* SVG icon */}
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-                </svg>
-              </div>
-              <div className="ml-2 font-bold text-2xl">QuickChat</div>
-            </div>
-            {/* User Profile */}
-
-            {/* Conversations */}
-            <div className="flex flex-col mt-8">
-              {/* Active Conversations */}
-              <div className="flex flex-row items-center justify-between text-xs">
-                <span className="font-bold">Active Conversations</span>
-                {/* <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">4</span> */}
-              </div>
-              {/* Conversation List */}
-{/* Conversation List */}
-<div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
- {bookings.map((booking, index) => (
-    <button
-      key={index}
-      className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2"
-      onClick={() => handleAppointmentClick(booking)}
-    >
-      <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
-        {/* Display the first letter of the patient's name */}
-        {booking.patient_name ? booking.patient_name.charAt(0).toUpperCase() : 'N/A'}
-      </div>
-      <div className="ml-2 text-sm font-semibold">
-        {booking.patient_name ? booking.patient_name : 'No Patient Name'}
-      </div>
-
-    </button>
-  ))}
-</div>
-
-  
-            </div>
+    <div className="flex flex-col md:flex-row h-screen antialiased text-gray-800">
+      {/* Sidebar */}
+      <div className="flex flex-col py-8 pl-6 pr-2 w-full md:w-64 bg-white flex-shrink-0">
+        {/* Header */}
+        <div className="flex flex-row items-center justify-center h-12 w-full">
+          <div className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10">
+            {/* SVG icon */}
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+            </svg>
           </div>
-          {/* Main Chat Area */}
-          <div className="flex flex-col flex-auto h-full p-6">
-            {/* Messages */}
-            <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
-              {/* Message List */}
-{/* Message List */}
-<div className="flex flex-col h-full overflow-x-auto mb-4" ref={chatContainerRef}>
- {/* Message Item */}
- <div className="grid grid-cols-12 gap-y-2">
-    {chatMessages.map((message, index) => (
-      <div key={index} className={`col-span-12 p-2 rounded-lg ${message.sendername === doct.first_name ? 'self-end' : 'self-start'}`}>
-        <div className={`flex items-center ${message.sendername === doct.first_name ? 'justify-end' : 'justify-start'}`}>
-          {/* Display an icon instead of the sender's name */}
-          <div className="flex-shrink-0">
-            <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
-              {/* Display the first letter of the sender's name as an icon */}
-              {message.sendername ? message.sendername.charAt(0).toUpperCase() : 'N/A'}
-            </div>
+          <div className="ml-2 font-bold text-2xl">QuickChat</div>
+        </div>
+        {/* Conversations */}
+        <div className="flex flex-col mt-8">
+          {/* Active Conversations */}
+          <div className="flex flex-row items-center justify-between text-xs">
+            <span className="font-bold">Active Conversations</span>
           </div>
-          <div className={`ml-3 ${message.sendername === doct.first_name ? 'bg-indigo-200' : 'bg-gray-200'} rounded-lg p-2`}>
-            <p className="text-sm font-medium text-gray-900">{message.message}</p>
+          {/* Conversation List */}
+          <div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
+            {bookings.map((booking, index) => (
+              <button
+                key={index}
+                className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2"
+                onClick={() => handleAppointmentClick(booking)}
+              >
+                <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+                 {booking.patient_name ? booking.patient_name.charAt(0).toUpperCase() : 'N/A'}
+                </div>
+                <div className="ml-2 text-sm font-semibold">
+                 {booking.patient_name ? booking.patient_name : 'No Patient Name'}
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </div>
-    ))}
- </div>
-</div>
-
-
-
-              {/* Message Input */}
-              <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
- <div className="flex-grow ml-4">
-    <div className="relative w-full">
-      <input
-        type="text"
-        value={message} // Bind the input value to the message state
-        onChange={(e) => setMessage(e.target.value)} // Update the message state on input change
-        className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
-      />
-      {/* Send Button */}
-      <button
-        onClick={sendMessage} // Call sendMessage when the button is clicked
-        className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-      </button>
-    </div>
- </div>
- {/* Send Button */}
- <div className="ml-4">
-    <button
-      onClick={sendMessage} // Call sendMessage when the button is clicked
-      className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
-    >
-      <span>Send</span>
-      <span className="ml-2">
-        <svg className="w-4 h-4 transform rotate-45 -mt-px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-        </svg>
-      </span>
-    </button>
+      {/* Main Chat Area */}
+      <div className="flex flex-col flex-auto h-full p-6">
+        {/* Messages */}
+        <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
+          {/* Message List */}
+          <div className="flex flex-col h-full overflow-y-auto mb-4" ref={chatContainerRef}>
+            {chatMessages.map((message, index) => (
+              <div key={index} className={`col-span-12 p-2 rounded-lg ${message.sendername === doct.first_name ? 'self-end' : 'self-start'}`}>
+                <div className={`flex items-center ${message.sendername === doct.first_name ? 'justify-end' : 'justify-start'}`}>
+                 <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
+                      {message.sendername ? message.sendername.charAt(0).toUpperCase() : 'N/A'}
+                    </div>
+                 </div>
+                 <div className={`ml-3 ${message.sendername === doct.first_name ? 'bg-indigo-200' : 'bg-gray-200'} rounded-lg p-2`}>
+                    <p className="text-sm font-medium text-gray-900">{message.message}</p>
+                 </div>
                 </div>
               </div>
+            ))}
+          </div>
+          {/* Message Input */}
+          <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
+            <div className="flex-grow ml-4">
+              <div className="relative w-full">
+                <input
+                 type="text"
+                 value={message}
+                 onChange={(e) => setMessage(e.target.value)}
+                 className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                />
+                {/* Send Button */}
+                <button
+                 onClick={sendMessage}
+                 className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
+                >
+                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                 </svg>
+                </button>
+              </div>
+            </div>
+            {/* Send Button */}
+            <div className="ml-4">
+              <button
+                onClick={sendMessage}
+                className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
+              >
+                <span>Send</span>
+                <span className="ml-2">
+                 <svg className="w-4 h-4 transform rotate-45 -mt-px" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                 </svg>
+                </span>
+              </button>
             </div>
           </div>
         </div>
       </div>
-
-      </div>
-      </div>
-   );
-   
+    </div>
+ );
 };
 
 export default DoctorChat;
-
-
-
-

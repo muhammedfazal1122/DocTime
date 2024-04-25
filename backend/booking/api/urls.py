@@ -43,8 +43,18 @@ urlpatterns = [
     path('reviews/create/', views.ReviewCreateView.as_view(), name='review-create'),
     path('reviews/<str:doctor_id>/', views.ReviewListView.as_view(), name='review-list'),
 
+    path('upload-prescription/<str:transaction_id>/', views.UploadPrescriptionView.as_view(), name='upload-prescription'),
 
 
     path('api/doctor-transactions/', views.DoctorTransactionsAPIView.as_view(), name='doctor-transactions'),
 
-]
+    path('prescription/create/', views.PrescriptionCreateView.as_view(), name='prescription-create'),
+    path('prescription/update/<int:pk>/', views.PrescriptionUpdateView.as_view(), name='prescription-update'),
+
+    path('prescriptions/display/<str:transaction_id>/', views.PatientPrescriptionsView.as_view(), name='prescription-get'),
+    
+    path('transactionCommission/', views.TransactionCommissionView.as_view(), name='transaction_commission'),
+
+    path('geting/transaction/<str:transaction_id>/', views.GetingTransaction.as_view(), name='transaction_'),
+
+    ]

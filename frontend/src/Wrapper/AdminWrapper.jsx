@@ -13,6 +13,7 @@ import isAuthAdmin from '../utils/isAuthAdmin'
 import VarificationDoc from '../pages/Admin/VarificationDoc'
 import DoctorList from '../pages/Admin/DoctorList'
 import TransactionHistory from '../pages/Admin/TransactionHistory'
+import Revenue from '../pages/Admin/Revenue'
 
 const Adminwrapper = () => {
   const dispatch = useDispatch();
@@ -59,6 +60,7 @@ const Adminwrapper = () => {
         { path: '/doctor', element: <DoctorList /> },
         { path: '/order', element: <TransactionHistory /> },
         { path: '/DocVerification', element: <VarificationDoc /> },
+        { path: '/revenue', element: <Revenue/> },
       ]
     },
     {

@@ -49,6 +49,11 @@ const navConfig = [
     path: '/admincontrol/DocVerification',
     icon: icon('ic_lock'),
   },
+  {
+    title: 'Revenue',
+    path: '/admincontrol/revenue',
+    icon: icon('ic_analytics'),
+  },
   // {
   //   title: 'Not found',
   //   path: '/404',

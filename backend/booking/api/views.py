@@ -3,11 +3,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from booking.models import Slot,Review
 from accounts.models import Doctor,Patient
-from .serializers import SlotSerializer,RazorpayOrderSerializer,TranscationModelSerializer,Transaction,TranscationModelList,ReviewSerializer
+from .serializers import SlotSerializer,TransactionCommission,TransactionCommissionSerializer,PrescriptionSerializer,RazorpayOrderSerializer,TranscationModelSerializer,Transaction,TranscationModelList,ReviewSerializer,TransactionSerializer,Prescription
 from rest_framework import generics
 from rest_framework import status
 from django.utils.dateparse import parse_date
 from datetime import datetime
+from rest_framework import viewsets
 from booking.api.razorpay.main import RazorpayClient
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
@@ -254,7 +255,6 @@ class TrasactionListAPIView(generics.ListAPIView):
     serializer_class = TranscationModelList
     pagination_class = PageNumberPagination    
     filter_backends = [SearchFilter]
-    permission_classes=[IsAdminUser]
     search_fields = ['transaction_id', 'doctor_id','patient_id', 'booked_date']
 
 
@@ -363,3 +363,86 @@ class DoctorTransactionsAPIView(APIView):
             data.append(transaction_data)
 
         return Response(data, status=status.HTTP_200_OK)
+
+
+
+class UploadPrescriptionView(APIView):
+    def get(self, request, transaction_id):
+        transaction = Transaction.objects.get(transaction_id=transaction_id)
+        serializer = TransactionSerializer(transaction)
+        return Response(serializer.data)
+
+    def post(self, request, transaction_id):
+        transaction = Transaction.objects.get(transaction_id=transaction_id)
+        serializer = TransactionSerializer(transaction, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class PrescriptionCreateView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = PrescriptionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PrescriptionUpdateView(APIView):
+    def get_object(self, pk):
+        try:
+            return Prescription.objects.get(pk=pk)
+        except Prescription.DoesNotExist:
+            raise Http404
+
+    def patch(self, request, pk, *args, **kwargs):
+        prescription = self.get_object(pk)
+        serializer = PrescriptionSerializer(prescription, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class PatientPrescriptionsView(generics.ListAPIView):
+    serializer_class = PrescriptionSerializer
+
+    def get_queryset(self):
+        transaction_id = self.kwargs['transaction_id']
+        return Prescription.objects.filter(transaction=transaction_id)
+    
+class TransactionCommissionView(APIView):
+    def post(self, request):
+        serializer = TransactionCommissionSerializer(data=request.data)
+        if serializer.is_valid():
+            # Attempt to get the object, or create it if it doesn't exist
+            transaction_commission, created = TransactionCommission.objects.get_or_create(
+                transaction_id=serializer.validated_data['transaction'],
+                defaults=serializer.validated_data
+            )
+            if created:
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                # If the object already exists, update it with the new data
+                for attr, value in serializer.validated_data.items():
+                    setattr(transaction_commission, attr, value)
+                transaction_commission.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class GetingTransaction(generics.RetrieveAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TranscationModelList  # Replace with your serializer
+
+    def get_object(self):
+        transaction_id = self.kwargs['transaction_id']
+        try:
+            return self.queryset.get(transaction_id=transaction_id)
+        except Transaction.DoesNotExist:
+            return None

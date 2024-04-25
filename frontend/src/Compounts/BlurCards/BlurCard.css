@@ -33,7 +33,7 @@
   height: 180px; /* Increased the height of the card */
   width: 200px; /* Increased the width of the card */
   border-radius: 10px;
-  color: rgb(255, 255, 255);
+  color: #c7e9ff;
   cursor: pointer;
   transition: 400ms;
   /* background-image: url('/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg');  */

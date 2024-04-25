@@ -8,7 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 const ReviewFormForDr = ({ doctorId }) => {
     const [subject, setSubject] = useState('');
     const [comment, setComment] = useState('');
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(true);
     const [reviews, setReviews] = useState([]);
     const [averageRating, setAverageRating] = useState(0);
     const [rating, setRating] = useState(0); // State for rating

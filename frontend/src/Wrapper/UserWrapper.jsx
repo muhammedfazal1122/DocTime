@@ -23,6 +23,7 @@ import BookingDetailes from '../pages/Patient/Book Appoiment/BookingDetailes';
 import Videocall from '../Compounts/Videocall';
 import SpecialisationShow from '../pages/Patient/SpecialisationShow';
 import PatientChat from '../Compounts/chat/PatientChat';
+import DoctorShowChatList from '../pages/Patient/DoctorList/DoctorShowChatList';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -86,6 +87,7 @@ const UserWrapper = () => {
     children:[
       {path: "/auth/*", element:<Authenticator/>},
       {path: "/DoctorShow/", element: <DoctorShow/>},    
+      {path: "/DoctorShowChatList/", element: <DoctorShowChatList/>},    
       {path: "/DoctorShow/:specialization", element: <SpecialisationShow/>},    
       {path: "/myprofile", element: <MyProfile/>},    
       {path: "/DoctorShow/ViewDocProfile/:id", element: <ViewDocProfile/>},    

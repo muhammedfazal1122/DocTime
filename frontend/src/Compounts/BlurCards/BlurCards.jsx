@@ -15,10 +15,10 @@ const BlurCard = () => {
   navigate('/DoctorShow/BookAppoiment/booking-detailes')
 }
 
- const videocall = ()=>{
-  const roomId = randomID(10)
-  navigate(`/DoctorShow/videocall/${roomId}`)
+const GotoDoctorShowChat = ()=>{
+  navigate('/DoctorShowChatList')
 }
+
 function randomID(len) {
   let result = '';
   if (result) return result;
@@ -46,17 +46,14 @@ function randomID(len) {
       <div
         onClick={gotoBooking} className="card red w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4 m-4">
         <p className="tip">View Appointment.</p>
-        <p className="second-text">Book an appointment for an in-clinic consultation</p>
       </div>
       <div 
-        onClick={videocall}
+        onClick={GotoDoctorShowChat}
       className="card blue w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4 m-4">
-        <p className="tip">Instant Video Consultation</p>
-        <p className="second-text">Connect within 60 secs</p>
+        <p className="tip">Instant Chat With Your Favourate Doctor</p>
       </div>
       <div onClick={GotoDoctorShow}  className="card green w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4 m-4">
         <p  className="tip">Find Your Doctor</p>
-        <p className="second-text">Find The Best One</p>
       </div>
     </div>
  );

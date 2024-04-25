@@ -39,11 +39,10 @@ const [id, setId] = useState(null);
 const navigate = useNavigate();
 const [OnlinePaymet, setOnlinePaymet] = useState(false)
 const doctorId = custom_id
+const [transactionData, setTrasaction] = useState([])
 
 
-
-
-
+  
 const handleRazorpay = () =>{
 
   const fees = DoctorData.doctor_user.consultaion_fees
@@ -165,6 +164,7 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
         console.log(response.data);
         if (response.status === 201) {
           console.log("compleeetedd transaction");
+      
           navigate("/DoctorShow/BookAppoiment/success-page")
         }
       })
@@ -176,7 +176,6 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
   
 
 
-  
   
 
 
@@ -619,7 +618,65 @@ const removeDuplicates = (slots) => {
 
 
 
+{/* 
+const express = require('express');
+const app = express();
+app.use(express.json());
 
+// Assuming you have a function to calculate the commission
+function calculateCommission(amount) {
+ return amount * 0.20; // 20% commission
+}
+
+// Endpoint to process payment and transfer funds
+app.post('/process-payment', async (req, res) => {
+ const { patientId, doctorId, amount } = req.body;
+
+ try {
+    // Calculate the commission
+    const commission = calculateCommission(amount);
+    const doctorAmount = amount - commission;
+
+    // Transfer funds to admin (commission)
+    await transferFunds(patientId, 'adminAccountId', commission);
+
+    // Transfer funds to doctor
+    await transferFunds('adminAccountId', doctorId, doctorAmount);
+
+    // Generate receipt
+    const receipt = generateReceipt(patientId, doctorId, amount, commission, doctorAmount);
+
+    // Send receipt to the client
+    res.json({ success: true, receipt });
+ } catch (error) {
+    res.status(500).json({ success: false, message: 'Error processing payment' });
+ }
+});
+
+// Function to transfer funds (simplified)
+async function transferFunds(fromAccountId, toAccountId, amount) {
+ // Implement your logic to transfer funds between accounts
+ // This might involve updating your database to reflect the transaction
+}
+
+// Function to generate a receipt (simplified)
+function generateReceipt(patientId, doctorId, totalAmount, commission, doctorAmount) {
+ // Generate a receipt object with the necessary details
+ return {
+    transactionId: 'someTransactionId',
+    patientId,
+    doctorId,
+    totalAmount,
+    commission,
+    doctorAmount
+ };
+}
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+
+
+
+ */}
 
 
     </div>
