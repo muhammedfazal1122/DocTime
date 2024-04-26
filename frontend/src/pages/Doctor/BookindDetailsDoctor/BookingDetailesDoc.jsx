@@ -5,6 +5,8 @@ import { Card, CardHeader, CardBody, Typography, Avatar } from "@material-tailwi
 import { FcVideoCall } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal'; // Import the Modal component
+import { toast } from 'react-toastify';
+Modal.setAppElement('#root'); // Add this line
 
 const DoctorBookingDetails = () => {
  const [booking, setBooking] = useState([]);
@@ -46,7 +48,7 @@ const DoctorBookingDetails = () => {
      maxHeight: '80vh', // Set a maximum height for the modal content
   },
   overlay: {
-     backgroundColor: 'rgba(0,0,0,0.5)', // Semi-transparent overlay to darken the background
+     backgroundColor: 'rgba(0,0,0,0.2)', // Semi-transparent overlay to darken the background
   },
  };
  const openModal = (transactionId, patientId) => {
@@ -95,7 +97,8 @@ const DoctorBookingDetails = () => {
        if (!prescriptionData.id) {
          setPrescriptionData(response.data);
        }
-   
+       
+   toast.success("Prescription sent successfully!")
        closeModal(); // Close the modal after successful submission
     } catch (error) {
        console.error('Error submitting prescription:', error);

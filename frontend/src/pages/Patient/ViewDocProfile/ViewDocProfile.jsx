@@ -314,11 +314,11 @@ export default function ViewDocProfile() {
 </div>
 
 
-    </div>
-    {doctor && doctor.doctor_user && (
-    <ReviewFormForDr doctorId={doctor.doctor_user.custom_id || "Ddddd"} />
+</div>
+{doctor && doctor.doctor_user && (
+  <ReviewFormForDr doctorId={doctor.doctor_user.custom_id || "Ddddd"} transaction_id={transactionId} />
 )}
+</div>
 
-    </div>
 );
 }

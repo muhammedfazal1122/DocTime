@@ -169,12 +169,10 @@ const BookingDetails = () => {
      console.log(typeof transaction_id); // Should log 'string'
  
      // Correctly set withCredentials to true
-     const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${transaction_id}`, { withCredentials: true });
-     if (!response.ok) {
-       throw new Error('Network response was not ok');
-     }
-     const data = await response.json(); // This line extracts the JSON data from the response
-     setPrescriptions(data);
+     const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${transaction_id}/`, { withCredentials: true });
+   
+     const data = response.data // This line extracts the JSON data from the response
+     setPrescriptions(data.results);
      console.log(data, 'Fetched prescriptions data');
   } catch (error) {
      console.error("Error fetching prescriptions:", error);
@@ -274,7 +272,7 @@ const BookingDetails = () => {
 
 <div>
 <button
- onClick={() => toggleModal(transaction.transaction_id)}
+ onClick={() => toggleModal(transaction.transaction_id,)}
  class="cursor-pointer flex items-center fill-lime-400 bg-lime-950 hover:bg-lime-900 active:border active:border-lime-400 rounded-md duration-100 p-2 mt-3"
   title="Save"
 >
@@ -297,56 +295,66 @@ const BookingDetails = () => {
 </button>
 
 <div>
-     
+ {isOpen && (
+    <div className="fixed z-10 inset-0 overflow-y-auto">
+      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
 
-      {isOpen && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 relative">
+            {/* Header with date on top right */}
+            <div className="absolute top-0 right-0 mt-2 mr-4 text-sm text-gray-500">
+              {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
             </div>
-
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                 Your Prescriptions
-                </h3>
-                <div className="mt-2">
-                 {prescriptions.map((prescription, index) => (
-                    <div key={index} className="border-b border-gray-200 py-2">
-                      <p className="text-sm text-gray-500">
-                        {prescription.medicine_name} - {prescription.dosage}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {prescription.times}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        Age: {prescription.Age}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        Duration: {prescription.duration}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        Notes: {prescription.notes}
-                      </p>
-                    </div>
-                  ))}
+            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+              Your Prescriptions
+            </h3>
+            <div className="mt-2">
+              {prescriptions.map((prescription, index) => (
+                <div key={index} className="border-b border-gray-200 py-4">
+                 {/* Doctor's name */}
+                 <p className="text-lg font-semibold text-gray-800 mb-1">
+                    Doctor Name: {`${doctorDetails[transaction.transaction_id]?.doctor_user.full_name} `} 
+                 </p>
+                 {/* Prescription details */}
+                 <p className="text-sm text-gray-500 mb-1">
+                    Medicine: {prescription.medicine_name} - {prescription.dosage}
+                 </p>
+                 <p className="text-sm text-gray-500 mb-1">
+                    Times: {prescription.times}
+                 </p>
+                 <p className="text-sm text-gray-500 mb-1">
+                    Age: {prescription.Age}
+                 </p>
+                 <p className="text-sm text-gray-500 mb-1">
+                    Duration: {prescription.duration}
+                 </p>
+                 {/* Highlighted Notes field */}
+                 <p className="text-sm text-gray-500 mb-1 bg-yellow-100 p-2 rounded">
+                    <span className="font-semibold">Notes:</span> {prescription.notes}
+                 </p>
                 </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                 type="button"
-                 className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                 onClick={toggleModal}
-                >
-                 Close
-                </button>
-              </div>
+              ))}
             </div>
           </div>
+          {/* Close button */}
+          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <button
+              type="button"
+              className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+              onClick={toggleModal}
+            >
+              Close
+            </button>
+          </div>
         </div>
-      )}
+      </div>
     </div>
+ )}
+</div>
+
 </div>
 
 

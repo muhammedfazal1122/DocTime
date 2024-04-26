@@ -12,7 +12,13 @@ function Revenue() {
   const [prevPage, setPrevPage] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [transactionData, setTrasaction] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Function to toggle modal visibility
+  const toggleModal = () => {
+     setIsModalOpen(!isModalOpen);
+  };
+ 
   const TransactionFields = [
     "transaction_id",
     "payment_id",
@@ -262,7 +268,79 @@ function Revenue() {
   </div>
 </div>
 
+<>
+      {/* Existing search bar and table... */}
 
+      {/* Button to open the modal */}
+      <button onClick={toggleModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Open Receipt
+      </button>
+
+      {/* Modal for the receipt */}
+      {isModalOpen && (
+        <div className="fixed z-10 inset-0 overflow-y-auto">
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                {/* Receipt component */}
+                <div className="flex justify-center">
+                 <div className="max-w-lg bg-white p-8 rounded-lg shadow-lg">
+                    <div className="flex justify-between mb-4">
+                      <div>
+                        <h1 className="text-2xl font-semibold">Transaction Receipt</h1>
+                        <p className="text-sm text-gray-500">Date: {new Date().toLocaleDateString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Receipt #: {Math.random().toString(36).substring(2, 15)}</p>
+                      </div>
+                    </div>
+                    <div className="border-b border-gray-300 mb-4"></div>
+                    <table className="w-full mb-4">
+                      <tbody>
+                          <tr>
+                            <td className="py-2 pr-4">Transaction ID</td>
+                            {/* <td className="py-2">Payment ID</td> */}
+                            <td className="py-2">Amount</td>
+                            <td className="py-2">Doctor ID</td>
+                            <td className="py-2">Patient ID</td>
+                          </tr>
+                          {/* Map through transactionData to display each transaction */}
+                          {transactionData.map((item, index) => (
+                            <tr key={index}>
+                              <td className="py-2 pr-4">{item.transaction_id}</td>
+                              {/* <td className="py-2">{item.payment_id}</td> */}
+                              <td className="py-2">{item.amount}</td>
+                              <td className="py-2">{item.doctor_id}</td>
+                              <td className="py-2">{item.patient_id}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                    <div className="flex justify-between">
+                      <p className="text-lg font-semibold">Total: {transactionData.reduce((total, item) => total + item.amount, 0)}</p>
+                      <p className="text-lg font-semibold">Doctor Commission: {transactionData.reduce((total, item) => total + item.doctor_commission, 0)}</p>
+                    </div>
+                 </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                 type="button"
+                 className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                 onClick={toggleModal}
+                >
+                 Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
 
     </>
   );

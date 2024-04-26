@@ -3,9 +3,10 @@ import axios from 'axios';
 import { baseUrl } from '../../utils/constants/Constants';
 import { Rating } from "@material-tailwind/react";
 import { jwtDecode } from 'jwt-decode';
+import { toast } from 'react-toastify';
  
 
-const ReviewFormForDr = ({ doctorId }) => {
+const ReviewFormForDr = ({ doctorId ,transaction_id}) => {
     const [subject, setSubject] = useState('');
     const [comment, setComment] = useState('');
     const [showForm, setShowForm] = useState(true);
@@ -13,7 +14,7 @@ const ReviewFormForDr = ({ doctorId }) => {
     const [averageRating, setAverageRating] = useState(0);
     const [rating, setRating] = useState(0); // State for rating
     const [id, setId] = useState(null);
-    const [patientID, setPatientID] = useState(null)
+    const [patientID, setPatientID] = useState(null) 
 
 
     const fetchPatientCustomId =async ()=>{
@@ -67,7 +68,13 @@ const ReviewFormForDr = ({ doctorId }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const reviewData = {
+        if (!transaction_id) {
+            toast.error("You have to consult this doctor at least once! ")
+            // Show toast or alert indicating no transaction ID
+            return;
+          }
+          
+          const reviewData = {
             doctor: doctorId,
             patient: patientID,
             subject:subject,
@@ -132,6 +139,7 @@ const ReviewFormForDr = ({ doctorId }) => {
                         )}
                     </div>
                     <div className="md:w-1/2 md:pl-4">
+                        
                         <button
                             onClick={() => setShowForm(!showForm)}
                             className="bg-blue-300 text-black text-center mx-auto block w-full py-2 rounded-md hover:bg-blue-400"
