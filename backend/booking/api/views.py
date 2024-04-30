@@ -2,8 +2,9 @@ from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from booking.models import Slot,Review
+from notifications.models import Notification
 from accounts.models import Doctor,Patient
-from .serializers import SlotSerializer,TransactionCommission,TransactionCommissionSerializer,PrescriptionSerializer,RazorpayOrderSerializer,TranscationModelSerializer,Transaction,TranscationModelList,ReviewSerializer,TransactionSerializer,Prescription
+from .serializers import SlotSerializer,AdminPatientUpdateSerializer,TransactionCommission,TransactionCommissionSerializer,PrescriptionSerializer,RazorpayOrderSerializer,TranscationModelSerializer,Transaction,TranscationModelList,ReviewSerializer,TransactionSerializer,Prescription
 from rest_framework import generics
 from rest_framework import status
 from django.utils.dateparse import parse_date
@@ -18,6 +19,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from django.http import Http404
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 
@@ -140,6 +142,8 @@ class TransactionAPIView(APIView):
                 print("ddddddddddddddddddddddddddddddddddddddddddddddddd")
                 doctor_id = transaction_serializer.validated_data.get("doctor_id")
                 patient_id=transaction_serializer.validated_data.get("patient_id")
+                doctor=Doctor.objects.get(custom_id=doctor_id)
+                patient=Patient.objects.get(custom_id=patient_id)
                 start_time = request.data.get('start_time')
                 end_time = request.data.get('end_time')
                 day = request.data.get('day')
@@ -150,11 +154,16 @@ class TransactionAPIView(APIView):
                 doctor_availability = get_object_or_404(Slot, doctor_id=doctor_id, day=day, start_time__lte=start_time, end_time__gte=end_time)
                 doctor_availability.is_booked=True
                 doctor_availability.save()
-    
+                Notification.objects.create(
+            Patient=patient, Doctor=doctor, message=f'{patient.user.first_name} has booked an appointment on {day} @ {start_time}.',
+            receiver_type=Notification.RECEIVER_TYPE[1][0],notification_type=Notification.NOTIFICATION_TYPES[0][0]
+            )
+            
             except Exception as e:
                 print(e)
                 return Response({"error": "Doctor availability not found"}, status=status.HTTP_404_NOT_FOUND)
-    
+
+            print("Notification is ooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkkk")
             transaction_serializer.save()
             response = {
                 "status_code": status.HTTP_201_CREATED,
@@ -446,3 +455,11 @@ class GetingTransaction(generics.RetrieveAPIView):
             return self.queryset.get(transaction_id=transaction_id)
         except Transaction.DoesNotExist:
             return None
+
+
+class PatientDetailList(generics.RetrieveAPIView):
+    queryset = Patient.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = AdminPatientUpdateSerializer
+    lookup_field = 'pk'
+

@@ -45,6 +45,7 @@ urlpatterns = [
 
     path('upload-prescription/<str:transaction_id>/', views.UploadPrescriptionView.as_view(), name='upload-prescription'),
 
+    path("Notification/<str:pk>", views.PatientDetailList().as_view(), name="Doc-list"),
 
     path('api/doctor-transactions/', views.DoctorTransactionsAPIView.as_view(), name='doctor-transactions'),
 

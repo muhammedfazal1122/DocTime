@@ -11,7 +11,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         doctor = await self.get_doctor_instance()
 
         if doctor:
-            self.room_group_name = f"notify_{doctor.custom_id}" 
+            self.room_group_name = f"notify_{doctor.custom_id}"
             await self.channel_layer.group_add(
                 self.room_group_name,
                 self.channel_name

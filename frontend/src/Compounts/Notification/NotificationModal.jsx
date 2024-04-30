@@ -5,7 +5,7 @@ import { baseUrl } from '../../utils/constants/Constants';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { debounce } from 'lodash';
-
+   
 function NotificationModal({ isOpen, customID, data }) {
   console.log(isOpen, customID, data,'firstLINEEEE');
   const [notifications, setNotifications] = useState([]);

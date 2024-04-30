@@ -1,7 +1,7 @@
 # slots/serializers.py
 from rest_framework import serializers
 from booking.models import Slot,Transaction,Review,Prescription,TransactionCommission
-from accounts.models import Doctor
+from accounts.models import Doctor,Patient,User
 
 
 class DoctorSerializer(serializers.ModelSerializer):
@@ -66,3 +66,25 @@ class TransactionCommissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransactionCommission
         fields = '__all__'
+
+
+class DOCUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        exclude = ('password', 'id' ,'is_staff','is_superuser','user_type')
+
+
+class AdminPatientUpdateSerializer(serializers.ModelSerializer):
+    user=DOCUserSerializer()
+    class Meta:
+        model = Patient
+        fields='__all__' 
+        
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', {}) # this is used to pop out the user object and if it is not existing then we will assign a {} to it as default
+        user_serializer = DOCUserSerializer(instance.user, data=user_data, partial=True)
+        if user_serializer.is_valid():
+            user_serializer.save()
+        return super().update(instance, validated_data)
+    
+

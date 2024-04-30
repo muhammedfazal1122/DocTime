@@ -38,5 +38,7 @@ if settings.DEBUG:
 
 
 websocket_urlpatterns = [
-     path('ws/doctor-notification/<str:custom_id>/', NotificationConsumer.as_asgi()),
+    path('ws/chat/<int:appointment_id>/', ChatConsumer.as_asgi()),
+
+    path('ws/doctor-notification/<str:custom_id>/', NotificationConsumer.as_asgi()),
 ]
