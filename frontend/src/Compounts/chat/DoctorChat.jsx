@@ -13,119 +13,92 @@ const DoctorChat = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [client, setClient] = useState(null);
   console.log("CLIENT:", client);
-  // const salonUser = useSelector(state => state.salon)
-  // console.log('salonUser:', salonUser)
-  // const salonId = salonUser.salonUser.id
-  // console.log('salonID:', salonId)
+ 
 
   const [patient_id, setPatientID] = useState(null);
   const [doct, setdoct] = useState("");
 
-
   const fetchBookings = async (id) => {
     try {
-      const response = await axios.get(
-        `${baseUrl}appointment/api/doctor-transactions/?doctor_id=${id}`
-      );
+      const response = await axios.get(`${baseUrl}appointment/api/doctor-transactions/?doctor_id=${id}`);
       setBookings(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching bookings", error);
     }
-  };
+ };
 
-
-  const fetchDoctorID = (id) => {
-    axios
-      .get(baseUrl + `auth/custom-id/doctor/${id}`)
+ const fetchDoctorID = (id) => {
+    axios.get(baseUrl + `auth/custom-id/doctor/${id}`)
       .then((res) => {
         setdoct(res.data);
-        console.log(res.data.doctor_user.custom_id,'DOCTOR_custom_id');
         fetchBookings(res.data.doctor_user.custom_id);
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+ };
 
-  const fetchUserID = () => {
+ const fetchUserID = () => {
     const token = localStorage.getItem("access");
     const decoded = jwtDecode(token);
     fetchDoctorID(decoded.user_id);
-  };
+ };
 
-  useEffect(() => {
+ useEffect(() => {
     fetchUserID();
-  }, []);
+ }, []);
 
-
-  useEffect(() => {
-    // Function to scroll to the bottom of the chat container
+ useEffect(() => {
     const scrollToBottom = () => {
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
       }
     };
-
-    // Scroll to bottom whenever new messages are added
     scrollToBottom();
-  }, [chatMessages]);
+ }, [chatMessages]);
 
-  useLayoutEffect(() => {
-    // Function to scroll to the bottom of the chat container
+ useLayoutEffect(() => {
     const scrollToBottom = () => {
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
       }
     };
-
-    // Scroll to bottom after the DOM has been updated
     scrollToBottom();
-  }, [chatMessages]);
-  const connectToWebSocket = (appointmentId) => {
+ }, [chatMessages]);
+
+ const connectToWebSocket = (appointmentId) => {
     if (!appointmentId) return;
-
-    const newClient = new W3CWebSocket(
-      `ws://127.0.0.1:8000/ws/chat/${appointmentId}/`
-    );
+    if (client) {
+      client.close();
+    }
+    const newClient = new W3CWebSocket(`ws://127.0.0.1:8000/ws/chat/${appointmentId}/`);
     setClient(newClient);
 
     newClient.onopen = () => {
       console.log("WebSocket Client Connected");
     };
-newClient.onmessage = (message) => {
- const data = JSON.parse(message.data);
- console.log("Incoming message:", data);
- console.log("Current chatMessages:", chatMessages);
- // Update logic here
- console.log("Updated chatMessages:", [...chatMessages, data]);
-};
 
+    newClient.onmessage = (message) => {
+      const data = JSON.parse(message.data);
+      // Prevent duplicate messages
+      if (!chatMessages.some(msg => msg.message === data.message)) {
+        setChatMessages((prevMessages) => [...prevMessages, data]);
+      }
+    };
 
-     
     const fetchExistingMessages = async () => {
       try {
-        const response = await fetch(
-          `${baseUrl}chat/chat-messages/transaction/${appointmentId}/`
-        );
-
+        const response = await fetch(`${baseUrl}chat/chat-messages/transaction/${appointmentId}/`);
         if (!response.ok) {
-          console.error(
-            "Error fetching existing messages. Status:",
-            response.status
-          );
+          console.error("Error fetching existing messages. Status:", response.status);
           return;
         }
-
         const data = await response.json();
-
         const messagesTextArray = data.map((item) => ({
           message: item.message,
           sendername: item.sendername,
         }));
-
         setChatMessages(messagesTextArray);
-        console.log("Chat messages:", messagesTextArray);
       } catch (error) {
         console.error("Error fetching existing messages:", error);
       }
@@ -136,31 +109,30 @@ newClient.onmessage = (message) => {
     return () => {
       newClient.close();
     };
-  };
+ };
 
-  const handleAppointmentClick = (booking) => {
+ const handleAppointmentClick = (booking) => {
     setSelectedAppointment(booking);
     setChatMessages([]);
     connectToWebSocket(booking.transaction_id);
-  };
+ };
 
-  const sendMessage = () => {
+ const sendMessage = () => {
     if (!client || client.readyState !== client.OPEN) {
       console.error("WebSocket is not open");
       return;
     }
 
     const sendername = doct.first_name;
-    console.log("SENDER NAME:", sendername);
-
     const messageData = { message, sendername };
     const messageString = JSON.stringify(messageData);
 
-    console.log("Sending Message:", messageString);
-
     client.send(messageString);
-    setMessage("");
-  };
+    setMessage(""); // Clear the input field after sending
+
+    // Add the sent message to the chatMessages state to reflect it in the UI
+    // setChatMessages((prevMessages) => [...prevMessages, messageData]);
+ };
 
 
 

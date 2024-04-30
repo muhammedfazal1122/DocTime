@@ -180,7 +180,7 @@ export default function ViewDocProfile() {
             {showPatientChat  && (
  <div className="fixed bottom-4 right-8 z-50">
     
-    {!hasError && transactionId && showPatientChat && (
+    { transactionId && showPatientChat && (
                 <PatientChat doctorId={doctorId} doctorCustomId={doctor.doctor_user.custom_id} />
             )}
  </div>

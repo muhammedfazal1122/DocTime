@@ -9,16 +9,27 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserProfileBox from '../pages/Patient/UserProfile/UserProfileBox';
 import axios from 'axios'; // Import axios
+import NotificationModal from './Notification/NotificationModal';
+import NotificationIcon from './Notification/NotificationIcon';
+import { baseUrl } from '../utils/constants/Constants';
 
 const Navbar2 = () => {
   // State to manage the navbar's visibility on smaller screens
   const [nav, setNav] = useState(false);
   const dispatch =   useDispatch()
+  const [notification, setNotification] = useState([]);
+
   const navigate = useNavigate()
   const [showProfileBox, setShowProfileBox] = useState(false); 
   const [Dp, setDp] = useState("")
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [customID, setCustomID] = useState(null);
+  const [data, setData] = useState(null);
 
-  const { name, isAuthenticated } = useSelector((state) => state.authentication_user);
+  const customId = localStorage.getItem("custom_id");
+  const customId2 = localStorage.getItem("custom_id");
+  console.log(customId2,'customId2customId2customId2');
+  const { name, isAuthenticated,user_id } = useSelector((state) => state.authentication_user);
 
   const GotoHome = () =>{ 
     navigate('/doctor/DocHome')
@@ -29,6 +40,51 @@ const Navbar2 = () => {
   const GotoChat = () =>{ 
     navigate('/doctor/doctorChat')
   }
+
+
+  
+ 
+  const fetchData = async (customId) => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}notifications/doctor-side/doctor-notification/${customId}/`
+      );
+      setNotification(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  useEffect(() => {
+    if (user_id) {
+      axios.get(baseUrl + `auth/custom-id/doctor/${user_id}`).then((res) => {
+        fetchData(customId);
+        setCustomID(customId);
+        console.log('222222222222222222222222222');
+        const wsURL = `ws://127.0.0.1:8000/ws/doctor-notification/${customId}/`;
+        const socket = new WebSocket(wsURL);
+        console.log(wsURL);
+
+        socket.onopen = () => {
+          console.log("WebSocket connection established");
+        };
+
+        socket.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          console.log(data,'dataaaaaaaaaaaa');
+          setData(data);
+        };
+
+        socket.onclose = (event) => {
+          console.log("WebSocket connection closed", event);
+        };
+
+        return () => {
+          socket.close();
+        };
+      });
+    }
+  }, [customId,user_id]);
 
   
   const handleAvatarClick = () => {
@@ -191,6 +247,20 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
                 <input type="text" name="text" className="input" placeholder="search.." />
               </div> */}
             </div>
+            <Link
+ className="nav-links"
+ onClick={() => {
+    console.log("Toggling notification modal",isNotificationModalOpen);
+    setIsNotificationModalOpen(!isNotificationModalOpen);
+ }}
+>
+ <NotificationIcon />
+<NotificationModal
+                isOpen={isNotificationModalOpen}
+                customID={customId}
+                data={data}
+              />
+</Link>
 
             {/* Avatar */}
             <Avatar
@@ -200,8 +270,9 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
               className="border rounded-xl border-green-500 shadow-xl shadow-green-900/20 ring-4 ring-green-500/30 max-w-11"
               onClick={handleAvatarClick}
             />
-
+              
             {/* Logout Button */}
+
             <div className='Buttonparant'>
               <button className="Btn" onClick={HandleLogout}>
                 <div className="sign">

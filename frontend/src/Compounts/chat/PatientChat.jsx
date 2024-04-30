@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef  } from 'react';
+import React, { useState, useEffect, useRef, useCallback  } from 'react';
 import io from 'socket.io-client';
 import { baseUrl } from '../../utils/constants/Constants';
 import axios from 'axios';
@@ -7,6 +7,19 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+     const later = () => {
+       clearTimeout(timeout);
+       func(...args);
+     };
+     clearTimeout(timeout);
+     timeout = setTimeout(later, wait);
+  };
+ }
+ 
 const PatientChat = ({doctorId,doctorCustomId}) => {
  const [socket, setSocket] = useState(null);
  const [message, setMessage] = useState('');
@@ -35,161 +48,85 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
      setIsChatVisible(!isChatVisible);
   };
 
+  useEffect(() => {
     const fetchDoctorID = async () => {
       try {
         const response = await axios.get(`${baseUrl}auth/custom-id/patient/${userId}`);
         setdoct(response.data);
-        setPatientID(response.data.patient_user.custom_id);
-        console.log(response.data.patient_user.custom_id, 'fetchDoctorIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
-        // Now that patientId is set, fetch booking details
-        await fetchBookingDetails(doctorCustomId, response.data.patient_user.custom_id);
+        const patientId = response.data.patient_user.custom_id;
+        await fetchBookingDetails(doctorCustomId, patientId);
       } catch (error) {
         console.log(error);
       }
     };
 
-    const fetchBookingDetails = async (doctorCustomId, patientId) => {
-      try {
-        console.log(doctorCustomId, patientId, 'iiiiiiiiiiiiiiggggggggggggggggggggggg');
-        const response = await axios.get(`${baseUrl}appointment/api/patient-transactions/`, {
-          params: {
-              patient_id: patientId,  
-              doctor_custom_id: doctorCustomId
-          }
-      });     
-          setBookings(response.data);
-     
-          // Check if response.data is defined and has at least one element
-          if (response.data ) {
-            // Extract the transaction_id from the first booking in the response data
-            const appointmentId = response.data.transaction_id;
-            setTransactionId(appointmentId);
-     
-            console.log("Transaction ddddddddd:", appointmentId);
-     
-            // Now you can use the transactionId as needed, for example:
-            connectToWebSocket(appointmentId);
-          } else {
-            console.error("No booking details found for the patient.");
-            // Handle the case where no booking details are found
-            toast.error("No booking details found for the patient. Please try again.");
-          }
-      } catch (error) {
-          console.error("Error fetching booking details:", error);
-          // Log additional details about the error
-          if (error.response) {
-            console.error("Error response:", error.response);
-          } else if (error.request) {
-            console.error("Error request:", error.request);
-          } else {
-            console.error("Error message:", error.message);
-          }
-          // Provide more specific feedback based on the error
-          toast.error("An error occurred while fetching booking details. Please try again.");
-      }
-     };
-     
- 
-  const connectToWebSocket = (appointmentId) => {
-    if (!appointmentId) return;
+    fetchDoctorID();
+ }, []);
 
-    const newClient = new W3CWebSocket(
-      `ws://127.0.0.1:8000/ws/chat/${appointmentId}/`
-    ); 
+ useEffect(() => {
+    const scrollToBottom = () => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+    };
+
+    scrollToBottom();
+ }, [chatMessages]);
+
+ const fetchBookingDetails = async (doctorCustomId, patientId) => {
+    try {
+      const response = await axios.get(`${baseUrl}appointment/api/patient-transactions/`, {
+        params: {
+          patient_id: patientId,
+          doctor_custom_id: doctorCustomId
+        }
+      });
+
+      if (response.data) {
+        const appointmentId = response.data.transaction_id;
+        connectToWebSocket(appointmentId);
+      } else {
+        toast.error("No booking details found for the patient. Please try again.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while fetching booking details. Please try again.");
+    }
+ };
+
+ const connectToWebSocket = (appointmentId) => {
+    const newClient = new W3CWebSocket(`ws://127.0.0.1:8000/ws/chat/${appointmentId}/`);
     setClient(newClient);
 
     newClient.onopen = () => {
       console.log("WebSocket Client Connected");
     };
 
-
-
     newClient.onmessage = (message) => {
       const data = JSON.parse(message.data);
-      // Check if the message already exists in the state
-
-      if (!chatMessages.some(msg => msg.message === data.message)) {
-         setChatMessages((prevMessages) => [...prevMessages, data]);
-      }
-     };
-
-
-
-    const fetchExistingMessages = async () => {
-      try {
-        const response = await fetch(
-          `${baseUrl}chat/chat-messages/transaction/${appointmentId}/`
-        );
-
-        if (!response.ok) {
-          console.error(
-            "Error fetching existing messages. Status:",
-            response.status
-          );
-          return;
-        }
-
-        const data = await response.json();
-
-        const messagesTextArray = data.map((item) => ({
-          message: item.message,
-          sendername: item.sendername,
-        }));
-
-        setChatMessages(messagesTextArray);
-        console.log("Chat messages:", messagesTextArray);
-      } catch (error) {
-        console.error("Error fetching existing messages:", error);
-      }
+     
+        setChatMessages((prevMessages) => [...prevMessages, data]);
+    
     };
-
-    fetchExistingMessages();
 
     return () => {
       newClient.close();
     };
-  };
+ };
 
-
- // Scroll to bottom of chat container when new messages arrive
- useEffect(() => {
-  const scrollToBottom = () => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }
-  };
-  scrollToBottom();
-}, [chatMessages]);
-
- useEffect(() => {
-    fetchDoctorID()
- }, []);
-
- useEffect(() => {
-    if (socket) {
-      socket.on('chat.message', (data) => {
-        setMessages((messages) => [...messages, data]);
-      });
-    }
- }, [socket]);
-
- const sendMessage = () => {
+ const sendMessage = useCallback(debounce(() => {
   if (!client || client.readyState !== client.OPEN) {
-    toast.error("WebSocket is not open")
+    toast.error("WebSocket is not open");
     return;
   }
 
   const sendername = doct.first_name;
-  console.log("SENDER NAME:", sendername);
-
   const messageData = { message, sendername };
   const messageString = JSON.stringify(messageData);
 
-  console.log("Sending Message:", messageString);
-
   client.send(messageString);
   setMessage("");
-};
+}, 300), [client, message, doct.first_name]);
+
 
 return (
   <>

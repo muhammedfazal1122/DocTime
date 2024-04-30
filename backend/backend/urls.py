@@ -19,6 +19,9 @@ from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
 
+from chat.consumers import ChatConsumer
+from notifications.consumers import NotificationConsumer
+
 
 urlpatterns = [ 
     path('admin/', admin.site.urls),
@@ -32,3 +35,8 @@ urlpatterns = [
     
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+websocket_urlpatterns = [
+     path('ws/doctor-notification/<str:custom_id>/', NotificationConsumer.as_asgi()),
+]

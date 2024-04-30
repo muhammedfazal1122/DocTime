@@ -215,6 +215,7 @@ const fetchPatientCustomId =async ()=>{
     // Fetch slots for the doctor
     fetchSlots();
     fetchPatientCustomId()
+    fetchDoctordata()
     if (patientID) {
       console.log('Updated patientID:', patientID);
       // You can use the updated patientID here
@@ -305,9 +306,9 @@ const removeDuplicates = (slots) => {
  const handleSlotSelect = (slot) => {
    
     handleBookNow()
+    
 
     setSelectedSlot(slot);
-    fetchDoctordata()
 
 
  };

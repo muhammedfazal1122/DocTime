@@ -96,7 +96,6 @@ const UserWrapper = () => {
       {path: "/DoctorShow/BookAppoiment/booking-detailes", element: <BookingDetailes/>},    
       {path: "/DoctorShow/BookAppoiment/Chat-to-doctor", element: <PatientChat/>},    
       {path: "/DoctorShow/videocall/:roomId", element: <Videocall/>},    
-      // {path: "/DoctorShow/", element: <Videocall/>},    
 
     ],
   },
