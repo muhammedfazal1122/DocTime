@@ -119,8 +119,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DATABASE_NAME'),
-        'USER': config('DATABASE_USER'),
+        'NAME': 'doctime',
+        'USER': 'ubuntu',
         'PASSWORD': config('DATABASE_PASS'),
         'HOST': 'localhost',  # Or the host where your PostgreSQL server is running
         'PORT': '5432',       # Default PostgreSQL port
