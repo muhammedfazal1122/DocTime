@@ -7,13 +7,13 @@ import { useDispatch } from 'react-redux';
 import { set_authentication } from '../../../Redux/AuthanticationUser'; 
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { toast } from "react-toastify";
 
 const DoctorLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const baseURL = "http://127.0.0.1:8000";
   const dispatch = useDispatch();
+  
   const navigate = useNavigate();
 
   const handleButtonClick = () => {

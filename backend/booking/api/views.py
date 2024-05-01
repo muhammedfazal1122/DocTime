@@ -307,6 +307,7 @@ class PatientTransactionsAPIView(APIView):
             return Response({'error': 'No completed transaction found between this patient and doctor'}, status=status.HTTP_404_NOT_FOUND)
 
         transaction_data = {
+            
             "transaction_id": common_transaction.transaction_id,
             "payment_id": common_transaction.payment_id,
             "order_id": common_transaction.order_id,
