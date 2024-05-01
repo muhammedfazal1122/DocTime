@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 from datetime import timedelta
-from decouple import config
+# from decouple import config
 
 
 
@@ -26,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'django-insecure-t1hbf@9%!r2$*&(mx*azsy133=(s&hih=49y1-sn3+hez=licg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  config('DEBUG', cast=bool)
+DEBUG =  'True'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -119,9 +119,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DATABASE_NAME'),
-        'USER': config('DATABASE_USER'),
-        'PASSWORD': config('DATABASE_PASS'),
+        'NAME': 'doctime',
+        'USER': 'ubuntu',
+        'PASSWORD': '1122',
         'HOST': 'localhost',  # Or the host where your PostgreSQL server is running
         'PORT': '5432',       # Default PostgreSQL port
     }
@@ -244,14 +244,14 @@ CORS_ALLOW_CREDENTIALS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USE_TLS =  config('EMAIL_USE_TLS', cast=bool)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD =  config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS =  'True'
+EMAIL_HOST_USER = 'ecomm.apps.info@gmail.com'
+EMAIL_HOST_PASSWORD =  'wkvimegxjdohfjbg'
 
 
 
-RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID')
-RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET')
+RAZORPAY_KEY_ID = 'rzp_test_qKaBFzO61y6fU4'
+RAZORPAY_KEY_SECRET = 'GcRVRc33TFHblux2NhOFwMGe'
 
 # settings.py
 
