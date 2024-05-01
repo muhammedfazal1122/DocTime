@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { baseUrl } from "../../utils/constants/Constants";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 const DoctorChat = () => {
   const chatContainerRef = useRef();
   const [message, setMessage] = useState("");
@@ -120,6 +121,7 @@ const DoctorChat = () => {
  const sendMessage = () => {
     if (!client || client.readyState !== client.OPEN) {
       console.error("WebSocket is not open");
+      toast.error("WebSocket is not open")
       return;
     }
 

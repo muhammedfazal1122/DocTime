@@ -154,10 +154,11 @@ class TransactionAPIView(APIView):
                 doctor_availability = get_object_or_404(Slot, doctor_id=doctor_id, day=day, start_time__lte=start_time, end_time__gte=end_time)
                 doctor_availability.is_booked=True
                 doctor_availability.save()
+                print(doctor_availability,'sssssssssssssssssssssssssssssssssssssssssssssssssssssssss')
                 Notification.objects.create(
-            Patient=patient, Doctor=doctor, message=f'{patient.user.first_name} has booked an appointment on {day} @ {start_time}.',
-            receiver_type=Notification.RECEIVER_TYPE[1][0],notification_type=Notification.NOTIFICATION_TYPES[0][0]
-            )
+                Patient=patient, Doctor=doctor, message=f'{patient.user.first_name} has booked an appointment on {day} @ {start_time}.',
+                receiver_type=Notification.RECEIVER_TYPE[1][0],notification_type=Notification.NOTIFICATION_TYPES[0][0]
+                )
             
             except Exception as e:
                 print(e)
