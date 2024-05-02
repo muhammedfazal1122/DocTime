@@ -59,6 +59,8 @@ APPROVAL_STATUS_CHOICES = [
 
 class User(AbstractBaseUser):
 
+
+
     USER_TYPE_CHOICE  = [
         ('admin','Admin'),
         ('patient','Patient'),
