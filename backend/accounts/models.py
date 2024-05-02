@@ -61,6 +61,9 @@ class User(AbstractBaseUser):
 
 
 
+
+
+
     USER_TYPE_CHOICE  = [
         ('admin','Admin'),
         ('patient','Patient'),
