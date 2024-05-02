@@ -5,7 +5,6 @@ from accounts.models import Doctor
 from channels.db import database_sync_to_async
 
 class NotificationConsumer(AsyncWebsocketConsumer):
-    print('Notification Consumer is reached')
     async def connect(self):
         self.custom_id = self.scope['url_route']['kwargs']['custom_id']
         doctor = await self.get_doctor_instance()
