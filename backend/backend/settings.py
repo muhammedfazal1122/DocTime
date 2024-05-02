@@ -123,7 +123,7 @@ DATABASES = {
         'USER': config('DATABASE_USER'),
         'PASSWORD': config('DATABASE_PASS'),
         'HOST': 'localhost',  # Or the host where your PostgreSQL server is running
-        'PORT': '5432',       # Default PostgreSQL port
+        'PORT': '',       # Default PostgreSQL port
     }
 }
 
