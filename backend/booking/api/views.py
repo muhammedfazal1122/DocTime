@@ -465,3 +465,19 @@ class PatientDetailList(generics.RetrieveAPIView):
     serializer_class = AdminPatientUpdateSerializer
     lookup_field = 'pk'
 
+class DoctorAccountTransactionsAPIView(generics.ListAPIView):
+    serializer_class = TranscationModelList
+
+    def get_queryset(self):
+        doctor_id = self.kwargs['doctor_id']
+        return Transaction.objects.filter(doctor_id=doctor_id)
+
+
+class TransactionsCommitionIdAPIView(generics.ListAPIView):
+    serializer_class = TransactionCommissionSerializer
+
+    def get_queryset(self):
+        transaction_id = self.kwargs['transaction_id']
+        return TransactionCommission.objects.filter(transaction=transaction_id)
+
+

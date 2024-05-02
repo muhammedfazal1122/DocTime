@@ -65,6 +65,7 @@ class TransactionCommission(models.Model):
     transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE )
     commission_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0.2)
     commission_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    doctor_commission_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
  
     def save(self, *args, **kwargs): 
         # Calculate commission amount based on the transaction amount and commission rate

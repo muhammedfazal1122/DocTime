@@ -37,7 +37,9 @@ urlpatterns = [
 
     path('api/patient-transactions/', views.PatientTransactionsAPIView.as_view(), name='patient-transactions'),
 
+    path('api/transactions-doctor-account/<str:doctor_id>/', views.DoctorAccountTransactionsAPIView.as_view(), name='patient-transactions'),
 
+    path('api/transactions-commision-transaction_id/<str:transaction_id>/', views.TransactionsCommitionIdAPIView.as_view(), name='patient-transactions'),
     #  to get the single Patient details based on the custom id
 
     path('reviews/create/', views.ReviewCreateView.as_view(), name='review-create'),

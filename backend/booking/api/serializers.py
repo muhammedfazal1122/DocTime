@@ -37,7 +37,12 @@ class TranscationModelList(serializers.ModelSerializer):
 
 
 
+class TransactionCommissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransactionCommission
+        fields = '__all__' 
 
+        
 class ReviewSerializer(serializers.ModelSerializer):
     patient_full_name = serializers.CharField(source='patient.full_name', read_only=True)
 

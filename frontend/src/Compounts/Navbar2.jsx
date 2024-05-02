@@ -40,6 +40,9 @@ const Navbar2 = () => {
   const GotoChat = () =>{ 
     navigate('/doctor/doctorChat')
   }
+  const GotoAccount = () =>{ 
+    navigate('/doctor/accountdetailes')
+  }
 
 
   
@@ -162,6 +165,9 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
           </li>
           <li onClick={GotoChat} className='p-4   border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'>
           Chat 
+          </li>
+          <li onClick={GotoAccount} className='p-4   border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'>
+          Account details
           </li>
       </ul>
 

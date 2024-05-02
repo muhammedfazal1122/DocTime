@@ -17,6 +17,7 @@ import Navbar2 from '../Compounts/Navbar2';
 import DocVideoCall from '../pages/Doctor/BookindDetailsDoctor/DocVideocall';
 import BookingDetailesDoc from '../pages/Doctor/BookindDetailsDoctor/BookingDetailesDoc';
 import DoctorChat from '../Compounts/chat/DoctorChat';
+import Accountdetailes from '../Compounts/Notification/Accountdetailes';
 
 const DoctorWrapper = () => {
   const dispatch = useDispatch();
@@ -103,6 +104,7 @@ const DoctorWrapper = () => {
         { path: '/BookingDetailes', element: <BookingDetailesDoc/> },
         { path: '/DoctorChat', element: <DoctorChat/> },
         { path: '/docvideocall/:roomId', element: <DocVideoCall/> },
+        { path: '/accountdetailes', element: <Accountdetailes/> },
 
       ]
     },
