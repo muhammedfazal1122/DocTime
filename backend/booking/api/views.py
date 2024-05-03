@@ -159,7 +159,7 @@ class TransactionAPIView(APIView):
                 Patient=patient, Doctor=doctor, message=f'{patient.user.first_name} has booked an appointment on {day} @ {start_time}.',
                 receiver_type=Notification.RECEIVER_TYPE[1][0],notification_type=Notification.NOTIFICATION_TYPES[0][0]
                 )
-            
+
             except Exception as e:
                 print(e)
                 return Response({"error": "Doctor availability not found"}, status=status.HTTP_404_NOT_FOUND)

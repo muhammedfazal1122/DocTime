@@ -248,14 +248,13 @@ class AdminDocVerificationView(generics.RetrieveUpdateDestroyAPIView):
 
 class AdminDoctorApprovalListView(generics.ListAPIView):
     queryset = User.objects.filter( Q(user_type='doctor') )
-    print(queryset,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
     parser_classes = (MultiPartParser, FormParser)
     # permission_classes = [IsAdminUser]
     serializer_class = UserDetailsUpdateSerializer
 
 class AdminDoctorListView(generics.ListAPIView):
     queryset = User.objects.filter( Q(user_type='doctor') & Q(approval_status='APPROVED'))
-    print(queryset,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
+    # print(queryset,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
     parser_classes = (MultiPartParser, FormParser)
     # permission_classes = [IsAdminUser]
     serializer_class = UserDetailsUpdateSerializer
