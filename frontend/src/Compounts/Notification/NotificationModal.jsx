@@ -35,6 +35,8 @@ function NotificationModal({ isOpen, customID, data }) {
     // fetchNotifications();
   }, [data]);
 
+  
+
   const handleNotificationClick = async (notification) => {
     try {
       await axios.put(
