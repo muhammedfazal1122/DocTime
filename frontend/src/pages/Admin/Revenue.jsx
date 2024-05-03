@@ -313,16 +313,17 @@ function Revenue() {
                             <tr key={index}>
                               <td className="py-2 pr-4">{item.transaction_id}</td>
                               {/* <td className="py-2">{item.payment_id}</td> */}
-                              <td className="py-2">{item.amount}</td>
+                              <td className="py-2">₹{item.amount}</td>
                               <td className="py-2">{item.doctor_id}</td>
                               <td className="py-2">{item.patient_id}</td>
                             </tr>
                           ))}
                       </tbody>
                     </table>
-                    <div className="flex justify-between">
                       <p className="text-lg font-semibold">Total: {transactionData.reduce((total, item) => total + item.amount, 0)}</p>
-                      <p className="text-lg font-semibold">Doctor Commission: {transactionData.reduce((total, item) => total + item.doctor_commission, 0)}</p>
+                      <p className="text-lg font-semibold">Doctor Commission: ₹{transactionData.reduce((total, item) => total + item.doctor_commission, 0)}</p>
+                    <div className="flex justify-between">
+                      <p className="text-lg font-semibold">Admin Commission: ₹{transactionData.reduce((total, item) => total + item.amount - item.doctor_commission, 0)}</p>
                     </div>
                  </div>
                 </div>

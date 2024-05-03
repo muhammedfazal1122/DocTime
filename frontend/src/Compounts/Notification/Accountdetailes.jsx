@@ -75,7 +75,7 @@ const Accountdetailes = ({ }) => {
                                 color="blue-gray"
                                 className="font-normal leading-none opacity-70"
                             >
-                                Patient Payed Amount
+                                Patient ID
                             </Typography>
                         </th>
                         <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
@@ -84,7 +84,7 @@ const Accountdetailes = ({ }) => {
                                 color="blue-gray"
                                 className="font-normal leading-none opacity-70"
                             >
-                                Amount Received
+                                Patient Payed Amount
                             </Typography>
                         </th>
                         <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
@@ -96,15 +96,17 @@ const Accountdetailes = ({ }) => {
                                 Commission for Admin
                             </Typography>
                         </th>
+                        
                         <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
                             <Typography
                                 variant="small"
                                 color="blue-gray"
                                 className="font-normal leading-none opacity-70"
                             >
-                                Actions
+                                Amount Received
                             </Typography>
                         </th>
+                       
                     </tr>
                 </thead>
                 <tbody>
@@ -123,13 +125,13 @@ const Accountdetailes = ({ }) => {
                                         {transaction.transaction_id}
                                     </Typography>
                                 </td>
-                                <td className={classes}>
-                                    <Typography
-                                        variant="small"
-                                        color="blue-gray"
+                                <td className={classes}>       
+                                    <Typography                
+                                        variant="small"        
+                                        color="blue-gray"      
                                         className="font-normal"
                                     >
-                                        {transaction.amount}
+                                        {transaction.patient_id}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
@@ -138,7 +140,7 @@ const Accountdetailes = ({ }) => {
                                         color="blue-gray"
                                         className="font-normal"
                                     >
-                                        {transaction.doctor_commission}
+                                       ₹ {transaction.amount}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
@@ -147,24 +149,28 @@ const Accountdetailes = ({ }) => {
                                         color="blue-gray"
                                         className="font-normal"
                                     >
-                                        {transaction.admin_commission}
+                                      ₹  {transaction.admin_commission}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
-                                    <Tooltip content="Edit Transaction">
-                                        <IconButton variant="text">
-                                            <PencilIcon className="h-4 w-4" />
-                                        </IconButton>
-                                    </Tooltip>
+                                    <Typography
+                                        variant="small"
+                                        color="blue-gray"
+                                        className="font-normal"
+                                    >
+                                        ₹{transaction.doctor_commission}
+                                    </Typography>
                                 </td>
+                                
+                                
                             </tr>
                         );
                     })}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colSpan="3" className="text-right font-bold">Total Amount:</td>
-                        <td className="font-bold">{totalAmount.toFixed(2)}</td>
+                        <td colSpan="4" className="text-right font-bold">Total Amount:</td>
+                        <td className="font-bold">₹{totalAmount.toFixed(2)}</td>
                         <td></td>
                     </tr>
                 </tfoot>
