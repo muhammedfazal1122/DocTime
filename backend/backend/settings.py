@@ -123,9 +123,10 @@ DATABASES = {
         'USER': config('DATABASE_USER'),
         'PASSWORD': config('DATABASE_PASS'),
         'HOST': 'localhost',  # Or the host where your PostgreSQL server is running
-        'PORT': '',       # Default PostgreSQL port
+        'PORT': '5432',       # Default PostgreSQL port
     }
 }
+
 
 
 # Password validation
@@ -166,6 +167,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+STATICFILES_DIRS = [
+    'django_rest_backend/static',
+]
    
    
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
