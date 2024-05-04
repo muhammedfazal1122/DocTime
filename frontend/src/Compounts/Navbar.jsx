@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import UserProfileBox from '../pages/Patient/UserProfile/UserProfileBox';
 import axios from 'axios'; // Import axios
 import { jwtDecode } from 'jwt-decode';
+import { baseUrl } from '../utils/constants/Constants';
 
 const Navbar = () => {
   // State to manage the navbar's visibility on smaller screens
@@ -21,7 +22,6 @@ const Navbar = () => {
   const { name, isAuthenticated } = useSelector((state) => state.authentication_user);
   
 
-  const baseURL = "http://127.0.0.1:8000";
   const [doctorDetails, setDoctorDetails] = useState(null);
   const [profileSucess, setprofileSucess] = useState(0)
   console.log(profileSucess);
@@ -49,7 +49,7 @@ const Navbar = () => {
 const showProfile = async () => {
   try {
     console.log(userId, 'uuuuuuuuuuuuuuuuuu');
-     const response = await axios.get(`${baseURL}/auth/doc/update/${userId}`);
+     const response = await axios.get(`${baseUrl}auth/doc/update/${userId}`);
      // Assuming setprofilepic is a state setter function
      // You might need to adjust this line based on how you're managing state
      setprofilepic(response.data.profile_picture);

@@ -6,9 +6,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ProfileCard from '../../../Compounts/ProfileCard/ProfileCard';
 import { Link, useNavigate } from 'react-router-dom';
+import { baseUrl } from '../../../utils/constants/Constants';
 
 const DoctorProfile = ({refresh}) => {
- const baseURL = "http://127.0.0.1:8000";
  const navigate = useNavigate();
  const [Count, setCount] = useState(0)
  const userId = useSelector(state => state.authentication_user.user_id);
@@ -46,7 +46,7 @@ const DoctorProfile = ({refresh}) => {
 const fetchData = async () => {
   try {
     const authToken = localStorage.getItem('access');
-    const response = await axios.get(`${baseURL}/auth/docdetailes/${userId}/`, {
+    const response = await axios.get(`${baseUrl}auth/docdetailes/${userId}/`, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
     console.log(response,'lllllllllllllllllllllllllllllllllll');
@@ -113,7 +113,7 @@ const handleSubmit = async (e) => {
   try {
      const authToken = localStorage.getItem('access');
      console.log(formData, 'ooooooooooooooooooooooooooooooooooooooo');
-     const response = await axios.patch(`${baseURL}/auth/doctor-update/${userId}/`, formData, {
+     const response = await axios.patch(`${baseUrl}auth/doctor-update/${userId}/`, formData, {
        headers: { Authorization: `Bearer ${authToken}` },
      });
      console.log('Form Data:', formData); // This line will print the form data before it's updated
@@ -159,7 +159,7 @@ const uploadProfilePicture = async () => {
     const fileInput = document.querySelector('input[name="profile_picture"]');
     formData.append('profile_picture', fileInput.files[0]); 
     // Append the file from the input element
-    const response = await axios.post(`${baseURL}/auth/profilepic-update/`, formData, {
+    const response = await axios.post(`${baseUrl}auth/profilepic-update/`, formData, {
       headers: {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'multipart/form-data',

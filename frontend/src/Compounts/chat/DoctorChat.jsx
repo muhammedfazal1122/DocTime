@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { baseUrl } from "../../utils/constants/Constants";
+import { WebsocketbaseUrl, baseUrl } from "../../utils/constants/Constants";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
+
 const DoctorChat = () => {
   const chatContainerRef = useRef();
   const [message, setMessage] = useState("");
@@ -72,7 +73,7 @@ const DoctorChat = () => {
     if (client) {
       client.close();
     }
-    const newClient = new W3CWebSocket(`ws://127.0.0.1:8000/ws/chat/${appointmentId}/`);
+    const newClient = new W3CWebSocket(`${WebsocketbaseUrl}ws/chat/${appointmentId}/`);
     setClient(newClient);
 
     newClient.onopen = () => {

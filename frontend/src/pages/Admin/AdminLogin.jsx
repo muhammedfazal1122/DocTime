@@ -6,11 +6,11 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { set_authentication } from '../../Redux/AuthanticationUser';
+import { baseUrl } from '../../utils/constants/Constants';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const baseURL = "http://127.0.0.1:8000";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const AdminLogin = () => {
     const form = new FormData(event.target);
 
     try {
-      const res = await axios.post(baseURL + '/auth/login', form);
+      const res = await axios.post(baseUrl + 'auth/login', form);
       if (res && res.status === 200) {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);

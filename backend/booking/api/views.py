@@ -48,7 +48,21 @@ class DoctorSlotListCreateView(APIView):
         else:
             print("Serializer errors:", serializer.errors) # Debugging log
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+
+
+class DoctorSlotListDeleteView(APIView):
+    serializer_class = SlotSerializer
+
+    def delete(self, request, custom_id, slot_id):
+        try:
+            print(slot_id,custom_id,'sssssssssssssssssslllllllllllllllllllllllllll  ')
+            slot = Slot.objects.get(id=slot_id, doctor__custom_id=custom_id)
+            slot.delete()
+            return Response({'message': 'Slot successfully deleted'}, status=status.HTTP_200_OK)
+        except Slot.DoesNotExist:
+            return Response({'error': 'Slot not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 

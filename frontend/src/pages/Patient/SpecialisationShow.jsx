@@ -12,7 +12,6 @@ const SpecialisationShow = () => {
  const fetchUsers = async () => {
     const accessToken = localStorage.getItem("access");
     const query = searchQuery ? `?search=${searchQuery}` : '';
-    const baseUrl = "http://127.0.0.1:8000/"; // Ensure this is correctly set
     const url = `${baseUrl}auth/doctors/specialization/${specialization}`;
     console.log('Request URL:', url); // Debugging line
     

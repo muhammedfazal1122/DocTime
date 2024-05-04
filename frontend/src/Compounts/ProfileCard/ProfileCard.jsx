@@ -4,9 +4,9 @@ import './ProfileCard.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { set_profile } from '../../Redux/UserProfileSlice';
+import { baseUrl } from '../../utils/constants/Constants';
 
 const ProfileCard = (props) => {
-const baseURL = "http://127.0.0.1:8000";
 const userId = useSelector(state => state.authentication_user.user_id);
 const [doctorDetails, setDoctorDetails] = useState(null);
 const [profileSucess, setprofileSucess] = useState(0)
@@ -17,7 +17,7 @@ const fetchData = async () => {
   try {
     
     const authToken = localStorage.getItem('access');
-    const fetchDoctorDetails = await axios.get(`${baseURL}/auth/docdetailes/${userId}/`, {
+    const fetchDoctorDetails = await axios.get(`${baseUrl}auth/docdetailes/${userId}/`, {
       headers: {
         Authorization: `Bearer ${authToken}`
       }
@@ -53,7 +53,7 @@ const fetchData = async () => {
                     <div className="profile-image">
                       {/* Append timestamp to profile picture URL to prevent caching */}
                       <img
-                        src={props.profile_pic ? `${baseURL}${props.profile_pic}` : `${doctorDetails.profile_picture}`}
+                        src={props.profile_pic ? `${baseUrl}${props.profile_pic}` : `${doctorDetails.profile_picture}`}
                         alt="Profile Picture"
                         className="pfp"
                       />

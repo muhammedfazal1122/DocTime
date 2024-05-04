@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'; // Import the 'toast' function from react-toastify
+import { baseUrl } from '../../../utils/constants/Constants';
 
 const DoctorRegister = () => {
-  const baseURL = "http://127.0.0.1:8000";
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -51,7 +51,7 @@ const DoctorRegister = () => {
       };
 
       try {
-        const res = await axios.post(baseURL + '/auth/register', userData);
+        const res = await axios.post(baseUrl + 'auth/register', userData);
         if (res.status === 201) {
           console.log("Success");
           localStorage.setItem('userEmail', email);

@@ -6,13 +6,14 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { set_authentication } from '../../../Redux/AuthanticationUser'; 
 import { jwtDecode } from 'jwt-decode';
+
 import { toast } from "react-toastify";
   import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../../../utils/constants/Constants';
 
 const UserLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const baseURL = "http://127.0.0.1:8000";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,7 +29,7 @@ const UserLogin = () => {
     const form = new FormData(event.target);
 
     try {
-      const res = await axios.post(baseURL + '/auth/login', form);
+      const res = await axios.post(baseUrl + 'auth/login', form);
       const user_type = localStorage.getItem('user_type');
 
       if (res.status === 200 ) {

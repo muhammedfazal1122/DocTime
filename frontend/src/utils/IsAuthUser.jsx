@@ -1,13 +1,13 @@
 
 import {jwtDecode} from "jwt-decode";
 import axios from 'axios'
+import { baseUrl } from "./constants/Constants";
 
 const updateUserToken = async ()=>{
     const refreshToken = localStorage.getItem("refresh");
-    const baseURL='http://127.0.0.1:8000'
 
     try {
-        const res = await axios.post(baseURL+'/accounts/api/token/refresh/', 
+        const res = await axios.post(baseUrl+'accounts/api/token/refresh/', 
         {
             'refresh':refreshToken
         })

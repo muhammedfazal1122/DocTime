@@ -21,15 +21,15 @@ function VarificationDoc() {
   const [nextPage, setNextPage] = useState(null);
   const [prevPage, setPrevPage] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const baseUrl = "http://127.0.0.1:8000";
 
+  
   const handleCheckboxChange = (docId, currentStatus) => {
     const formData = new FormData();
     formData.append("user.is_active", !currentStatus);
     console.log('lllllllllllllllll',docId,formData,currentStatus);
 
 
-    axios.patch(`${baseUrl}/auth/admin/doc/${docId}/`, formData).then((res) => {
+    axios.patch(`${baseUrl}auth/admin/doc/${docId}/`, formData).then((res) => {
         console.log("Data updated successfully:", res.data);
         toast.success("Data updated successfully");
         // Optionally, you can update the state or handle other actions
@@ -80,7 +80,7 @@ function VarificationDoc() {
 
 
   useEffect(() => {
-    fetchUsers(`${baseUrl}/auth/admin/doctor/verication/list/`);
+    fetchUsers(`${baseUrl}auth/admin/doctor/verication/list/`);
   }, [isEditModalVisible, checked, searchQuery]);
 
   return (

@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('doctors/<str:custom_id>/slots/', views.DoctorSlotListCreateView.as_view(), name='doctor-slots-create'),    
 
+    path('doctors/<str:custom_id>/slots-delete/<int:slot_id>/', views.DoctorSlotListDeleteView.as_view(), name='doctor-slots-delete'),    
 # -----------------------------------------Patient-------------------------------------------------------#
 
     path('patient/slotsview/<str:custom_id>/<str:date>/', views.PatientSlotView.as_view(), name='doctor-slots-view'),

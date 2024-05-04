@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import '../../Patient/UserReg/Register.css';
 import axios from 'axios';
+import { baseUrl } from '../../../utils/constants/Constants';
 
 const UserRegister = () => {
-  const baseURL = "http://127.0.0.1:8000";
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -41,7 +41,7 @@ const UserRegister = () => {
       toast.error("Invalid email address");
     } else {
       try {
-        const res = await axios.post(baseURL + '/auth/register', formData);
+        const res = await axios.post(baseUrl + 'auth/register', formData);
         if (res.status === 201) {
           console.log("Success");
           localStorage.setItem('userEmail', email); // Use email directly from form data

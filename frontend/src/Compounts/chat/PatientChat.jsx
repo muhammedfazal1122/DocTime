@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback  } from 'react';
 import io from 'socket.io-client';
-import { baseUrl } from '../../utils/constants/Constants';
+import { WebsocketbaseUrl, baseUrl } from '../../utils/constants/Constants';
 import axios from 'axios';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
@@ -94,7 +94,7 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
  };
 
  const connectToWebSocket = (appointmentId) => {
-    const newClient = new W3CWebSocket(`ws://127.0.0.1:8000/ws/chat/${appointmentId}/`);
+    const newClient = new W3CWebSocket(`${WebsocketbaseUrl}ws/chat/${appointmentId}/`);
     setClient(newClient);
 
     newClient.onopen = () => {

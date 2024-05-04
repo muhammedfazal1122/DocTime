@@ -18,6 +18,30 @@ function CreateSlot() {
  const [selectedSlot2, setSelectedSlot2] = useState(null); // State to track the selected slot
  const [someArray, setSomeArray] = useState([]);
 
+
+ const handleDeleteSlot = async () => {
+
+ 
+  try {
+    const custom_id = localStorage.getItem('custom_id'); // Retrieve custom_id from localStorage
+
+     // Assuming you have an endpoint to delete a slot by its ID
+     const response = await axios.delete(`${baseUrl}appointment/doctors/${custom_id}/slots-delete/${selectedSlot2.id}/`);
+ 
+     if (response.status === 200) {
+       // Remove the deleted slot from the slots2 array
+       setSlots2(slots2.filter(slot => slot.id !== selectedSlot2.id));
+       // Reset the selected slot
+       setSelectedSlot2(null);
+       toast.success("Slot successfully deleted.");
+     } else {
+       toast.error("Failed to delete slot. Please try again.");
+     }
+  } catch (error) {
+     console.error("Error deleting slot:", error);
+  }
+ };
+ 
  useEffect(() => {
    fetchSlots()
 
@@ -393,18 +417,42 @@ const handleSlotSelect = (slot) => {
       <p class="mt-8 font-serif text-xl font-bold text-blue-900">Select a time</p>
 
 
-      <div class="mt-4 grid grid-cols-4 gap-2 lg:max-w-xl">
+      <div className="mt-4 grid grid-cols-4 gap-2 lg:max-w-xl">
       {slots2.map((slot, index) => (
-              <button
-                key={index}
-                className={`rounded-lg px-19 py-6 font-medium text-cyan-900 active:scale-95  w-full  ${selectedSlot2 === slot ? 'bg-cyan-700 text-white' : 'bg-cyan-100'}`}
-                onClick={() => handleSlotSelect(slot)}
-                
-              >
-                {dayjs(slot.start_time).format('HH:mm')} - {dayjs(slot.end_time).format('HH:mm')}
-              </button>
-            ))} 
-      </div>
+ <div key={index} className="slot-container">
+    <button
+      className={`rounded-lg px-19 py-6 font-medium text-cyan-900 active:scale-95 w-full ${selectedSlot2 === slot ? 'bg-cyan-300 text-white' : 'bg-cyan-100'}`}
+      onClick={() => handleSlotSelect(slot)}
+    >
+      {dayjs(slot.start_time).format('HH:mm')} - {dayjs(slot.end_time).format('HH:mm')}
+      <div className='mt-3'>
+    <button
+      className="delete-button inline-flex items-center px-4 py-2 bg-red-600 transition ease-in-out delay-75 hover:bg-red-700 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-110"
+      onClick={() => handleDeleteSlot(slot)}
+    >
+      <svg
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        fill="none"
+        className="h-5 w-5 mr-2"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          strokeWidth="2"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        ></path>
+      </svg>
+      Delete
+    </button>
+    </div>
+    </button>
+ </div>
+))}
+
+</div>
+
       </div>
 
 

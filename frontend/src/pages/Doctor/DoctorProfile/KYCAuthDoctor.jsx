@@ -3,7 +3,7 @@
   import { Link, useNavigate } from 'react-router-dom';
   import { toast } from 'react-toastify';
   import { useSelector } from 'react-redux';
-  const baseURL = "http://127.0.0.1:8000";
+import { baseUrl } from '../../../utils/constants/Constants';
 
   const KYCAuthDoctor = () => {
     const [kycData, setKycData] = useState(null);
@@ -15,7 +15,6 @@
   const [experience, setExperience] = useState(false);
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
-  const baseURL = "http://127.0.0.1:8000";
 
   const userId = useSelector(state => state.authentication_user.user_id);
 
@@ -23,7 +22,7 @@
   useEffect(() => {
     const fetchKYCData = async () => {
       try {
-        const response = await axios.get(`${baseURL}/auth/KycVerification-upload/${userId}/`);
+        const response = await axios.get(`${baseUrl}auth/KycVerification-upload/${userId}/`);
         console.log(response,'rrrrrrrrrrrrrrrrrrrrreeeeeeeeeeeeeeeeeee');
         setQualificationImage(response.data.qualificationImage);
         setCertificateImage(response.data.licencecertificateImage);
@@ -87,7 +86,7 @@
 
 
         const authToken = localStorage.getItem('access');
-        const response = await axios.post(`${baseURL}/auth/KycVerification-upload/${userId}/`, formData, {
+        const response = await axios.post(`${baseUrl}auth/KycVerification-upload/${userId}/`, formData, {
           headers: {
               Authorization: `Bearer ${authToken}`,
               // 'Content-Type': 'multipart/form-data',

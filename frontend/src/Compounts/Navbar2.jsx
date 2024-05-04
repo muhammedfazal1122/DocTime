@@ -11,7 +11,7 @@ import UserProfileBox from '../pages/Patient/UserProfile/UserProfileBox';
 import axios from 'axios'; // Import axios
 import NotificationModal from './Notification/NotificationModal';
 import NotificationIcon from './Notification/NotificationIcon';
-import { baseUrl } from '../utils/constants/Constants';
+import { WebsocketbaseUrl, baseUrl } from '../utils/constants/Constants';
 
 const Navbar2 = () => {
   // State to manage the navbar's visibility on smaller screens
@@ -64,7 +64,7 @@ const Navbar2 = () => {
         fetchData(customId);
         setCustomID(customId);
         console.log('222222222222222222222222222');
-        const wsURL = `ws://127.0.0.1:8000/ws/doctor-notification/${customId}/`;
+        const wsURL = `${WebsocketbaseUrl}ws/doctor-notification/${customId}/`;
         const socket = new WebSocket(wsURL);
         console.log(wsURL,'socketurl:');
 
@@ -127,7 +127,6 @@ const Navbar2 = () => {
   ];
 
 
-  const baseURL = "http://127.0.0.1:8000";
   const userId = useSelector(state => state.authentication_user.user_id);
   const [doctorDetails, setDoctorDetails] = useState(null);
   const [profileSucess, setprofileSucess] = useState(0)

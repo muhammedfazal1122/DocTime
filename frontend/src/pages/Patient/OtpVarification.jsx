@@ -5,10 +5,10 @@ import Footer from '../../Compounts/Footer'; // Assuming the correct path to Foo
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {  toast } from 'react-toastify'; // Import the 'toast' function from react-toastify
+import { baseUrl } from '../../utils/constants/Constants';
 
 const OTPVerificationForm = () => {
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-  const baseURL = "http://127.0.0.1:8000";
   const navigate = useNavigate();
 
   // Define state to hold the user's email
@@ -39,7 +39,7 @@ const OTPVerificationForm = () => {
     const otp = inputRefs.map((ref) => ref.current.value).join('');
     
     try {
-      const res = await axios.post(baseURL + '/auth/verify-otp', { otp, email: userEmail });
+      const res = await axios.post(baseUrl + 'auth/verify-otp', { otp, email: userEmail });
       const user_type = localStorage.getItem('user_type');
       console.log(user_type);
 
