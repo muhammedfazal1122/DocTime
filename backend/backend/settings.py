@@ -33,7 +33,7 @@ DEBUG =  config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ['doctime.site']
+CSRF_TRUSTED_ORIGINS = ['https://doctime.site/']
 
 
 # Application definition
