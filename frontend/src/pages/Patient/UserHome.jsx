@@ -6,6 +6,7 @@ import './getstart.scss';
 import { useNavigate } from 'react-router-dom';
 import DoctorCatogoryList from './DoctorList/DoctorCatogoryList';
 import ReviewForm from './ReviewForm';
+import logo from '../../../src/assets/logo/doctor-offering-medical-teleconsultation.jpg';
 
 const UserHome = () => {
 
@@ -21,7 +22,7 @@ const UserHome = () => {
       <div className="relative w-full h-screen">
         <div className="relative w-full h-full">
           <img
-            src="src/assets/logo/doctor-offering-medical-teleconsultation.jpg"
+            src={logo}
             alt=""
             className="w-full h-full inset-0"
           />
