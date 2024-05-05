@@ -61,4 +61,8 @@ urlpatterns = [
 
     path('geting/transaction/<str:transaction_id>/', views.GetingTransaction.as_view(), name='transaction_'),
 
+
+
+
+
     ]

@@ -31,6 +31,7 @@ const BookingDetails = () => {
  const [isOpen, setIsOpen] = useState(false);
  const [doctorId, setDoctorId] = useState(null);
  const [prescriptions, setPrescriptions] = useState([]);
+ const [reviewTransactionId, setReviewTransactionId] = useState(null);
 
 
 
@@ -244,6 +245,7 @@ const BookingDetails = () => {
       onClick={() => {
         setIsReviewModalOpen(true);
         setDoctorId(transaction.doctor_id); 
+        setReviewTransactionId(transaction.transaction_id); // Set the transaction ID
         console.log('oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo', transaction.doctor_id);
         // Assuming transaction_id is the doctorId
       }}
@@ -325,9 +327,7 @@ const BookingDetails = () => {
                  <p className="text-sm text-gray-500 mb-1">
                     Times: {prescription.times}
                  </p>
-                 <p className="text-sm text-gray-500 mb-1">
-                    Age: {prescription.Age}
-                 </p>
+                
                  <p className="text-sm text-gray-500 mb-1">
                     Duration: {prescription.duration}
                  </p>
@@ -386,7 +386,7 @@ const BookingDetails = () => {
           </button>
         </div>
         <div className="bg-white px-4 pt-0 pb-4 sm:p-6 sm:pb-0">
-          <ReviewFormForDr doctorId={doctorId || "Ddddd"} />
+        <ReviewFormForDr doctorId={doctorId || "Ddddd"} transaction_id={reviewTransactionId} />
         </div>
       </div>
     </div>
