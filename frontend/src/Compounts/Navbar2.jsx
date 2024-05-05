@@ -12,7 +12,8 @@ import axios from 'axios'; // Import axios
 import NotificationModal from './Notification/NotificationModal';
 import NotificationIcon from './Notification/NotificationIcon';
 import { WebsocketbaseUrl, baseUrl } from '../utils/constants/Constants';
-
+import logo from '../../public/Screenshot_2024-02-19_151751-removebg-preview.png';
+import logoss from '../../public/assets/avatar/avatar_6.jpg';
 const Navbar2 = () => {
   // State to manage the navbar's visibility on smaller screens
   const [nav, setNav] = useState(false);
@@ -144,7 +145,7 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
     <nav className='bg-cyan-950 flex justify-between items-center h-17 max-w-full mx-auto px-4 text-white'>
       <img
         className='w-24 h-24 cursor-pointer'
-        src="/public/Screenshot_2024-02-19_151751-removebg-preview.png"
+        src={logo}
         alt=""
         onClick={GotoHome}
       />
@@ -271,7 +272,7 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
             <Avatar
               size="lg"
               alt="avatar"
-              src={profilepic ? profilepic : '/public/assets/avatar/avatar_6.jpg'}
+              src={profilepic ? profilepic : logoss }
               className="border rounded-xl border-green-500 shadow-xl shadow-green-900/20 ring-4 ring-green-500/30 max-w-11"
               onClick={handleAvatarClick}
             />

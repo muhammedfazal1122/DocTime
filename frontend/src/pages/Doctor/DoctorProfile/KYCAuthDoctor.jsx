@@ -3,8 +3,10 @@
   import { Link, useNavigate } from 'react-router-dom';
   import { toast } from 'react-toastify';
   import { useSelector } from 'react-redux';
-import { baseUrl } from '../../../utils/constants/Constants';
-
+ import { baseUrl } from '../../../utils/constants/Constants';
+ import logo from '../../../../src/assets/logo/kyc2.jpg';
+import label_5427739 from '../../../../src/assets/logo/label_5427739.png'
+import certificate_6703900 from '../../../../src/assets/logo/certificate_6703900.png'
   const KYCAuthDoctor = () => {
     const [kycData, setKycData] = useState(null);
     const [error, setError] = useState(null);
@@ -120,7 +122,7 @@ import { baseUrl } from '../../../utils/constants/Constants';
   <div className="bg-gray-100 min-h-screen flex justify-center items-center">
     
     <img
-      src="/src/assets/logo/kyc2.jpg"
+      src={logo}
       width={600}
       height={100}
       alt="Step 1"
@@ -160,7 +162,7 @@ import { baseUrl } from '../../../utils/constants/Constants';
               Doctor Certificate
             </label>
             <div className="flex items-center">
-              <img src="/src/assets/logo/certificate_6703900.png" alt="Certificate" className="h-8 mr-4"/>
+              <img src={certificate_6703900} alt="Certificate" className="h-8 mr-4"/>
               <input className="flex w-full rounded-md border border-blue-300 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-blue-600 file:text-white file:text-sm file:font-medium"
                 type="file"
                 id="picture"
@@ -174,7 +176,7 @@ import { baseUrl } from '../../../utils/constants/Constants';
               Qualification
             </label>
             <div className="flex items-center">
-              <img src="/src/assets/logo/label_5427739.png" alt="Qualification" className="h-8 mr-4"/>
+              <img src={label_5427739} alt="Qualification" className="h-8 mr-4"/>
               <input className="flex w-full rounded-md border border-blue-300 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-blue-600 file:text-white file:text-sm file:font-medium"
                 type="file"
                 id="picture"
