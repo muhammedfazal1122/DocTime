@@ -5,6 +5,7 @@ const NotificationComponent = () => {
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
+        
         const socket = io('http://localhost:8000/ws/notifications/');
         socket.on('notification', (data) => {
             setNotifications([...notifications, data.message]);
