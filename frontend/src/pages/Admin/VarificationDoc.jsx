@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import DeleteDoct from "../../Compounts/admin/elements/Modal/DeleteDoct";
 import axios from "axios";
 import avatar from '/public/assets/avatar/docAvathar.jpg'
+import { baseUrl } from "../../utils/constants/Constants";
 
 
 
