@@ -39,8 +39,9 @@ function NotificationModal({ isOpen, customID, data }) {
 
   const handleNotificationClick = async (notification) => {
     try {
-      await axios.put(
-        `${baseUrl}notification/update-notification/${notification.id}/`,
+      console.log(notification,'nnnoooooooooo');
+      await axios.patch(
+        `${baseUrl}notifications/update-notification/${notification.id}/`,
         {
           is_seen: true,
         }

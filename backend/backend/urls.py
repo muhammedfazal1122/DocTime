@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from chat.consumers import ChatConsumer
-# from notifications.consumers import NotificationConsumer
+from notifications.consumers import NotificationConsumer
 
 
 urlpatterns = [ 
@@ -40,5 +40,5 @@ if settings.DEBUG:
 websocket_urlpatterns = [
     path('ws/chat/<int:appointment_id>/', ChatConsumer.as_asgi()),
 
-    # path('ws/doctor-notification/<str:custom_id>/', NotificationConsumer.as_asgi()),
+    path('ws/doctor-notification/<str:custom_id>/', NotificationConsumer.as_asgi()),
 ]

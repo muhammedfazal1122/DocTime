@@ -132,7 +132,7 @@ class Verification(models.Model):
     licencecertificateImage = models.FileField(upload_to='verification_documents/licence', blank=True, null=True)
     qualificationImage = models.FileField(upload_to='verification_documents/qualification', blank=True, null=True)
     register_number = models.CharField( max_length=10, blank=True, null=True)
-    aadhaarNumber = models.CharField( max_length=10, blank=True, null=True)
+    aadhaarNumber = models.CharField( max_length=12, blank=True, null=True)
     experience = models.CharField( max_length=10, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
     is_KYC_submitted = models.BooleanField(default=False)

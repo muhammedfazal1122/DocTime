@@ -20,6 +20,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from django.http import Http404
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.shortcuts import get_list_or_404
 
 
 
@@ -99,12 +100,12 @@ def check_availability(request):
         return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        doctor_availability = get_object_or_404(Slot, doctor_id=doctor_id, day=selected_day, start_time__lte=selected_from_time, end_time__gte=selected_to_time)
-        available = not doctor_availability.is_booked
+        doctor_availability = get_list_or_404(Slot, doctor_id=doctor_id, day=selected_day, start_time__lte=selected_from_time, end_time__gte=selected_to_time)
+        # Assuming you want to check if any of the slots are available
+        available = any(slot.is_booked is False for slot in doctor_availability)
         return Response({'available': available}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 
@@ -138,62 +139,81 @@ class RazorpayOrderAPIView(APIView):
 
 
 
+def create_notification(patient, doctor, day, start_time):
+    """
+    Function to create a notification.
+    """
+    try:
+        Notification.objects.create(
+            Patient=patient, Doctor=doctor, message=f'{patient.user.first_name} has booked an appointment on {day} @ {start_time}.',
+            receiver_type=Notification.RECEIVER_TYPE[1][0], notification_type=Notification.NOTIFICATION_TYPES[0][0]
+        )
+        print("Notification created successfully")
+    except Exception as e:
+        print(f"Error creating notification: {e}")
+        return False
+    return True
 
-    
 class TransactionAPIView(APIView):
     """This API will complete order and save the transaction"""
     
     def post(self, request):
         transaction_serializer = TranscationModelSerializer(data=request.data)
         if transaction_serializer.is_valid():
-            print('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
-            rz_client.verify_payment_signature(
-                razorpay_payment_id=transaction_serializer.validated_data.get("payment_id"),
-                razorpay_order_id=transaction_serializer.validated_data.get("order_id"),
-                razorpay_signature=transaction_serializer.validated_data.get("signature")
-            )
+            print('Transaction data is valid')
             try:
-                print("ddddddddddddddddddddddddddddddddddddddddddddddddd")
+                # Verify payment signature
+                rz_client.verify_payment_signature(
+                    razorpay_payment_id=transaction_serializer.validated_data.get("payment_id"),
+                    razorpay_order_id=transaction_serializer.validated_data.get("order_id"),
+                    razorpay_signature=transaction_serializer.validated_data.get("signature")
+                )
+                
                 doctor_id = transaction_serializer.validated_data.get("doctor_id")
-                patient_id=transaction_serializer.validated_data.get("patient_id")
-                doctor=Doctor.objects.get(custom_id=doctor_id)
-                patient=Patient.objects.get(custom_id=patient_id)
+                patient_id = transaction_serializer.validated_data.get("patient_id")
+                doctor = Doctor.objects.get(custom_id=doctor_id)
+                patient = Patient.objects.get(custom_id=patient_id)
                 start_time = request.data.get('start_time')
                 end_time = request.data.get('end_time')
                 day = request.data.get('day')
-                # Check if any of the required fields are None
-                print(f"Querying for doctor_id={doctor_id}, selected_day={day}, start_time__lte={start_time}, end_time__gte={end_time}")
-
-            
-                doctor_availability = get_object_or_404(Slot, doctor_id=doctor_id, day=day, start_time__lte=start_time, end_time__gte=end_time)
-                doctor_availability.is_booked=True
-                doctor_availability.save()
-                print(doctor_availability,'sssssssssssssssssssssssssssssssssssssssssssssssssssssssss')
-                Notification.objects.create(
-                Patient=patient, Doctor=doctor, message=f'{patient.user.first_name} has booked an appointment on {day} @ {start_time}.',
-                receiver_type=Notification.RECEIVER_TYPE[1][0],notification_type=Notification.NOTIFICATION_TYPES[0][0]
-                )
-
+                
+                # Log the query parameters for debugging
+                print(f"Querying for doctor_id={doctor_id}, day={day}, start_time={start_time}, end_time={end_time}")
+                
+                # Use filter instead of get_object_or_404 to handle multiple matching slots
+                slots = get_list_or_404(Slot, doctor_id=doctor_id, day=day, start_time__lte=start_time, end_time__gte=end_time)
+                
+                # Assuming you want to book the first available slot
+                for slot in slots:
+                    if not slot.is_booked:
+                        slot.is_booked = True
+                        slot.save()
+                        print(f"Booked slot: {slot}")
+                        
+                        # Create notification
+                        create_notification(patient, doctor, day, start_time)
+                        # Save transaction
+                        transaction_serializer.save()
+                        response = {
+                            "status_code": status.HTTP_201_CREATED,
+                            "message": "Transaction created"
+                        }
+                        return Response(response, status=status.HTTP_201_CREATED)
+                
+                # If no available slots are found
+                return Response({"error": "No available slots found"}, status=status.HTTP_404_NOT_FOUND)
+                
             except Exception as e:
-                print(e)
-                return Response({"error": "Doctor availability not found"}, status=status.HTTP_404_NOT_FOUND)
-
-            print("Notification is ooooooooooooookkkkkkkkkkkkkkkkkkkkkkkkkkk")
-            transaction_serializer.save()
-            response = {
-                "status_code": status.HTTP_201_CREATED,
-                "message": "transaction created"
-            }
-            return Response(response, status=status.HTTP_201_CREATED)
+                print(f"Error: {e}")
+                return Response({"error": "An error occurred while processing the transaction"}, status=status.HTTP_400_BAD_REQUEST)
+                
         else:
             response = {
                 "status_code": status.HTTP_400_BAD_REQUEST,
-                "message": "bad request",
+                "message": "Bad request",
                 "error": transaction_serializer.errors
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 class UpdateOrderAPIView(APIView):

@@ -10,6 +10,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom'
 import useRazorpay from "react-razorpay";
+import bookingpic from  '../../../../public/assets/catogory/booking.jpg';
+import razorwebp from '../../../../public/assets/Logo/razor.webp'
+
+
+
 
 import {
   Card,
@@ -381,7 +386,7 @@ const removeDuplicates = (slots) => {
   <div class="relative mx-auto mt-20 mb-20 max-w-screen-lg overflow-hidden rounded-t-xl bg-cyan-600-400/60 py-32 text-center shadow-xl shadow-gray-300">
     <h1 class="mt-4 mb-8x-8 text-4xl font-bold text-cyan-400 md:text-5xl">Book an Appointment</h1>
     <p class="mt-6 text-lg text-gray-500">Get an appointment with our experienced accountants</p>
-    <img class="absolute top-0 left-0 -z-10 h-full w-full object-cover" src="/public/assets/catogory/booking.jpg" alt="" />
+    <img class="absolute top-0 left-0 -z-10 h-full w-full object-cover" src={bookingpic} alt="" />
   </div>
 
   <div class="mx-auto grid max-w-screen-lg px-6 pb-20">
@@ -593,7 +598,7 @@ const removeDuplicates = (slots) => {
       <img
         className="w-full md:w-[36rem] h-full"
         alt="stripe payment from undraw"
-        src="/public/assets/Logo/razor.webp"
+        src={razorwebp}
       />
       </div>
 

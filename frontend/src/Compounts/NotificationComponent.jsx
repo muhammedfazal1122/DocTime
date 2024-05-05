@@ -13,7 +13,7 @@ const NotificationComponent = () => {
         return () => {
             socket.disconnect();
         };
-    }, [notifications]);
+    }, []);
 
     return (
         <div>

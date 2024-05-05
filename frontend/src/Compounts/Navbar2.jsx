@@ -67,7 +67,7 @@ const Navbar2 = () => {
         console.log('222222222222222222222222222');
         const wsURL = `${WebsocketbaseUrl}ws/doctor-notification/${customId}/`;
         const socket = new WebSocket(wsURL);
-        console.log(wsURL,'socketurl:');
+        console.log(wsURL,'socketurl:------------');
 
         socket.onopen = () => {
           console.log("WebSocket connection established");
