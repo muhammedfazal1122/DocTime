@@ -18,6 +18,7 @@ import DocVideoCall from '../pages/Doctor/BookindDetailsDoctor/DocVideocall';
 import BookingDetailesDoc from '../pages/Doctor/BookindDetailsDoctor/BookingDetailesDoc';
 import DoctorChat from '../Compounts/chat/DoctorChat';
 import Accountdetailes from '../Compounts/Notification/Accountdetailes';
+import AboutPage from '../Compounts/About';
 
 const DoctorWrapper = () => {
   const dispatch = useDispatch();
@@ -98,6 +99,7 @@ const DoctorWrapper = () => {
       ),
       children: [
         { path: '/DocHome', element: <DocHome /> },
+        { path: '/About', element: <AboutPage /> },
         { path: '/Docprofile', element: <DoctorProfile /> },
         { path: '/Docprofile/KYC', element: <KYCAuthDoctor /> },
         { path: '/createSloat', element: <CreateSloat/> },

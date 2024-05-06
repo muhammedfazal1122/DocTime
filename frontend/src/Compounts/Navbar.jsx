@@ -87,11 +87,13 @@ const showProfile = async () => {
 
   // Array containing navigation items
   const navItems = [
-    { id: 1, text: 'Home' },
-    { id: 4, text: 'About' },
-    { id: 5, text: 'Contact' },
-  ];
+    { id: 1, text: 'Home', path: '/' },
+    { id: 4, text: 'About', path: '/DoctorShow/about' },
+ ];
 
+ const handleNavigation = (path) => {
+    navigate(path);
+ };
 
 
 
@@ -100,23 +102,26 @@ const showProfile = async () => {
     showProfile()
   }, [profilepic]); 
  
+
+  
   return (
     <nav className='bg-cyan-950 flex justify-between items-center h-17 max-w-full mx-auto px-4 text-white'>
-      <img
-        className='w-24 h-24 cursor-pointer'
-        src={logo}
-        alt=""
-        onClick={GotoHome}
-      />
+    <img
+      className='w-24 h-24 cursor-pointer'
+      src={logo}
+      alt=""
+      onClick={GotoHome}
+    />
 
-      <ul className='hidden md:flex'>
-        {navItems.map(item => (
-          <li
-            key={item.id}
-            className='p-4 hover:bg-[rgb(75,196,217)] rounded-xl m-2 cursor-pointer duration-300 hover:text-black' onClick={GotoHome}
-          >
-            {item.text}
-          </li>
+    <ul className='hidden md:flex'>
+      {navItems.map(item => (
+        <li
+          key={item.id}
+          className='p-4 hover:bg-[rgb(75,196,217)] rounded-xl m-2 cursor-pointer duration-300 hover:text-black'
+          onClick={() => handleNavigation(item.path)}
+        >
+          {item.text}
+        </li>
         ))}
       </ul>
 

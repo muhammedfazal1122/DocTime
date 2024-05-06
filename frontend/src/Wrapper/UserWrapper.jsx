@@ -25,6 +25,7 @@ import SpecialisationShow from '../pages/Patient/SpecialisationShow';
 import PatientChat from '../Compounts/chat/PatientChat';
 import DoctorShowChatList from '../pages/Patient/DoctorList/DoctorShowChatList';
 import DoctorShowBycat from '../pages/Patient/DoctorList/DoctorShowBycat';
+import AboutPage from '../Compounts/About';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -88,6 +89,7 @@ const UserWrapper = () => {
     children:[
       {path: "/auth/*", element:<Authenticator/>},
       {path: "/DoctorShow/", element: <DoctorShow/>},    
+      {path: "/DoctorShow/about", element: <AboutPage/>},    
       {path: "/DoctorShowBycat/:specialization", element: <DoctorShowBycat/>},    
       {path: "/DoctorShowChatList/", element: <DoctorShowChatList/>},    
       {path: "/DoctorShow/:specialization", element: <SpecialisationShow/>},    

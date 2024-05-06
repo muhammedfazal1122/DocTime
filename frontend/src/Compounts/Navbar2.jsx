@@ -44,6 +44,9 @@ const Navbar2 = () => {
   const GotoAccount = () =>{ 
     navigate('/doctor/accountdetailes')
   }
+  const GotoAbout = () =>{ 
+    navigate('/doctor/About')
+  }
 
 
   
@@ -154,12 +157,10 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
       <li  onClick={GotoHome} className='p-4 border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'>
           Home
           </li>
-          <li className='p-4 border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'>
+          <li onClick={GotoAbout} className='p-4 border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'>
           About
           </li>
-          <li className='p-4 border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'>
-          Contact
-          </li>
+ 
           <li onClick={GotoKYC} className='p-4   border-b rounded-xl hover:bg-[rgb(75,196,217)] duration-300 hover:text-black cursor-pointer border-gray-600'>
           Update KYC
           </li>
