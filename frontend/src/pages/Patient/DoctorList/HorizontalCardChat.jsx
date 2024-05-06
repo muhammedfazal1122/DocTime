@@ -5,6 +5,7 @@ import PatientChat from "../../../Compounts/chat/PatientChat";
 import axios from "axios";
 import { baseUrl } from "../../../utils/constants/Constants";
 import { jwtDecode } from "jwt-decode";
+import {  toast } from 'react-toastify'; // Import the 'toast' function from react-toastify
 
 export default function HorizontalCardChat({ doctor }) {
   const  navigate = useNavigate()

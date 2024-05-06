@@ -116,12 +116,12 @@ const OTPVerificationForm = () => {
           <button className="reserntclasssname" onClick={handleVerify}>
             Verify
           </button>
-          <p className="otpresend">You don't receive the code ? <a className="otpresend-action" onClick={handleResend}></a></p>
-          <button className='otpvalidate'>Resent</button>
+          {/* <p className="otpresend">You don't receive the code ? <a className="otpresend-action" onClick={handleResend}></a></p> */}
+          {/* <button className='otpvalidate'>Resent</button> */}
           
         </form>
       </div>
-
+ 
     </>
   );
 };

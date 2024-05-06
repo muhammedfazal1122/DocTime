@@ -8,7 +8,7 @@
 
 .cards .red {
   
-  background-image: url('/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg');
+  background-image: url('/src/assets/logo/2148757391.jpg');
   background-color: #007e9e;
 }
 
@@ -23,7 +23,6 @@
   background-image: url('/src/assets/logo/39388.jpg');
   background-color: #18cd5e;
 }
-
 .cards .card {
   display: flex;
   align-items: center;
@@ -33,13 +32,15 @@
   height: 180px; /* Increased the height of the card */
   width: 200px; /* Increased the width of the card */
   border-radius: 10px;
-  color: #c7e9ff;
+  color: #000000;
   cursor: pointer;
   transition: 400ms;
-  /* background-image: url('/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg');  */
+  /* background-image: url('/src/assets/logo/WhatsApp Image 2024-02-14 at 10.46.17_781daa59.jpg'); */
   background-size: cover; /* Ensure the image covers the entire card */
   background-position: center; /* Center the image within the card */
-}
+  text-shadow: 2px 2px 4px rgb(255, 255, 255); /* Add a bright shadow around the text */
+ }
+ 
 
 .cards .card p.tip {
   font-size: 1.5em; /* Increased the font size of the tip */

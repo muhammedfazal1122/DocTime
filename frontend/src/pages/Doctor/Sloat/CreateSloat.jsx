@@ -6,7 +6,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import TextField from '@mui/material/TextField';
 import { baseUrl } from '../../../utils/constants/Constants';
-
+import docbook from '../../../../public/assets/catogory/docbook.jpg'
 function CreateSlot() {
  const [selectedDate, setSelectedDate] = useState(dayjs());
  const [selectedDate2, setSelectedDate2] = useState(dayjs());
@@ -229,7 +229,7 @@ const handleSlotSelect = (slot) => {
         <div className="relative mx-auto mt-20 mb-20 max-w-screen-lg overflow-hidden rounded-t-xl bg-teal-600-400/60 py-32 text-center shadow-xl shadow-gray-300">
           <h1 className="mt-4 mb-8x-8 text-4xl font-bold text-cyan-500 md:text-5xl">Create Appointments</h1>
           <p className="mt-6 text-lg text-gray-500">“Wear the white coat with dignity and pride, It is an honor and privilege to get to serve the public as a physician.” </p>
-          <img className="absolute top-0 left-0 -z-10 h-full w-full object-cover" src="/public/assets/catogory/docbook.jpg" alt="" />
+          <img className="absolute top-0 left-0 -z-10 h-full w-full object-cover" src={docbook} alt="" />
         </div>
 
         <div className="mx-auto grid max-w-screen-lg px-6 pb-20">
@@ -419,7 +419,7 @@ const handleSlotSelect = (slot) => {
 
       <div className="mt-4 grid grid-cols-4 gap-2 lg:max-w-xl">
       {slots2.map((slot, index) => (
- <div key={index} className="slot-container">
+    <div key={index} className="slot-container">
     <button
       className={`rounded-lg px-19 py-6 font-medium text-cyan-900 active:scale-95 w-full ${selectedSlot2 === slot ? 'bg-cyan-300 text-white' : 'bg-cyan-100'}`}
       onClick={() => handleSlotSelect(slot)}
