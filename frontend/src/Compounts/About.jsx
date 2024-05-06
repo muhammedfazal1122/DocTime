@@ -43,7 +43,7 @@ const AboutPage = () => {
               <h3 className="text-2xl font-bold mt-8 mb-4 text-black">Find Your Trusted Doctor</h3>
               <p className="text-lg mb-4 text-gray-700">We understand the importance of choosing the right healthcare provider. That's why we only feature verified doctors who meet our strict criteria for expertise, professionalism, and patient care. Use our search filters to find the perfect doctor for your needs!</p>
 
-              <Link to='/doctors'>
+              <Link to='/'>
                 <Button className='lg:w-60 lg:h-14 rounded-full py-2 px-4 text-white font-bold bg-pink-500'>Book an Appointment</Button>
               </Link>
             </div>
