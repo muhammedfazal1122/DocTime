@@ -24,6 +24,7 @@ const DoctorsPage = () => {
  const sidebarRef = useRef(null);
  const [open, setOpen] = React.useState(0);
  const { specialization } = useParams();
+ console.log(specialization,'ppppppppppppppppaaaaaaaaaaaa');
 
  const filters = [
   

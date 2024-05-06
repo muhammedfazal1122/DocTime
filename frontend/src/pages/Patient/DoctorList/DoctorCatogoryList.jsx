@@ -4,6 +4,7 @@ import dentist from '../../../../public/assets/catogory/dentist.jpg';
 import General from '../../../../public/assets/catogory/general.jpg';
 import Gynecologist2 from '../../../../public/assets/catogory/Gynecologist.jpg';
 import Neurologist from '../../../../public/assets/catogory/neurologist.jpg';
+import Cardiologist from '../../../../public/assets/catogory/2149040259.jpg';
 
 const DoctorCatogoryList = () => {
  const cards = [
@@ -27,6 +28,11 @@ const DoctorCatogoryList = () => {
       imageUrl: Neurologist,
       specialization: 'neurologist',
     },
+    {
+      title: 'Cardiologist',
+      imageUrl: Cardiologist,
+      specialization: 'cardiologist',
+    },
     // Add more card objects here if needed
  ];
 
@@ -37,7 +43,7 @@ const DoctorCatogoryList = () => {
         {cards.map((card, index) => (
           <div key={index} className="s-static__card w-full sm:w-48 h-48 transform hover:scale-105 transition-transform duration-200 overflow-hidden">
             <div className="card card--180 p-8 text-center m-2">
-              <Link to={`/DoctorShow/${card.specialization}`} aria-label={card.title} className="card-link" previewlistener="true">
+              <Link to={`/DoctorShowBycat/${card.specialization}`} aria-label={card.title} className="card-link" previewlistener="true">
                 <div className="card__img--120x120">
                  <span className="LazyLoad is-visible">
                     <img src={card.imageUrl} alt={card.title} className="card_img" />

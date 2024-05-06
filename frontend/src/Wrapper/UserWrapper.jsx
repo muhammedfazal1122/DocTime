@@ -24,6 +24,7 @@ import Videocall from '../Compounts/Videocall';
 import SpecialisationShow from '../pages/Patient/SpecialisationShow';
 import PatientChat from '../Compounts/chat/PatientChat';
 import DoctorShowChatList from '../pages/Patient/DoctorList/DoctorShowChatList';
+import DoctorShowBycat from '../pages/Patient/DoctorList/DoctorShowBycat';
 
 const UserWrapper = () => {
   const dispatch = useDispatch()
@@ -87,6 +88,7 @@ const UserWrapper = () => {
     children:[
       {path: "/auth/*", element:<Authenticator/>},
       {path: "/DoctorShow/", element: <DoctorShow/>},    
+      {path: "/DoctorShowBycat/:specialization", element: <DoctorShowBycat/>},    
       {path: "/DoctorShowChatList/", element: <DoctorShowChatList/>},    
       {path: "/DoctorShow/:specialization", element: <SpecialisationShow/>},    
       {path: "/myprofile", element: <MyProfile/>},    

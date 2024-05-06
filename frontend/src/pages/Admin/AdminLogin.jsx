@@ -77,6 +77,9 @@ const AdminLogin = () => {
               name="password"
               id="password"
               placeholder="Password"
+
+
+              
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
