@@ -94,7 +94,7 @@ const UserLogin = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span className="forgot-password"><a href="#">Forgot Password ?</a></span>
+            {/* <span className="forgot-password"><a href="#">Forgot Password ?</a></span> */}
             <input className="login-button" type="submit" value="Sign In" />
           </form>
           <div className="social-account-container">
