@@ -539,7 +539,6 @@ const removeDuplicates = (slots) => {
       <img class="w-14 object-contain" src="/images/naorrAeygcJzX0SyNI4Y0.png" alt="" />
       <div class="ml-5">
         <span class="mt-2 font-semibold">Online Payment</span>
-        <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
       </div>
     </label>
  </div>
@@ -558,7 +557,6 @@ const removeDuplicates = (slots) => {
       <img class="w-14 object-contain" src="/images/oG8xsl3xsOkwkMsrLGKM4.png" alt="" />
       <div class="ml-5">
         <span class="mt-2 font-semibold">Wallet</span>
-        <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
       </div>
     </label>
  </div>

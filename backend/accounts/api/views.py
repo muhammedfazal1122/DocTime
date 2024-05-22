@@ -50,13 +50,17 @@ class RegisterView(APIView):
     def send_otp_email(self, email):
         random_num = random.randint(1000, 9999)
         print(random_num)
-        send_mail(
-            "OTP AUTHENTICATING DocTime",
-            f"{random_num} -OTP",
-            "ecomm.apps.info@gmail.com",
-            [email],
-            fail_silently=False,
-            )
+        try:
+            send_mail(
+                "OTP AUTHENTICATING DocTime",
+                f"{random_num} -OTP",
+                "ecomm.apps.info@gmail.com",
+                [email],
+                fail_silently=False,
+                )
+        except Exception as e:
+            print("**********************8")
+            print(e)
         otp_instance = OTPModel.objects.create(
             user=User.objects.get(email=email),
             otp=random_num,

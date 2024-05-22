@@ -241,13 +241,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS =  config('EMAIL_USE_TLS', cast=bool)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD =  config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = 'muhammedfazalcholayil@gmail.com'
+EMAIL_HOST_PASSWORD =  'tldy zsmr bejc zcvt'
 
 
 
 RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID')
-RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET')
+RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET') 
 
 # settings.py
 

@@ -70,8 +70,8 @@ const UserWrapper = () => {
     <Footer2/>
         </>
       ),children:[
-        {path: "/auth/*", element:<Authenticator/>},
-        {path: "/", element: <UserHome/>},    
+        {path: "/auth/*", element: <Authenticator/>},
+        {path: "/", element: <UserHome/>},
       ]
     }
     ,

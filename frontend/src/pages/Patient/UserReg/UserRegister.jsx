@@ -5,6 +5,7 @@ import '../../Patient/UserReg/Register.css';
 import axios from 'axios';
 import { baseUrl } from '../../../utils/constants/Constants';
 
+
 const UserRegister = () => {
   const navigate = useNavigate();
 
@@ -20,51 +21,71 @@ const UserRegister = () => {
     password: '',
     confirmPassword: ''
   });
-  
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const { first_name, last_name, email, phone_number, password, confirmPassword } = formData;
 
-    if (!first_name || !last_name) {
-      toast.error("Please enter a name");
-    } else if (first_name.indexOf(" ") !== -1 || last_name.indexOf(" ") !== -1) {
-      toast.error("Enter a valid name");
-    } else if (!email) {
-      toast.error("Please enter an email address");
-    } else if (password.trim() === "") {
-      toast.error("Please enter a password");
-    } else if (password !== confirmPassword) {
-      toast.error("Password and confirm password do not match");
-    } else if (email.indexOf("@") === -1 || email.indexOf(".") === -1) {
-      toast.error("Invalid email address");
+    // Name validation
+    if (!first_name ||!last_name) {
+      toast.error("Both first name and last name are required.");
+    } else if (first_name.length < 2 || last_name.length < 2) {
+      toast.error("First name and last name must be at least 2 characters long.");
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      toast.error("Email address is required.");
+    } else if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
+    }
+
+    // Phone number validation
+    const phoneNumberRegex = /^\d{10}$/; // Adjust regex based on expected format
+    if (!phone_number) {
+      toast.error("Phone number is required.");
+    } else if (!phoneNumberRegex.test(phone_number)) {
+      toast.error("Please enter a valid phone number.");
+    }
+
+    // Password validation
+    const passwordRegex = /^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{8,}$/; // At least 8 characters, including at least one uppercase letter, one lowercase letter, and one digit
+    if (!password) {
+      toast.error("Password is required.");
+    } else if (!passwordRegex.test(password)) {
+      toast.error("Password must be at least 8 characters long, including at least one uppercase letter, one lowercase letter, and one digit.");
+    } else if (password!== confirmPassword) {
+      toast.error("Passwords do not match.");
     } else {
       try {
         const res = await axios.post(baseUrl + 'auth/register', formData);
         if (res.status === 201) {
-          console.log("Success");
-          localStorage.setItem('userEmail', email); // Use email directly from form data
-          localStorage.setItem('user_type', 'patient'); // Assuming user_type is fixed for patient registration
+          toast.success("Registration successful!");
+          localStorage.setItem('userEmail', email);
+          localStorage.setItem('user_type', 'patient');
           navigate('/auth/otpvarification');
         }
-        console.log(res);
-        return res;
       } catch (error) {
         console.log("Error:", error);
-        if (error.response && error.response.data && error.response.data.email) {
-          toast.error(error.response.data.email[0]);
+        if (error.response && error.response.data && error.response.data.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("An unexpected error occurred. Please try again later.");
         }
       }
     }
   };
 
-
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
-      ...formData,
+     ...formData,
       [name]: value
     });
   };
@@ -121,28 +142,49 @@ const UserRegister = () => {
             />
             <span className="absolute left-2 top-6 text-gray-500 text-sm">Phonenumber</span>
           </label>
+
           <label>
-            <input
-              className="Registinput w-full p-3 outline-none border border-gray-300 rounded-lg"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-            />
+            <div className="relative">
+              <input
+                className={`Registinput w-full p-3 outline-none border border-gray-300 rounded-lg ${showPassword? 'border-transparent' : ''}`}
+                type={showPassword? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+              />
             <span className="absolute left-2 top-6 text-gray-500 text-sm">Password</span>
+
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white px-2 py-1 rounded text-gray-500 hover:bg-gray-100"
+                onClick={toggleShowPassword}
+              >
+                {showPassword? 'Hide' : 'Show'}
+              </button>
+            </div>
           </label>
           <label>
-            <input
-              className="Registinput w-full p-3 outline-none border border-gray-300 rounded-lg"
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              required
-            />
-            <span className="absolute left-2 top-6 text-gray-500 text-sm">Confirm password</span>
+            <div className="relative">
+              <input
+                className={`Registinput w-full p-3 outline-none border border-gray-300 rounded-lg ${showPassword? 'border-transparent' : ''}`}
+                type={showPassword? "text" : "password"}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                required
+              />
+             <span className="absolute left-2 top-6 text-gray-500 text-sm">Confirm password</span>
+
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white px-2 py-1 rounded text-gray-500 hover:bg-gray-100"
+                onClick={toggleShowPassword}
+              >
+              </button>
+            </div>
           </label>
+
           <button className="signupBtn">
           SIGN UP
           <span className="arrow">
