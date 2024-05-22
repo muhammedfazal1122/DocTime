@@ -48,10 +48,10 @@ const OTPVerificationForm = () => {
         console.log(user_type,'user_type');
 
         if (user_type === "patient") {
-          console.log("Patient Successfully logined");
+          toast.success("Registration successful!");
           navigate('/auth/login');
         } else if (user_type === "doctor") {
-          console.log("Doctor Successfully logined");
+          toast.success("Registration successful!");
           navigate('/auth/doctor/login')
         }else{
 

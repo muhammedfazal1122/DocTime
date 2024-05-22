@@ -87,7 +87,7 @@ const UserWrapper = () => {
       </>
     ),
     children:[
-      {path: "/auth/*", element:<Authenticator/>},
+      {path: "/auth/*", element:<Authenticator/>}, 
       {path: "/DoctorShow/", element: <DoctorShow/>},    
       {path: "/DoctorShow/about", element: <AboutPage/>},    
       {path: "/DoctorShowBycat/:specialization", element: <DoctorShowBycat/>},    

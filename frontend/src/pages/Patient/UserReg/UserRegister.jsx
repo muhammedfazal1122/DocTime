@@ -66,7 +66,6 @@ const UserRegister = () => {
       try {
         const res = await axios.post(baseUrl + 'auth/register', formData);
         if (res.status === 201) {
-          toast.success("Registration successful!");
           localStorage.setItem('userEmail', email);
           localStorage.setItem('user_type', 'patient');
           navigate('/auth/otpvarification');
