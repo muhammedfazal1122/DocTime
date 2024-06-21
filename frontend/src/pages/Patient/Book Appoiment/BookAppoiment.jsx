@@ -46,7 +46,7 @@ const [OnlinePaymet, setOnlinePaymet] = useState(false)
 const doctorId = custom_id
 const [transactionData, setTrasaction] = useState([])
 
-
+console.log(DoctorData,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
   
 const handleRazorpay = () =>{
 
@@ -245,7 +245,7 @@ const fetchPatientCustomId =async ()=>{
        if (doctor) {
          setDoctorData(doctor);
          setFees(doctor.doctor.doctor_user.consultaion_fees);
-         console.log(doctor.doctor_user.consultaion_fees,'fee');
+         console.log(doctor.doctor_user.consultaion_fees,'feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
 
        } else {
          console.log('Doctor not found');
@@ -506,16 +506,16 @@ const removeDuplicates = (slots) => {
             <StarIcon />
             <StarIcon />
           </div>
-        Booking Fees: ₹ { DoctorData.doctor_user.consultaion_fees}
+          Booking Fees: ₹ {DoctorData?.doctor_user?.consultaion_fees}
         
-          <Typography color="blue-gray"> { DoctorData.doctor_user.specializations}</Typography>
-          <Typography color="blue-gray"> Hospital: { DoctorData.doctor_user.Hospital}</Typography>
-          <Typography color="blue-gray"> Experience: { DoctorData.doctor_user.experience} years</Typography>
+          <Typography color="blue-gray"> { DoctorData?.doctor_user?.specializations}</Typography>
+          <Typography color="blue-gray"> Hospital: { DoctorData?.doctor_user?.Hospital}</Typography>
+          <Typography color="blue-gray"> Experience: { DoctorData?.doctor_user?.experience} years</Typography>
         </div>
       </CardHeader>
       <CardBody className="mb-6 p-0">
         <Typography>
-          &quot;    { DoctorData.doctor_user.about_me}&quot;
+          &quot;    { DoctorData?.doctor_user?.about_me}&quot;
         </Typography>
       </CardBody>
     </Card>
