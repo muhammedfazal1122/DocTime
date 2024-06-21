@@ -88,7 +88,7 @@ const DoctorLogin = () => {
             <input className="login-button" type="submit" value="Sign In" />
           </form>
           <div className="social-account-container">
-            <span className="title">Or Sign in with</span>
+            {/* <span className="title">Or Sign in with</span> */}
             <div className="social-accounts">
               {/* Social buttons */}
             </div>

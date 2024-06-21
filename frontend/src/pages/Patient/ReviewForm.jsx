@@ -13,7 +13,7 @@ const ReviewForm = ({ doctorId }) => {
             message,
         };
 
-        try {
+        try {  
             const response = await axios.post('http://localhost:8000/reviews/create/', reviewData);
             console.log(response.data);
             // Handle success, e.g., show a success message or clear the form

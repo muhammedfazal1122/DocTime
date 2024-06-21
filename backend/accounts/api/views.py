@@ -50,7 +50,7 @@ class RegisterView(APIView):
     def send_otp_email(self, email):
         random_num = random.randint(1000, 9999)
         print(random_num)
-        try:
+        try:    
             send_mail(
                 "OTP AUTHENTICATING DocTime",
                 f"{random_num} -OTP",
