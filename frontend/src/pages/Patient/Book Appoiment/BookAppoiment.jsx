@@ -481,7 +481,7 @@ const removeDuplicates = (slots) => {
             <Typography variant="h5" color="blue-gray">
               <div>
 
-           {`${DoctorData.doctor_user.full_name } `}
+           {`${DoctorData.first_name } ${DoctorData.last_name } `}
               </div>
             </Typography>
            
