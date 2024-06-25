@@ -36,6 +36,7 @@ function BookAppoiment() {
  const [ShowPaymet, setShowPaymet] = useState(false)
  const [patientID, setPatientID] = useState(null)
 const [Fees, setFees] = useState(300)
+const [specializations, setspecializations] = useState()
 const [id, setId] = useState(null);
  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('online');
  const [DoctorData, setDoctorData] = useState({
@@ -51,8 +52,12 @@ console.log(DoctorData,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
 const handleRazorpay = () =>{
 
   const fees = DoctorData.doctor_user.consultaion_fees
-  console.log(fees);
+  const specializations = DoctorData.doctor_user.specializations
+  // const fees = DoctorData.doctor_user.consultaion_fees
+  // const fees = DoctorData.doctor_user.consultaion_fees
+  
   setFees(fees)
+  setspecializations(specializations)
 
 
  // Check if selectedSlot is not null before proceeding
@@ -75,13 +80,12 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
         console.log(availabilityCheckResponse,'lllllllllllllll');
 
         if (!availabilityCheckResponse.data.available) {                            
-          toast.warning("This slot is already booked. Please choose another slot.");
+          toast.warning("This slot is already booked. Please choose another slot ");
           return;
         }
         else if (availabilityCheckResponse.data.error) {
           toast.warning("This slot is already booked. Please choose another slot.");
-
-        }
+        }        
         // If the slot is available, proceed with creating the order
         return axios.post(`${baseUrl}appointment/create-order/`, {
           amount: fees,
@@ -104,7 +108,6 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
               "api responseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
               response
             );
-            
             //complete order
             complete_order(
               response.razorpay_payment_id,
@@ -245,6 +248,7 @@ const fetchPatientCustomId =async ()=>{
        if (doctor) {
          setDoctorData(doctor);
          setFees(doctor.doctor.doctor_user.consultaion_fees);
+         setspecializations(doctor.doctor.doctor_user.specializations);
          console.log(doctor.doctor_user.consultaion_fees,'feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
 
        } else {
@@ -506,9 +510,9 @@ const removeDuplicates = (slots) => {
             <StarIcon />
             <StarIcon />
           </div>
-          Booking Fees: ₹ {DoctorData?.doctor_user?.consultaion_fees}
+          Booking Fees: ₹ {Fees}
         
-          <Typography color="blue-gray"> { DoctorData?.doctor_user?.specializations}</Typography>
+          <Typography color="blue-gray">fasdfasdf { specializations}</Typography>
           <Typography color="blue-gray"> Hospital: { DoctorData?.doctor_user?.Hospital}</Typography>
           <Typography color="blue-gray"> Experience: { DoctorData?.doctor_user?.experience} years</Typography>
         </div>

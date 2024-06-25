@@ -48,6 +48,7 @@ const UserLogin = () => {
         );
         console.log(res.data.is_doctor, "this is the status");
         if (res.data.is_doctor | res.data.isAdmin) {
+          toast.error("Doctors/Admin Login Page is not here")
           console.log("IT IS DOCTOR or an Admin ");
         } else {
           console.log("ok");

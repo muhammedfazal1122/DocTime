@@ -138,8 +138,8 @@ class OTPVerificationView(APIView):
                     print("otp is correcrt")
                     user.is_active = True
                     user.save()
-# ----------------------------------------------------------
- # Delete the OTP instance after successful verification
+                    # ----------------------------------------------------------
+                    # Delete the OTP instance after successful verification
                     otp_object.delete()
                     return Response("User successfully verified",status=200)
                 else:

@@ -8,6 +8,7 @@ import { set_authentication } from '../../../Redux/AuthanticationUser';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../../../utils/constants/Constants';
+import { toast } from "react-toastify";
 
 const DoctorLogin = () => {
   const [email, setEmail] = useState('');
@@ -43,8 +44,12 @@ const DoctorLogin = () => {
         console.log(res.data.is_doctor, "this is the is_doctor");
         if (res.data.is_doctor) {
           console.log("IT IS DOCTOR");
+          toast.success("You are successfully logged in !")
+
           navigate("/doctor/DocHome");
         } else {
+          toast.error("Patients Login Page is not here")
+
           console.log("not ok");
         }
       }

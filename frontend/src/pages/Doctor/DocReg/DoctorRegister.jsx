@@ -23,68 +23,104 @@ const DoctorRegister = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const { first_name, last_name, email, password, confirmPassword } = formData;
-
-    // Perform validation
-    if (!first_name || !last_name) {
-      toast.error("Please enter a name");
-    } else if (first_name.indexOf(" ") !== -1 || last_name.indexOf(" ") !== -1) {
-      toast.error("Enter a valid name");
-    } else if (!email) {
-      toast.error("Please enter an email address");
-    } else if (password.trim() === "") {
-      toast.error("Please enter a password");
-    } else if (email.indexOf("@") === -1 || email.indexOf(".") === -1) {
-      toast.error("Invalid email address");
-    } else if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
-    } else {
-      // All validation passed, proceed with form submission
-      const userData = {
-        first_name,
-        last_name,
-        email,
-        phone_number: formData.phone_number,
-        password,
-        user_type: 'doctor'
-      };
-
-      try {
-        const res = await axios.post(baseUrl + 'auth/register', userData);
-        if (res.status === 201) {
-          console.log("Success");
-          localStorage.setItem('userEmail', email);
-          localStorage.setItem('user_type', 'doctor');
-          navigate('/auth/otpvarification');
-        }
-        console.log(res);
-        return res;
-      } catch (error) {
-        console.log(error, "Error occurred");
-        if (error.response && error.response.data) {
-           // Iterate over each key in the error response data
-           Object.keys(error.response.data).forEach((key) => {
-             // Check if the value is an array (which it should be for multiple errors)
-             if (Array.isArray(error.response.data[key])) {
-               // Iterate over each error message for this field
-               error.response.data[key].forEach((errorMessage) => {
-                 // Display each error message using toast
-                 toast.error(errorMessage);
-               });
-             } else {
-               // If the value is not an array, display it as a single error message
-               toast.error(error.response.data[key]);
-             }
-           });
-        } else {
-           toast.error("An error occurred. Please try again later.");
-        }
-       }
-       
+  
+    const { first_name, last_name, email, phone_number, password, confirmPassword } = formData;
+  
+    let errors = {}; // Initialize an empty object to hold any validation errors
+  
+    // Name validation
+    const fullName = `${first_name} ${last_name}`; // Combine first and last name for validation
+    if (!fullName.trim()) {
+      errors.name = 'Name is required';
+    } else if (!/^[A-Za-z\s]+$/i.test(fullName)) {
+      errors.name = 'Should not contain numbers!';
     }
-  };
+  
+    // Email validation
+    if (!email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+      errors.email = 'Invalid email address';
+    }
+  
+    // Phone number validation
+    if (!phone_number.trim()) {
+      errors.phone = 'Phone is required';
+    } else if (!/^[0-9]+$/u.test(phone_number)) {
+      errors.phone = 'Should not include characters';
+    } else if (phone_number.length!== 10) {
+      errors.phone = 'Should contain 10 numbers';
+    }
+  
+    // Password validation
+    if (!password.trim()) {
+      errors.password = 'Password is required';
+    } else if (password.length < 6) {
+      errors.password = 'Contain at least 6 characters';
+    }
+  
+    // Confirm password validation
+    if (!confirmPassword.trim()) {
+      errors.confirm_password = 'Confirm Password is required';
+    } else if (confirmPassword!== password) {
+      errors.confirm_password = 'Password should match!';
+    }
+  
+    // Check if there are any errors before proceeding
+    if (Object.keys(errors).length > 0) {
+      // Iterate through the errors object and display each error using toast
+      Object.keys(errors).forEach(key => {
+        toast.error(errors[key]); // Display each error message
+      });
+      return; // Stop execution if there are errors
+    }
+  
+    // All validation passed, proceed with form submission
+    const userData = {
+      first_name,
+      last_name,
+      email,
+      phone_number,
+      password,
+      user_type: 'doctor'
+    };
+  
+    try {
+      const res = await axios.post(baseUrl + 'auth/register', userData);
+      if (res.status === 201) {
+        console.log("Success");
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('user_type', 'doctor');
+        toast.success("OTP has been sent to your email.");
 
+        navigate('/auth/otpvarification');
+      }
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.log(error, "Error occurred");
+      if (error.response && error.response.data) {
+         // Iterate over each key in the error response data
+         Object.keys(error.response.data).forEach((key) => {
+           // Check if the value is an array (which it should be for multiple errors)
+           if (Array.isArray(error.response.data[key])) {
+             // Iterate over each error message for this field
+             error.response.data[key].forEach((errorMessage) => {
+               // Display each error message using toast
+               toast.error(errorMessage);
+             });
+           } else {
+             // If the value is not an array, display it as a single error message
+             toast.error(error.response.data[key]);
+           }
+         });
+      } else {
+         toast.error("An error occurred. Please try again later.");
+      }
+     }
+  };
+  
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
