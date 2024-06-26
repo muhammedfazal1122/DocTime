@@ -84,8 +84,23 @@ useEffect(() => {
   fetchData();
 }, []);
 
+
+const validateInput = (name, value) => {
+  if (value.trim() === '' || (['consultaion_fees', 'consultation_slots', 'experience'].includes(name) && value < 0)) {
+    return false;
+  }
+  return true;
+};
+
+
+
 const handleChange = (e) => {
   const { name, value } = e.target;
+  if (!validateInput(name, value)) {
+    toast.error("Invalid input. Please enter a valid value.");
+    return;
+  }
+
   if (name.startsWith('user.')) {
      // If the input is for the user object, update it accordingly
      const [userKey, userField] = name.split('.');
@@ -96,7 +111,9 @@ const handleChange = (e) => {
          [userField]: value,
        },
      }));
-  } else {
+  }
+
+   else {
      // Otherwise, update the main formData object
      setFormData({ ...formData, [name]: value });
   }
@@ -269,7 +286,6 @@ const uploadProfilePicture = async () => {
                     />
                   </div>
                 </div>
-      {/* ------------------------------------------------------------- */}
    
     {/* ------------------------------------------------------------- */}
     <div>
@@ -449,7 +465,7 @@ const uploadProfilePicture = async () => {
                     <input
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       required=""
-                      type="text"
+                      type="number"
                       name="consultaion_fees"
                       id="consultaion_fees"
                       value={formData.consultaion_fees}
@@ -459,16 +475,16 @@ const uploadProfilePicture = async () => {
                 </div>
       {/* --------------------------------------------------------------------------------- */}
                 <div>
-                  <label htmlFor="consultaion_fees" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="experience" className="block text-sm font-medium text-gray-700">
                   Experience 
                   </label>
                   <div className="mt-1">
                     <input
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       required=""
-                      type="text"
-                      name="consultaion_fees"
-                      id="consultaion_fees"
+                      type="number"
+                      name="experience"
+                      id="experience"
                       value={formData.experience }
                       onChange={handleChange}
                     />
