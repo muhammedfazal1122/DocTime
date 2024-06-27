@@ -149,6 +149,13 @@ class UserDetailsUpdateSerializer(serializers.ModelSerializer):
         model = User
         exclude = ('password','is_staff','is_superuser','user_type')
 
+class UserDetailsUpdateSerializerlistbooking(serializers.ModelSerializer):
+    doctor_user=DoctorSerializer(read_only=True)
+    class Meta:
+        model = User
+        exclude = ('password','is_staff','is_superuser','user_type')
+
+
 class AdminDocUpdateSerializer(serializers.ModelSerializer):
     user=DOCUserSerializer()
     class Meta:

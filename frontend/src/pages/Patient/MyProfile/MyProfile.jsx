@@ -213,9 +213,9 @@ function MyProfile() {
       case "date_of_birth":
         // Validate date of birth - 10 years before the current date
         const tenYearsAgo = new Date();
-        tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 10);
+        tenYearsAgo.setFullYear(tenYearsAgo.getFullYear() - 5);
         if (new Date(value) > tenYearsAgo) {
-          error = "Date of birth should be at least 10 years ago.";
+          error = "Date of birth should be at least 5 years ago.";
         }
         break;
 

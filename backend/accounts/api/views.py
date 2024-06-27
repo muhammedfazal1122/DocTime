@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, DoctorCustomIDSerializer,OTPModel,Patient,PatientUserSerializer,Doctor
 from .serializers import VarificationSerializer,Verification,AdminDocVerificationSerializer,UserDetailsUpdateSerializer,AdminDocUpdateSerializer,AdminClientUpdateSerializer
-from .serializers import UserIsActiveSerializer,AdminPatientUpdateSerializer,AdminDocVerificationSerializerApprove,DoctorSerializer,UserPatientCustomIDSerializer,UserDoctorCustomIDSerializer2
+from .serializers import UserIsActiveSerializer,UserDetailsUpdateSerializerlistbooking,AdminPatientUpdateSerializer,AdminDocVerificationSerializerApprove,DoctorSerializer,UserPatientCustomIDSerializer,UserDoctorCustomIDSerializer2
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed, ParseError
@@ -250,11 +250,28 @@ class AdminDocVerificationView(generics.RetrieveUpdateDestroyAPIView):
         
 
 
+
 class AdminDoctorApprovalListView(generics.ListAPIView):
     queryset = User.objects.filter( Q(user_type='doctor') )
     parser_classes = (MultiPartParser, FormParser)
     # permission_classes = [IsAdminUser]
     serializer_class = UserDetailsUpdateSerializer
+
+
+class DoctorListViewlistbooking(generics.ListAPIView):
+    queryset = User.objects.filter( Q(user_type='doctor') )
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = UserDetailsUpdateSerializerlistbooking
+
+
+class AdminDoctorApprovalListView(generics.ListAPIView):
+    queryset = User.objects.filter( Q(user_type='doctor') )
+    parser_classes = (MultiPartParser, FormParser)
+    # permission_classes = [IsAdminUser]
+    serializer_class = UserDetailsUpdateSerializer
+
+
+
 
 class AdminDoctorListView(generics.ListAPIView):
     queryset = User.objects.filter( Q(user_type='doctor') & Q(approval_status='APPROVED'))

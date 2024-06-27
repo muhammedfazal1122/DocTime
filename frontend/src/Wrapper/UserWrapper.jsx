@@ -24,7 +24,7 @@ import Videocall from '../Compounts/Videocall';
 import SpecialisationShow from '../pages/Patient/SpecialisationShow';
 import PatientChat from '../Compounts/chat/PatientChat';
 import DoctorShowChatList from '../pages/Patient/DoctorList/DoctorShowChatList';
-import DoctorShowBycat from '../pages/Patient/DoctorList/DoctorShowBycat';
+import DoctorShowBycat from '../pages/Patient/DoctorList/DoctorShowBycat'; 
 import AboutPage from '../Compounts/About';
 
 const UserWrapper = () => {

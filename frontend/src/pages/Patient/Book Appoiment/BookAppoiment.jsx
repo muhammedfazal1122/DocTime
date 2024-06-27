@@ -235,7 +235,7 @@ const fetchPatientCustomId =async ()=>{
     console.log('lllllllllllll');
      const accessToken = localStorage.getItem("access");
  
-     axios.get(`${baseUrl}auth/admin/doctor/verication/list/`, {
+     axios.get(`${baseUrl}auth/admin/doctor/verication/listbooking/`, {
        headers: {
          Authorization: `Bearer ${accessToken}`,
          Accept: 'application/json',
@@ -247,8 +247,7 @@ const fetchPatientCustomId =async ()=>{
        const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id === custom_id);
        if (doctor) {
          setDoctorData(doctor);
-         setFees(doctor.doctor.doctor_user.consultaion_fees);
-         setspecializations(doctor.doctor.doctor_user.specializations);
+       
          console.log(doctor.doctor_user.consultaion_fees,'feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
 
        } else {

@@ -46,8 +46,10 @@ urlpatterns = [
     path("admin/client/<str:pk>", views.AdminClientUpdate().as_view(), name="adminClient-Update"),
 
     path('admin/verification/doctor/<str:user__id>/', views.AdminDocVerificationView.as_view(), name='admin-verification-doctor'),
-
     path("admin/doctor/verication/list/", views.AdminDoctorApprovalListView.as_view(), name="admin-verification-doctor-list"),
+    # ------------------------------------------------------booking fetch------------------
+    path("admin/doctor/verication/listbooking/", views.DoctorListViewlistbooking.as_view(), name="admin-verification-doctor-list"),
+
     path("admin/doctor/list/", views.AdminDoctorListView.as_view(), name="admin-verification-doctor-list"),
 
     path("admin/doc/delete/<str:pk>/", views.AdminDocDelete.as_view(), name="admin-doctor-delete"),
