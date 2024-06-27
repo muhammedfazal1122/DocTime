@@ -55,7 +55,7 @@ const handleRazorpay = () =>{
   const specializations = DoctorData.doctor_user.specializations
   // const fees = DoctorData.doctor_user.consultaion_fees
   // const fees = DoctorData.doctor_user.consultaion_fees
-  
+ 
   setFees(fees)
   setspecializations(specializations)
 
@@ -83,6 +83,7 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
           toast.warning("This slot is already booked. Please choose another slot ");
           return;
         }
+
         else if (availabilityCheckResponse.data.error) {
           toast.warning("This slot is already booked. Please choose another slot.");
         }        
@@ -198,6 +199,7 @@ const fetchPatientCustomId =async ()=>{
     setId(id);
     console.log(id,'iiiiiiiiiiiiiiiiiiddddddddddddddddddddd');
 
+
     const doct = await axios.get(`${baseUrl}auth/patient/list/${id}`);
     // http://localhost:8000/auth/patient/list/5f7876fe-6907-4386-94e0-2bfe2c5faeb2
     if (doct.status === 200) {
@@ -242,9 +244,10 @@ const fetchPatientCustomId =async ()=>{
          'Content-Type': 'application/json',
        }
      }).then(response => {
-       console.log(response.data, 'reeeeessssssssssss');
+       console.log(response.data,doctorId, 'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEssssssssssss');
+       
        // Assuming you want to find the doctor by custom_id and then extract consultation_fees
-       const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id === custom_id);
+       const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id == doctorId);
        if (doctor) {
          setDoctorData(doctor);
        
