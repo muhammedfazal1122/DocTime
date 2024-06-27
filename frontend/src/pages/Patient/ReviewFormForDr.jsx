@@ -20,13 +20,13 @@ const ReviewFormForDr = ({ doctorId ,transaction_id}) => {
     const fetchPatientCustomId =async ()=>{
         try {
           const refreshToken = localStorage.getItem("refresh");
-          console.log(refreshToken, "nooooooooooooo");
+          
       
           let decoded = jwtDecode(refreshToken);
-          console.log(decoded, "hfhhhhhhhhhhhhhhhhhhhhhhhh");
+          
           let id = decoded.user_id;
           setId(id);
-          console.log(id,'iiiiiiiiiiiiiiiiiiddddddddddddddddddddd');
+          
       
           const doct = await axios.get(`${baseUrl}auth/patient/list/${id}`);
           // http://localhost:8000/auth/patient/list/5f7876fe-6907-4386-94e0-2bfe2c5faeb2
@@ -35,13 +35,13 @@ const ReviewFormForDr = ({ doctorId ,transaction_id}) => {
       
             setPatientID(CustomId);
       
-            console.log('custom_id=======',patientID);
-            console.log('custom_id=======',doct.data.patient_user.custom_id);
+            
+            
       
       
           }
         } catch (error) {
-          console.log("error in iiiiiiiiiiiiiiiiiiddddddddddddddddddddd custom_id");
+          
         }
        
       } 
@@ -54,7 +54,7 @@ const ReviewFormForDr = ({ doctorId ,transaction_id}) => {
             try {
                 const response = await axios.get(`${baseUrl}appointment/reviews/${doctorId}/`);
                 setReviews(response.data.results);
-                console.log(response.data.results,'rrrrrrrreeeeeeesssssssssssssss');
+                
                 setAverageRating(response.data.averageRating);
             } catch (error) {
                 console.error(error);
@@ -84,7 +84,7 @@ const ReviewFormForDr = ({ doctorId ,transaction_id}) => {
 
         try {
             const response = await axios.post(`${baseUrl}appointment/reviews/create/`, reviewData);
-            console.log(response.data);
+            
             // Handle success, e.g., show a success message or clear the form
             setSubject('');
             setComment('');

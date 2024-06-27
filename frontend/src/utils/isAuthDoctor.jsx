@@ -15,7 +15,7 @@ const updateDocToken = async () => {
     if (res.status === 200) {
       localStorage.setItem("access", res.data.access);
       localStorage.setItem("refresh", res.data.refresh);
-      console.log("updateDocToken OKKKKKKKKK");
+      
       return true;
     } else {
       return false;
@@ -35,7 +35,7 @@ const fetchisDoctor = async () => {
         "Content-Type": "application/json",
       },
     });  
-    console.log("fetchisDoctor(userDETAILES) is ok ");
+    
     
     return res.data.user_type === "doctor";
   } catch (error) {

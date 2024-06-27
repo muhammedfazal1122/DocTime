@@ -109,7 +109,7 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
     axios
       .patch(baseUrl + `auth/admin/client/${doctorId}`, formData)
       .then((res) => {
-        console.log("Data updated successfully:", res.data);
+        
         toast.success("Data updated successfully");
         setEditModalVisible(false);
         // Optionally, you can reset the form or handle other actions
@@ -128,11 +128,11 @@ function EditPatient({ doctorId, setIsDataFetched, setEditModalVisible }) {
         setUser({ ...res.data.user }); // Spread the user object to avoid mutation
         setSpecializations(res.data.blood_group || "");
         setDocDetail(res.data);
-      console.log(res.data, "reached to the editing component");
+      
       setIsDataFetched(true);
     })
     .catch((err) => {
-      console.log(err);
+      
       toast.error(err);
     });
  }, [doctorId, setIsDataFetched]);

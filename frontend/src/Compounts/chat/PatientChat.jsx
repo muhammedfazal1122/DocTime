@@ -30,8 +30,8 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
   const [client, setClient] = useState(null);
   const [patientId, setPatientID] = useState(null);
   const [doct, setdoct] = useState("");
-  console.log("CLIENT:", client);
-  console.log("BOOKINGS:", bookings);
+  
+  
   const chatContainerRef = useRef(null);
   const [appointmentId, setTransactionId] = useState(null); // State to hold the transaction ID
   // const doctorId = doctor_id;
@@ -56,7 +56,7 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
         const patientId = response.data.patient_user.custom_id;
         await fetchBookingDetails(doctorCustomId, patientId);
       } catch (error) {
-        console.log(error);
+        
       }
     };
 
@@ -98,7 +98,7 @@ const PatientChat = ({doctorId,doctorCustomId}) => {
     setClient(newClient);
 
     newClient.onopen = () => {
-      console.log("WebSocket Client Connected");
+      
     };
 
     newClient.onmessage = (message) => {

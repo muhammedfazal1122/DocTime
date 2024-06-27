@@ -58,11 +58,11 @@ const BookingDetails = () => {
       if (doctor) {
         return doctor;
       } else {
-        console.log('Doctor not found');
+        
         return null;
       }
     } catch (error) {
-      console.log(error, 'errorrrrrrrrrrrr');
+      
       return null;
     }  
  };
@@ -166,15 +166,15 @@ const BookingDetails = () => {
 
  const fetchPrescriptions = async (transaction_id) => {
   try {
-     console.log(transaction_id, 'transaction_id');
-     console.log(typeof transaction_id); // Should log 'string'
+     
+     
  
      // Correctly set withCredentials to true
      const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${transaction_id}/`, { withCredentials: true });
    
      const data = response.data // This line extracts the JSON data from the response
      setPrescriptions(data.results);
-     console.log(data, 'Fetched prescriptions data');
+     
   } catch (error) {
      console.error("Error fetching prescriptions:", error);
   }
@@ -246,7 +246,7 @@ const BookingDetails = () => {
         setIsReviewModalOpen(true);
         setDoctorId(transaction.doctor_id); 
         setReviewTransactionId(transaction.transaction_id); // Set the transaction ID
-        console.log('oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo', transaction.doctor_id);
+        
         // Assuming transaction_id is the doctorId
       }}
       className="font-inherit text-sm bg-blue-500 text-white py-1 px-2 flex items-center border-none rounded-lg overflow-hidden transition-all duration-200 ease-in-out cursor-pointer hover:scale-95 hover:bg-blue-700 hover:text-gray-100"

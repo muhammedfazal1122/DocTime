@@ -19,20 +19,20 @@ const DocVideoCall = () => {
     const userID = decoded.user_id;
     const userName = decoded.first_name;
     const navigate = useNavigate();
-      console.log(  userID,userName,'ppppppppp'
-  );
+      
+  
 
   const trainsactionId = roomId
 
     const handleLeaveRoom = async () => {
 
         try {
-            console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+            
     
             // Use async/await to wait for the axios.patch request to complete
             const response = await axios.patch(`${baseUrl}appointment/update-order/${trainsactionId}/`);
-            console.log(response,'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
-            console.log(response.data);
+            
+            
             // Navigate to the specified route after the update
         } catch (error) {
             // Handle any errors that occur during the request
@@ -58,7 +58,7 @@ const DocVideoCall = () => {
                     Date.now().toString(),
                     userName
                 );
-                console.log(kitToken,'THIS IS KIT TOKEN');
+                
                 
                 const zp = ZegoUIKitPrebuilt.create(kitToken);
                 

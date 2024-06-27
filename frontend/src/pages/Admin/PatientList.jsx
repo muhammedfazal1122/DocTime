@@ -13,8 +13,8 @@ import EditPatient from "../../Compounts/admin/elements/Modal/EditPatient";
 
 const PatientList = () => {
 
-    const onChange = (e) => console.log(`radio checked:${e.target.value}`);
-    const [doctorData, setDoctorData] = useState([]);
+  const onChange = (e) => console.log(`radio checked:${e.target.value}`);
+  const [doctorData, setDoctorData] = useState([]);
     const [isDataFetched, setIsDataFetched] = useState(false);
     const [checked, setChecked] = useState(true);
     const [isEditModalVisible, setEditModalVisible] = useState(false);
@@ -28,11 +28,11 @@ const PatientList = () => {
     const handleCheckboxChange = (docId, currentStatus) => {
       const formData = new FormData();
       formData.append("user.is_active", !currentStatus);
-      console.log('lllllllllllllllll',docId,formData,currentStatus);
+      
   
   
       axios.patch(`${baseUrl}auth/admin/patient-isactive/${docId}/`, formData).then((res) => {
-          console.log("Data updated successfully:", res.data);
+          
           toast.success("Data updated successfully");
           // Optionally, you can update the state or handle other actions
           setChecked(prevChecked => !prevChecked);
@@ -67,11 +67,11 @@ const PatientList = () => {
           setDoctorData(req.data.results,'llllllllllllllllllllllllll');
           setNextPage(req.data.next);
           setPrevPage(req.data.previous);
-          console.log(req.data.results);
+          
           // setDoctorData(req.data)
         })
         .catch((err) => {
-          console.log(err);
+          
         });
     };
   

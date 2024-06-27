@@ -84,7 +84,7 @@ function MyProfile() {
         toast.success("profile pic has been updated");
       })
       .catch((err) => {
-        console.log(err);
+        
         toast.error(err);
       });
   };
@@ -100,7 +100,7 @@ function MyProfile() {
         toast.success("profile pic deleted successfully");
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   };
 
@@ -109,12 +109,12 @@ function MyProfile() {
   const fetchData = async () => {
     try {
       const refreshToken = localStorage.getItem("refresh");
-      console.log(refreshToken, "nooooooooooooo");
+      
 
       let decoded = jwtDecode(refreshToken);
-      console.log(decoded, "hh   hhhhhhhhhhhhhhhhhhhhhhhh");
+      
       let id = decoded.user_id;
-      console.log(id);
+      
       setId(id);
 
       const doct = await axios.get(baseUrl + "auth/patient/list/" + id);
@@ -131,17 +131,17 @@ function MyProfile() {
             setUser({ ...res.data.user }); // Spread the user object to avoid mutation
             setSpecializations(res.data.specializations || "");
             setDocDetail(res.data);
-            console.log(res.data, "reached to the editing component");
+            
           })
           .catch((err) => {
-            console.log(err);
+            
             toast.error(err);
           });
       }
       // Handle the response data as needed
-      console.log(doct.data);
+      
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -260,7 +260,7 @@ function MyProfile() {
       axios
         .patch(baseUrl + `auth/admin/client/${docid}`, formData)
         .then((res) => {
-          console.log("Data updated successfully:", res.data);
+          
           toast.success("Data updated successfully");
           // Optionally, you can reset the form or handle other actions
         })
@@ -269,7 +269,7 @@ function MyProfile() {
           // Handle the error as needed
         });
     } else {
-      console.log("Form has errors. Please fix them before submitting.");
+      
     }
   };
 

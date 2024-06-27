@@ -30,7 +30,7 @@ function UserManagement() {
 
     axios.get(API_BASE_URL + '/admin/listuser').then((res) => {
       setUsers(res.data)
-      // console.log(res.data, "dsfasdfa\n\n", listusers);
+      // 
     }).catch((err) => {
       console.error(err)
     })
@@ -39,7 +39,7 @@ function UserManagement() {
   const handleFormSubmit = async(event) => {
 
     event.preventDefault()
-    console.log(formData);
+    
     await axios.put(API_BASE_URL+`/admin/user/detail/${id}/`, formData).then((res)=>{
       TSuccess('completed')
       seteditfield(true)
@@ -66,8 +66,8 @@ function UserManagement() {
       setIsVendor(res.data.is_vendor)
       setid(id)
 
-      console.log(res.data, "dsfasdfa\n\n", listusers);
-      console.log(res.data);
+      
+      
 
     }).catch((err) => {
       TError("Error in fetching user details")

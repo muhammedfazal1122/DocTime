@@ -31,7 +31,7 @@ const DoctorLogin = () => {
       if (res && res.status === 200) {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);
-        console.log("eeeeeeeeeeeeeeee", res.data);
+        
         dispatch(
           set_authentication({
             name: jwtDecode(res.data.access),
@@ -41,25 +41,25 @@ const DoctorLogin = () => {
             user_id: res.data.user_id
           })
         );
-        console.log(res.data.is_doctor, "this is the is_doctor");
+        
         if (res.data.is_doctor) {
-          console.log("IT IS DOCTOR");
+          
           toast.success("You are successfully logged in !")
 
           navigate("/doctor/DocHome");
         } else {
           toast.error("Patients Login Page is not here")
 
-          console.log("not ok");
+          
         }
       }
       return res;
     } catch (error) { 
-      console.log(error);
-      console.log("Error");
+      
+      
     }
     
-    console.log(`Email: ${email}, Password: ${password}`);
+    
     
   };
 

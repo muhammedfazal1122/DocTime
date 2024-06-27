@@ -17,11 +17,11 @@ function EditDoctor({ doctorId, setIsDataFetched, setEditModalVisible }) {
 
       setUser({ ...res.data.user });
       setDocDetail(res.data);
-      console.log(res.data, "reached to the editing component");
+      
       setIsDataFetched(true);
     })
     .catch((err) => {
-      console.log(err);
+      
       toast.error(err);
     });
  }, [doctorId, setIsDataFetched,isKYCSubmitted]);
@@ -39,7 +39,7 @@ function EditDoctor({ doctorId, setIsDataFetched, setEditModalVisible }) {
       setDocDetail(res.data);
       const { is_KYC_submitted } = res.data; // Assuming this is how the data is structured
       setIsKYCSubmitted(is_KYC_submitted); // Set default value based on backend response
-      console.log("Backend updated successfully:", res.data);
+      
       // Handle success as needed
     })
     .catch((err) => {
@@ -55,7 +55,7 @@ const HandleStatus = (value) => {
   const newStatus = value;
   setNewValue(newStatus)
   
-  console.log(newStatus,doctorId,'lllllllllllllllllllllllllll');
+  
 
   const newStatusres = {
     user: {
@@ -65,7 +65,7 @@ const HandleStatus = (value) => {
 
   axios.patch(`${baseUrl}auth/admin/doc/edit-varification/${doctorId}/`, newStatusres,)
     .then((res) => {
-      console.log("Backend updated successfully:", res.data.user.approval_status);
+      
       setUser({ ...res.data.user });
       // Handle success as needed
     })

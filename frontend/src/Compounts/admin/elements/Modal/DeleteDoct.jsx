@@ -12,7 +12,7 @@ function DeleteModal({ doctorId,setDeleteModalVisible }) {
     axios.delete(url, { withCredentials: true })
         .then((res) => {
             // Log the response
-            console.log(res);
+            
 
             // Show a success toast message
             toast.success("Doctor Deleted Successfully");

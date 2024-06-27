@@ -35,7 +35,7 @@ const UserLogin = () => {
       if (res.status === 200 ) {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);
-        console.log( jwtDecode(res.data.access).user_id);
+        
         dispatch(
           set_authentication({
             name: jwtDecode(res.data.access).first_name,
@@ -46,19 +46,19 @@ const UserLogin = () => {
 
           })
         );
-        console.log(res.data.is_doctor, "this is the status");
+        
         if (res.data.is_doctor | res.data.isAdmin) {
           toast.error("Doctors/Admin Login Page is not here")
-          console.log("IT IS DOCTOR or an Admin ");
+          
         } else {
-          console.log("ok");
+          
           toast.success('You are successfully logged in !')
 
           navigate('/');
         }
       }
     } catch (error) { 
-      console.log(error);
+      
       if (error.response) {
         toast.error(error.response.data.detail);
       } else {
@@ -66,7 +66,7 @@ const UserLogin = () => {
       }
     }
 
-    console.log(`Email: ${email}, Password: ${password}`);
+    
   };
 
   return (

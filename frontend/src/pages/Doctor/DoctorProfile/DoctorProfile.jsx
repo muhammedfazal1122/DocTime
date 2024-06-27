@@ -12,7 +12,7 @@ const DoctorProfile = ({refresh}) => {
  const navigate = useNavigate();
  const [Count, setCount] = useState(0)
  const userId = useSelector(state => state.authentication_user.user_id);
- console.log(userId,'uuuuuuuuuuuuuuuuurrrrrrrrrrrrrrrrrrrrrr');
+ 
  const dispatch = useDispatch();
  const [profile_picture_state, setProfilePicture] = useState(null)
 
@@ -49,7 +49,7 @@ const fetchData = async () => {
     const response = await axios.get(`${baseUrl}auth/docdetailes/${userId}/`, {
       headers: { Authorization: `Bearer ${authToken}` },
     });
-    console.log(response,'lllllllllllllllllllllllllllllllllll');
+    
     const { data } = response;
     setFormData({
       ...formData,
@@ -129,11 +129,11 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   try {
      const authToken = localStorage.getItem('access');
-     console.log(formData, 'ooooooooooooooooooooooooooooooooooooooo');
+     
      const response = await axios.patch(`${baseUrl}auth/doctor-update/${userId}/`, formData, {
        headers: { Authorization: `Bearer ${authToken}` },
      });
-     console.log('Form Data:', formData); // This line will print the form data before it's updated
+     
  
      // Update formData with the relevant fields from the response
      setFormData(prevState => ({
@@ -161,7 +161,7 @@ const handleSubmit = async (e) => {
        rating: response.data.rating,
      }));
  
-     console.log('response Dataaaaaaaaaaaaaaaaaaaaaa:', response.data); // This line will print the form data after it's updated
+     
  
      toast.success("Profile updated successfully.");
   } catch (error) {

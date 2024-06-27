@@ -27,18 +27,18 @@ export default function HorizontalCardChat({ doctor }) {
         setShowPatientChat(!showPatientChat);
   
       }
-    console.log(doctor.doctor_user.custom_id,'llllllllllllllllllllllllllllllllll');
+    
    
     const fetchDoctorID = async () => {
         try {
           const response = await axios.get(`${baseUrl}auth/custom-id/patient/${userId}`);
           setdoct(response.data);
           setPatientID(response.data.patient_user.custom_id);
-          console.log(response.data.patient_user.custom_id, 'fetchDoctorIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
+          
           // Now that patientId is set, fetch booking details
           await fetchBookingDetails(doctor.doctor_user.custom_id, response.data.patient_user.custom_id);
         } catch (error) {
-          console.log(error);
+          
         }
       };
   

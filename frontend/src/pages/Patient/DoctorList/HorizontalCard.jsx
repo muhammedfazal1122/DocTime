@@ -6,13 +6,13 @@ export default function HorizontalCard({ doctor }) {
 
     // Assuming doctor object has properties like doctor.full_name, doctor.specializations, doctor.experience, etc.
     const gotoViewDoctor = () =>{
-      console.log(doctor.id);
+      
       navigate(`/DoctorShow/ViewDocProfile/${doctor.id}`);
 
     }
-    console.log(doctor.doctor_user.custom_id,'llllllllllllllllllllllllllllllllll');
+    
     const gotoBookAppoiment = () =>{
-      console.log(doctor.id);
+      
       navigate(`/DoctorShow/BookAppoiment/${doctor.doctor_user.custom_id}`);
 
     }

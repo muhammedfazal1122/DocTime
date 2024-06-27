@@ -17,15 +17,15 @@ function DoctorRoute({ children }) {
     const fetchData = async () => {
       try {
         const authInfo = await isAuthDoctor();
-        console.log("this is the log", authInfo);
+        
         if (authInfo) {
           set_authentication({
             isAuthenticated: authInfo.isAuthenticated,
             isAdmin: authInfo.isAdmin,
             isDoctor: authInfo.is_doctor,
           });
-          console.log("Auth info after dispatch:", authInfo);
-          console.log(authInfo.is_doctor, "authInfo.is_doctor");
+          
+          
           setIsAuthenticated({
             isAuthenticated: authInfo.isAuthenticated,
             isAdmin: authInfo.isAdmin,

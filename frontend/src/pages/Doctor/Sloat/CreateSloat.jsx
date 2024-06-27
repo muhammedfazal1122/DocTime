@@ -158,7 +158,7 @@ const handleDateChange = async (date) => {
         doctor: custom_id
       }));
 
-      console.log(custom_id, 'oooooooooooooooo', slotsData);
+      
 
       try {
         const response = await axios.post(`${baseUrl}appointment/doctors/${custom_id}/slots/`, { slots: slotsData }, {
@@ -168,7 +168,7 @@ const handleDateChange = async (date) => {
         });
         toast.success("Slot Successfully Created");
       } catch (error) {
-        console.log('response errorrrrrrrr');
+        
         // Handle error appropriately
       }
     } catch (error) {

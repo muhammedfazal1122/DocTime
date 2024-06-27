@@ -32,7 +32,7 @@ const OTPVerificationForm = () => {
 
     // Check if userEmail is null, if so, return early
     if (!userEmail) {
-      console.log("User email is not available");
+      
       return;
     }
 
@@ -41,11 +41,11 @@ const OTPVerificationForm = () => {
     try {
       const res = await axios.post(baseUrl + 'auth/verify-otp', { otp, email: userEmail });
       const user_type = localStorage.getItem('user_type');
-      console.log(user_type);
+      
 
-      console.log(res);
+      
       if (res.status === 200) {
-        console.log(user_type,'user_type');
+        
 
         if (user_type === "patient") {
           toast.success("Registration successful!");
@@ -55,16 +55,16 @@ const OTPVerificationForm = () => {
           navigate('/auth/doctor/login')
         }else{
 
-          console.log("other error");
+          
         }
       }
       return res;
     } catch (error) {  
       
-      console.log(error);
+      
       toast.error("OTP doesn't match");
       toast.error(error.data);
-      console.log("Error");
+      
     }
     
   };

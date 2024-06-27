@@ -24,7 +24,7 @@ function BusStop() {
   const [Point, setPoint] = useState(null)
   const [stopName, setstopName] = useState('')
   useEffect(() => {
-    console.log(Point);
+    
   }, [Point])
 
   const handleRouteSubmit = async () => {
@@ -66,22 +66,22 @@ function BusStop() {
   }
 
   function onPlaceChanged() {
-    console.log(searchResult);
+    
     if (searchResult != null) {
       const place = searchResult.getPlace();
       const name = place.name;
       const status = place.business_status;
       const formattedAddress = place.formatted_address;
-      // console.log(place);
+      // 
       getGeocode({ address: name }).then((results) => {
         const { lat, lng } = getLatLng(results[0]);
         setPoint({ lat, lng })
-        console.log("📍 Coordinates: ", { lat, lng });
-      }).catch((err) => console.log(err))
+        
+      }).catch((err) => 
 
-      console.log(`Name: ${name}`);
-      console.log(`Business Status: ${status}`);
-      console.log(`Formatted Address: ${formattedAddress}`);
+      
+      
+      
     } else {
       alert("Please enter text");
     }

@@ -13,7 +13,7 @@ const SpecialisationShow = () => {
     const accessToken = localStorage.getItem("access");
     const query = searchQuery ? `?search=${searchQuery}` : '';
     const url = `${baseUrl}auth/doctors/specialization/${specialization}`;
-    console.log('Request URL:', url); // Debugging line
+    
     
     try {
         const response = await axios.get(url, {
@@ -23,9 +23,9 @@ const SpecialisationShow = () => {
                 'Content-Type': 'application/json',
             }
         });
-        console.log('API Response:', response.data); // Debugging line
+        
         const doctorsData = response.data.results.filter(doctor => doctor.approval_status !== "PENDING");
-        console.log('Filtered Doctors:', doctorsData); // Debugging line
+        
         setDoctors(doctorsData);
     } catch (error) {
         console.error('Error fetching users:', error);

@@ -43,7 +43,7 @@ const fetchisAdmin = async () => {
 };
 
 const isAuthAdmin = async () => {
-  console.log("isAuthAdminisAuthAdmin");
+  
   const accessToken = localStorage.getItem('access');
 
 
@@ -64,7 +64,7 @@ const isAuthAdmin = async () => {
       isAdmin: checkAdmin,
     };
   } else {
-    console.log(accessToken,";(accessToken,)",checkAdmin)
+    
 
     const updateSuccess = await updateAdminToken();
 

@@ -18,17 +18,17 @@ const VideoCall = () => {
     const userID = decoded.user_id;
     const userName = decoded.first_name;
     const navigate = useNavigate();
-      console.log(  userID,userName,'ppppppppp'
-  );
+      
+ 
 
   const handleLeaveRoom = async () => {
     try {
-        console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+        
 
         // Use async/await to wait for the axios.patch request to complete
         const response = await axios.patch(`${baseUrl}appointment/update-order/${trainsactionId}/`);
-        console.log(response,'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
-        console.log(response.data);
+        
+        
         fetchTransactions(trainsactionId)
         // Navigate to the specified route after the update
         navigate(`/DoctorShow/BookAppoiment/booking-detailes`);
@@ -44,7 +44,7 @@ const VideoCall = () => {
   // to fetch the data as per the search query
   const fetchTransactions = (trainsactionId) => {
     const accessToken = localStorage.getItem("access");
-    console.log(accessToken, "this portion for the access token");
+    
     axios
        .get(baseUrl + `appointment/geting/transaction/${trainsactionId}/`, {
          headers: {
@@ -54,10 +54,10 @@ const VideoCall = () => {
          },
        })
        .then((req) => {
-        console.log("Raw transactions data:", req.data); // Log raw data for debugging
+        
         // Directly access the transaction object
         const transaction = req.data;
-        console.log(transaction.amount, 'AAAMOOOUUUNNTTT'); // Access the amount directly
+        
     
         // Calculate commissions for the transaction
         const doctorCommission = transaction.amount * 0.8; // 80% of amount
@@ -70,7 +70,7 @@ const VideoCall = () => {
             admin_commission: adminCommission,
         };
     
-        console.log("Transaction with commissions:", transactionWithCommissions);
+        
        
                    
            // Save commissions to the transactionCommission table
@@ -90,7 +90,7 @@ const VideoCall = () => {
        
          })
          .catch((err) => {
-           console.log(err);
+           
          });
      };
    
@@ -108,7 +108,7 @@ const VideoCall = () => {
                     Date.now().toString(),
                     userName
                 );
-                console.log(kitToken,'THIS IS KIT TOKEN');
+                
                 
                 const zp = ZegoUIKitPrebuilt.create(kitToken);
                 

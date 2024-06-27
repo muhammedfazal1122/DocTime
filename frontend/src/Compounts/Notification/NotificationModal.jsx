@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { debounce } from 'lodash';
    
 function NotificationModal({ isOpen, customID, data }) {
-  console.log(isOpen, customID, data,'firstLINEEEE');
+  
   const [notifications, setNotifications] = useState([]);
   const debouncedToast = debounce((message) => {
     toast.info(`New Notification: ${message}`);
@@ -22,7 +22,7 @@ function NotificationModal({ isOpen, customID, data }) {
         debouncedToast(response.data.notifications[0].message)
         setNotifications(response.data.notifications);
         setNotificationCount(response.data.notification_count);
-        console.log('RESPONSE DATA in the notification:', response.data)
+        
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }
@@ -39,7 +39,7 @@ function NotificationModal({ isOpen, customID, data }) {
 
   const handleNotificationClick = async (notification) => {
     try {
-      console.log(notification,'nnnoooooooooo');
+      
       await axios.patch(
         `${baseUrl}notifications/update-notification/${notification.id}/`,
         {

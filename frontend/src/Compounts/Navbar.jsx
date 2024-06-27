@@ -28,16 +28,16 @@ const Navbar = () => {
 
   const [doctorDetails, setDoctorDetails] = useState(null);
   const [profileSucess, setprofileSucess] = useState(0)
-  console.log(profileSucess);
+  
   if (isAuthenticated){
-    console.log(name,is_doctor,"pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp");
+    
 
   
   const authToken = localStorage.getItem('access')
   const decoder = jwtDecode(authToken)
   const userId = decoder.user_id
   
-  console.log(userId,'yheaaaaaaaaaaaaaaa'); 
+  
   }
 
 
@@ -53,13 +53,13 @@ const Navbar = () => {
 
 const showProfile = async () => {
   try {
-    console.log(userId, 'uuuuuuuuuuuuuuuuuu');
+    
      const response = await axios.get(`${baseUrl}auth/doc/update/${userId}`);
      // Assuming setprofilepic is a state setter function
      // You might need to adjust this line based on how you're managing state
      setprofilepic(response.data.profile_picture);
   } catch (error) {
-     console.log(error, "error in show profile");
+     
   }
  };
  

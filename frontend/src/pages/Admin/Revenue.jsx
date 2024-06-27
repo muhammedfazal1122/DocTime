@@ -45,7 +45,7 @@ function Revenue() {
   // to fetch the data as per the search query
   const fetchTransactions = (url) => {
     const accessToken = localStorage.getItem("access");
-    console.log(accessToken, "this portion for the access token");
+    
     axios
       .get(url, {
         headers: {
@@ -82,7 +82,7 @@ function Revenue() {
               "Content-Type": "application/json",
             },
           }).then(response => {
-            console.log('Commission saved successfully:', response.data);
+            
           }).catch(error => {
             console.error('Error saving commission:', error);
           });
@@ -92,11 +92,11 @@ function Revenue() {
        
         setNextPage(req.data.next);
         setPrevPage(req.data.previous);
-        console.log(req.data.results);
+        
         // setDoctorData(req.data)
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   };
 

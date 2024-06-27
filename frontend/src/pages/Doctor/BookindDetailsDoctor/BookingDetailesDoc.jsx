@@ -90,7 +90,7 @@ const DoctorBookingDetails = () => {
    
        // Make the request to your backend API
        const response = await axios[method](url, prescriptionData);
-       console.log(response.data); // Log the response from the server
+       
    
        // If creating a new prescription, you might want to reset the form or navigate away
        // If updating, you might want to update the state with the new data
@@ -135,13 +135,13 @@ const DoctorBookingDetails = () => {
  
  const fetchPatientDetaiels = async (patientId) => {
  try {
-  console.log(patientId,'llllllllllllllllllllll');
+  
       const response = await axios.get(`${baseUrl}auth/detail/patient/${patientId}`);
       // Update the PatientData state to include the new patient details
       setPatientData(prevState => ({ ...prevState, [patientId]: response.data }));
-      console.log(response.data,'PPpppppppppppppppppppppppppppppppppppppppppp');
+      
  } catch (error) {
-    console.log(error,'EEOEOEO');
+    
  }
  }
 

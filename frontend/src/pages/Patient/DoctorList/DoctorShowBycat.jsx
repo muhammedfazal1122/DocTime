@@ -7,13 +7,13 @@ import { useParams } from 'react-router-dom';
 const DoctorShowBycat = () => {
  const [doctors, setDoctors] = useState([]);
  const { specialization } = useParams();
-console.log(specialization);
+
  useEffect(() => {
     const fetchDoctors = async () => {
       
       try {
         const accessToken = localStorage.getItem("access");
-        console.log(accessToken);
+        
         const response = await axios.get(`${baseUrl}auth/doctors/details/?specialization=${specialization}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,

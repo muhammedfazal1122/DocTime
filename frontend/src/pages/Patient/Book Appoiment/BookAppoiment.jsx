@@ -47,7 +47,7 @@ const [OnlinePaymet, setOnlinePaymet] = useState(false)
 const doctorId = custom_id
 const [transactionData, setTrasaction] = useState([])
 
-console.log(DoctorData,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+
   
 const handleRazorpay = () =>{
 
@@ -66,7 +66,7 @@ const handleRazorpay = () =>{
   return; // Exit the function if selectedSlot is null
 }
 
-console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.format("YYYY-MM-DD"),'ppppppppppppppppppppppppppppppppppppppppp');
+
     // Check slot availability before proceeding with payment
     
     axios
@@ -77,7 +77,7 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
         selected_day: selectedDate.format("YYYY-MM-DD"),
       })
       .then((availabilityCheckResponse) => {
-        console.log(availabilityCheckResponse,'lllllllllllllll');
+        
 
         if (!availabilityCheckResponse.data.available) {                            
           toast.warning("This slot is already booked. Please choose another slot ");
@@ -105,10 +105,8 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
           image: "https://example.com/your_logo",
           order_id: order, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
           handler: function (response) {
-            console.log(
-              "api responseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-              response
-            );
+            
+            
             //complete order
             complete_order(
               response.razorpay_payment_id,
@@ -150,9 +148,9 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
   
   // complete order
   const complete_order = (paymentID, orderID, signature) => {
-    console.log(Fees,'feeeeeeeeeeeeeeeeeee');
+    
 
-    console.log("patient id got here befor passing",patientID)
+    
     axios
       .post(`${baseUrl}appointment/complete-order/`, {
         payment_id: paymentID,
@@ -170,15 +168,15 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
         }
       })
       .then((response) => {
-        console.log(response.data);
+        
         if (response.status === 201) {
-          console.log("compleeetedd transaction");
+          
       
           navigate("/DoctorShow/BookAppoiment/success-page")
         }
       })
       .catch((error) => {
-        console.log(error);
+        
       });
 };
 
@@ -191,13 +189,13 @@ console.log(doctorId,selectedSlot.end_time,selectedSlot.start_time,selectedDate.
 const fetchPatientCustomId =async ()=>{
   try {
     const refreshToken = localStorage.getItem("refresh");
-    console.log(refreshToken, "nooooooooooooo");
+    
 
     let decoded = jwtDecode(refreshToken);
-    console.log(decoded, "hfhhhhhhhhhhhhhhhhhhhhhhhh");
+    
     let id = decoded.user_id;
     setId(id);
-    console.log(id,'iiiiiiiiiiiiiiiiiiddddddddddddddddddddd');
+    
 
 
     const doct = await axios.get(`${baseUrl}auth/patient/list/${id}`);
@@ -207,13 +205,13 @@ const fetchPatientCustomId =async ()=>{
 
       setPatientID(CustomId);
 
-      console.log('custom_id=======',patientID);
-      console.log('custom_id=======',doct.data.patient_user.custom_id);
+      
+      
 
 
     }
   } catch (error) {
-    console.log("error in iiiiiiiiiiiiiiiiiiddddddddddddddddddddd custom_id");
+    
   }
  
 } 
@@ -227,14 +225,14 @@ const fetchPatientCustomId =async ()=>{
     fetchPatientCustomId()
     fetchDoctordata()
     if (patientID) {
-      console.log('Updated patientID:', patientID);
+      
       // You can use the updated patientID here
    }
  }, [custom_id, selectedDate,patientID]); // Depend on custom_id and selectedDate to refetch if they change
  
  const fetchDoctordata = () => {
   try {
-    console.log('lllllllllllll');
+    
      const accessToken = localStorage.getItem("access");
  
      axios.get(`${baseUrl}auth/admin/doctor/verication/listbooking/`, {
@@ -244,23 +242,23 @@ const fetchPatientCustomId =async ()=>{
          'Content-Type': 'application/json',
        }
      }).then(response => {
-       console.log(response.data,doctorId, 'EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEssssssssssss');
+       
        
        // Assuming you want to find the doctor by custom_id and then extract consultation_fees
        const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id == doctorId);
        if (doctor) {
          setDoctorData(doctor);
        
-         console.log(doctor.doctor_user.consultaion_fees,'feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+         
 
        } else {
-         console.log('Doctor not found');
+         
        }
      }).catch(error => {
-       console.log(error, 'errorrrrrrrrrrrr');
+       
      });
   } catch (error) {
-     console.log(error, 'errorrrrrrrrrrrr');
+     
   }
  };
  
@@ -303,7 +301,7 @@ const removeDuplicates = (slots) => {
 
 
  const bookSlot = async (slotId) => {
-    console.log(`Booking slot with ID: ${slotId}`);
+    
     // Here you would typically send a request to your backend to update the database
     // For example:
     // try {
@@ -682,7 +680,7 @@ function generateReceipt(patientId, doctorId, totalAmount, commission, doctorAmo
  };
 }
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(3000, () => 
 
 
 

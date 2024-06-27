@@ -29,7 +29,7 @@ const Navbar2 = () => {
 
   const customId = localStorage.getItem("custom_id");
   const customId2 = localStorage.getItem("custom_id");
-  console.log(customId2,'customId2customId2customId2');
+  
   const { name, isAuthenticated,user_id } = useSelector((state) => state.authentication_user);
 
   const GotoHome = () =>{ 
@@ -67,23 +67,23 @@ const Navbar2 = () => {
       axios.get(baseUrl + `auth/custom-id/doctor/${user_id}`).then((res) => {
         fetchData(customId);
         setCustomID(customId);
-        console.log('222222222222222222222222222');
+        
         const wsURL = `${WebsocketbaseUrl}ws/doctor-notification/${customId}/`;
         const socket = new WebSocket(wsURL);
-        console.log(wsURL,'socketurl:------------');
+        
 
         socket.onopen = () => {
-          console.log("WebSocket connection established");
+          
         };
 
         socket.onmessage = (event) => {
           const data = JSON.parse(event.data);
-          console.log(data,'dataaaaaaaaaaaa');
+          
           setData(data);
         };
 
         socket.onclose = (event) => {
-          console.log("WebSocket connection closed", event);
+          
         };
 
         return () => {
@@ -134,7 +134,7 @@ const Navbar2 = () => {
   const userId = useSelector(state => state.authentication_user.user_id);
   const [doctorDetails, setDoctorDetails] = useState(null);
   const [profileSucess, setprofileSucess] = useState(0)
-  console.log(profileSucess);
+  
 
 
 const profilepic = localStorage.getItem('Doc_profile_pic')
@@ -257,7 +257,7 @@ const profilepic = localStorage.getItem('Doc_profile_pic')
             <Link
  className="nav-links"
  onClick={() => {
-    console.log("Toggling notification modal",isNotificationModalOpen);
+    
     setIsNotificationModalOpen(!isNotificationModalOpen);
  }}
 >

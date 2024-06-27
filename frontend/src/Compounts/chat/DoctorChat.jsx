@@ -11,10 +11,10 @@ const DoctorChat = () => {
   const [message, setMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const [bookings, setBookings] = useState([]);
-  console.log("BOOKINGS:", bookings);
+  
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [client, setClient] = useState(null);
-  console.log("CLIENT:", client);
+  
  
 
   const [patient_id, setPatientID] = useState(null);
@@ -36,7 +36,7 @@ const DoctorChat = () => {
         fetchBookings(res.data.doctor_user.custom_id);
       })
       .catch((error) => {
-        console.log(error);
+        
       });
  };
 
@@ -77,7 +77,7 @@ const DoctorChat = () => {
     setClient(newClient);
 
     newClient.onopen = () => {
-      console.log("WebSocket Client Connected");
+      
     };
 
     newClient.onmessage = (message) => {

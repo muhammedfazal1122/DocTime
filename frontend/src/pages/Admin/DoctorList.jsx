@@ -25,11 +25,11 @@ function VarificationDoc() {
   const handleCheckboxChange = (docId, currentStatus) => {
     const formData = new FormData();
     formData.append("user.is_active", !currentStatus);
-    console.log('lllllllllllllllll',docId,formData,currentStatus);
+    
 
 
     axios.patch(`${baseUrl}auth/admin/doc/${docId}/`, formData).then((res) => {
-        console.log("Data updated successfully:", res.data);
+        
         toast.success("Data updated successfully");
         // Optionally, you can update the state or handle other actions
         setChecked(prevChecked => !prevChecked);
@@ -56,12 +56,12 @@ function VarificationDoc() {
         setDoctorData(req.data.results);
         setNextPage(req.data.next);
         setPrevPage(req.data.previous);
-        console.log(req.data.results);
-        // console.log(req.data.custom_id);
+        
+        // 
         // setDoctorData(req.data)
       })
       .catch((err) => {
-        console.log(err);
+        
       });
   };
 

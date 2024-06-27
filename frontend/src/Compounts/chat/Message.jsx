@@ -32,8 +32,8 @@ const ChatComponent = () => {
       setPatientID(patientId);
       setBookings(reversedBookings);
 
-      console.log('***PATIENT***', patientIdResponse.data);
-      console.log('***BOOKINGS***', reversedBookings);
+      
+      
     } catch (error) {
       navigate('/login');
       console.error('Error fetching data', error);
@@ -63,15 +63,15 @@ const ChatComponent = () => {
 
     const newClient = new W3CWebSocket(`${WebsocketbaseUrl}ws/chat/${appointmentId}/`);
     setClient(newClient);
-    console.log('SET CLIENT:', newClient);
+    
 
     newClient.onopen = () => {
-      console.log('Websocket Client Connected');
+      
     };
 
     newClient.onmessage = (message) => {
       const data = JSON.parse(message.data);
-      console.log('Received message:', message.data);
+      
       setChatMessages((prevMessages) => [...prevMessages, data]);
     };
 
@@ -79,7 +79,7 @@ const ChatComponent = () => {
       try {
         const response = await fetch(`${baseUrl}chat/chat-messages/transaction/${appointmentId}/`);
         const data = await response.json();
-        console.log('data:', data);
+        
         const messagesTextArray = data.map((item) => ({
           message: item.message,
           sendername: item.sendername,
@@ -88,7 +88,7 @@ const ChatComponent = () => {
       } catch (error) {
         console.error('Error fetching existing messages:', error);
       }
-      console.log('Chat messages:', chatMessages);
+      
     };
     fetchExistingMessages();
 
@@ -104,7 +104,7 @@ const ChatComponent = () => {
 
   const sendMessage = () => {
     if (message.trim() === '' || !client || !selectedAppointment) {
-      console.log('Invalid conditions for sending a message');
+      
       return;
     }
 
@@ -117,7 +117,7 @@ const ChatComponent = () => {
       client.send(JSON.stringify({ message, sendername }));
       setMessage('');
     } else {
-      console.log('WebSocket is not open');
+      
     }
   };
 

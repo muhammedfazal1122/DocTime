@@ -29,7 +29,7 @@ const AdminLogin = () => {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);
         localStorage.setItem("email",email);
-        console.log("eeeeeeeeeeeeeeee", res.data);
+        
         dispatch(
           set_authentication({
             name: jwtDecode(res.data.access),
@@ -37,21 +37,21 @@ const AdminLogin = () => {
             isAdmin: res.data.isAdmin,
           })
         );
-        console.log(res.data.isAdmin, "this is the admin");
+        
         if (res.data.isAdmin) {
-          console.log("IT IS admin");
+          
           navigate("/admincontrol/dashbord");
         } else {
-          console.log("not ok");
+          
         }
       }
       return res;
     } catch (error) { 
-      console.log(error);
-      console.log("Error");
+      
+      
     }
     
-    console.log(`Email: ${email}, Password: ${password}`);
+    
   };
 
   return (

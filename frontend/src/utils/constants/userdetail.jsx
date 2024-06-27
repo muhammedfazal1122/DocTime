@@ -2,7 +2,7 @@ const dataString = localStorage.getItem('authenticationData');
 const data = dataString ? JSON.parse(dataString) : null;
 const emailValue = localStorage.getItem('email');
 
-console.log(emailValue);
+
 
 export const account = {
   displayName: data && data.name ? data.name : "",

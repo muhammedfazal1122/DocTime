@@ -16,10 +16,10 @@ function Approval() {
                 'Content-Type': 'application/json',                                                
             },
         }).then((res) => {
-            console.log(res.data)
+            
             setApprovedList(res.data)
         }).catch((err) => {
-            console.log(err);
+            
             TError(err)
         })
     }
@@ -33,10 +33,10 @@ function Approval() {
         //         'Content-Type': 'application/json',
         //     },
         // }).then((res) => {
-        //     console.log(res.data)
+        //     
         //     setApprovedList(res.data)
         // }).catch((err) => {
-        //     console.log(err);
+        //     
         //     TError(err)
         // })
     }, [])                  
@@ -44,10 +44,10 @@ function Approval() {
     const approveVendor = async (id, approval) =>{
         const formData = {'approve': approval}
         await AdminAxios.patch(`/vendor/update/${id}`, formData).then((res)=>{
-            console.log(res);
+            
             getData()
         }).catch((err)=>{
-            console.log(err);
+            
         })
     }
     return (

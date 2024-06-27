@@ -88,17 +88,17 @@ const DoctorRegister = () => {
     try {
       const res = await axios.post(baseUrl + 'auth/register', userData);
       if (res.status === 201) {
-        console.log("Success");
+        
         localStorage.setItem('userEmail', email);
         localStorage.setItem('user_type', 'doctor');
         toast.success("OTP has been sent to your email.");
 
         navigate('/auth/otpvarification');
       }
-      console.log(res);
+      
       return res;
     } catch (error) {
-      console.log(error, "Error occurred");
+      
       if (error.response && error.response.data) {
          // Iterate over each key in the error response data
          Object.keys(error.response.data).forEach((key) => {

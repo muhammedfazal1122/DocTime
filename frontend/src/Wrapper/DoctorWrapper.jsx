@@ -28,8 +28,8 @@ const DoctorWrapper = () => {
 
   const checkLocal = () =>{
     const isAuthenticated = JSON.parse(localStorage.getItem('authenticationData'));
-    console.log('Authentication data:', isAuthenticated);
-    console.log('Is authenticated:', isAuthenticated.isAuthenticated);
+    
+    
     dispatch(
         set_authentication({
             name: isAuthenticated.name,
@@ -66,9 +66,9 @@ const DoctorWrapper = () => {
         name: response.data.first_name,
         profile_pic: response.data.profile_pic,
       }));
-      console.log("Profile useeefct in Doctor wrapper success");
+      
     } catch (error) {  
-      console.log("Profile ERROR during useeefct in Doctor wrapper");
+      
     }
  };
 

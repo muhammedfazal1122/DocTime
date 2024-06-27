@@ -17,9 +17,9 @@ function StopList() {
     useEffect(() => {
         axios.get(API_BASE_URL + "/bus/list").then((res) => {
             setBusStops(res.data)
-            console.log(res.data);
+            
 
-        }).catch((err) => console.log(err))
+        }).catch((err) => 
     }, [])
 
     return (
