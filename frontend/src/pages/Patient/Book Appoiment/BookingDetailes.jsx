@@ -104,35 +104,20 @@ const BookingDetails = () => {
  }, [patientID]);
 
  useEffect(() => {
-  if (booking.length > 0) {
-    const fetchAndStoreDoctorDetails = async () => {
-      const details = {};
-  
-      try {
-        // Fetch doctor details in parallel using Promise.all
-        const doctorPromises = booking.map(async (transaction) => {
+    if (booking.length > 0) {
+      const fetchAndStoreDoctorDetails = async () => {
+        const details = {};
+        for (const transaction of booking) {
           const doctor = await fetchDoctordata(transaction.doctor_id);
-          return doctor || {}; // Return an empty object if doctor data is unavailable
-        });
-  
-        const fetchedDoctors = await Promise.all(doctorPromises);
-  
-        for (let i = 0; i < fetchedDoctors.length; i++) {
-          const doctor = fetchedDoctors[i];
           if (doctor) {
-            details[booking[i].transaction_id] = doctor;
+            details[transaction.transaction_id] = doctor;
           }
         }
-      } catch (error) {
-        console.error("Error fetching doctor details:", error);
-        // Handle the error appropriately (e.g., display an error message)
-      } finally {
         setDoctorDetails(details);
-      }
-    };
-  
-    fetchAndStoreDoctorDetails();
-  }
+      };
+
+      fetchAndStoreDoctorDetails();
+    }
  }, [booking]);
 
  const formatDate = (dateString) => {
