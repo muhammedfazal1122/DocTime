@@ -12,6 +12,7 @@ import {
 import { FcVideoCall } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import ReviewFormForDr from '../ReviewFormForDr';
+import { set } from 'date-fns';
 
 
 
@@ -31,6 +32,7 @@ const BookingDetails = () => {
  const [isOpen, setIsOpen] = useState(false);
  const [doctorId, setDoctorId] = useState(null);
  const [prescriptions, setPrescriptions] = useState([]);
+ const [TransactionId, setTransactionId] = useState([]);
  const [reviewTransactionId, setReviewTransactionId] = useState(null);
 
 
@@ -160,17 +162,18 @@ const BookingDetails = () => {
 
 
  const toggleModal = (transaction_id) => {
-    fetchPrescriptions(transaction_id)
+    setTransactionId(transaction_id)
+    fetchPrescriptions()
    setIsOpen(!isOpen);
  };
 
- const fetchPrescriptions = async (transaction_id) => {
+ const fetchPrescriptions = async () => {
   try {
      
      
  
      // Correctly set withCredentials to true
-     const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${transaction_id}/`, { withCredentials: true });
+     const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${TransactionId}/`, { withCredentials: true });
    
      const data = response.data // This line extracts the JSON data from the response
      setPrescriptions(data.results);

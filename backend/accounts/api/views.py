@@ -271,11 +271,6 @@ class DoctorDetailsView(generics.RetrieveAPIView):
 
 
 
-class AdminDoctorApprovalListView(generics.ListAPIView):
-    queryset = User.objects.filter( Q(user_type='doctor') )
-    parser_classes = (MultiPartParser, FormParser)
-    # permission_classes = [IsAdminUser]
-    serializer_class = UserDetailsUpdateSerializer
 
 
 
