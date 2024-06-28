@@ -153,14 +153,15 @@ class UserDetailsUpdateSerializerlistbooking(serializers.ModelSerializer):
     doctor_user=DoctorSerializer(read_only=True)
     class Meta:
         model = User
-        exclude = ('password','is_staff','is_superuser','user_type')
+        exclude = ('password','is_staff','is_superuser')
 
 
 class AdminDocUpdateSerializer(serializers.ModelSerializer):
     user=DOCUserSerializer()
     class Meta:
         model = Doctor
-        fields='__all__' 
+        fields='__all__'
+        
         
     def update(self, instance, validated_data):
         user_data = validated_data.pop('user', {}) # this is used to pop out the user object and if it is not existing then we will assign a {} to it as default
