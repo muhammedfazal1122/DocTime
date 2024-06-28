@@ -46,7 +46,8 @@ const navigate = useNavigate();
 const [OnlinePaymet, setOnlinePaymet] = useState(false)
 const doctorId = custom_id
 const [transactionData, setTrasaction] = useState([])
-
+console.log(custom_id);
+console.log(typeof(custom_id));
 
   
 const handleRazorpay = () =>{
@@ -244,19 +245,19 @@ const fetchPatientCustomId =async ()=>{
     
      const accessToken = localStorage.getItem("access");
  
-     await axios.get(`${baseUrl}auth/admin/doctor/verication/listbooking/`, {
+     await axios.get(`${baseUrl}auth/doctor/details/${custom_id}/`, {
        headers: {
          Authorization: `Bearer ${accessToken}`,
          Accept: 'application/json',
          'Content-Type': 'application/json',
        }
      }).then(response => {
+      console.log(response);
        
        
        // Assuming you want to find the doctor by custom_id and then extract consultation_fees
-       const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id == custom_id);
-       if (doctor) {
-         setDoctorData(doctor);
+       if (response) {
+         setDoctorData(response.data);
        
        } else {
         console.log("error");
