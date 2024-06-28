@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { baseUrl } from '../../../utils/constants/Constants';
+import DocPic from '../../../../public/assets/avatar/docAvathar2.jpg'
 import {
  Card,
  CardHeader,
@@ -189,7 +190,13 @@ const BookingDetails = () => {
         booking.map((transaction, index) => (
           <Card key={index} shadow={false} className="w-full max-w-[49rem] bg-slate-200 mt-5 relative">
             <CardHeader color="transparent" floated={false} shadow={false} className="mx-0 flex items-center gap-4 pt-0 pb-8">
-              <Avatar className="max-w-[8rem] ml-7" size="lg" variant="circular" alt="Doctor" src={doctorDetails[transaction.transaction_id]?.profile_picture} />
+            <Avatar
+  className="max-w-[8rem] ml-7"
+  size="lg"
+  variant="circular"
+  alt="Doctor"
+  src={doctorDetails[transaction.transaction_id]?.profile_picture ?? DocPic}
+/>
               <div className="flex w-full flex-col gap-0.5">
               {/* <button onClick={sendNotification}>Initiate Video Call</button> */}
                  <div>
@@ -197,7 +204,9 @@ const BookingDetails = () => {
               </div>
                 <div className="flex items-center justify-between">
                  <Typography variant="h5" color="blue-gray">
-                    <div>{`${doctorDetails[transaction.transaction_id]?.doctor_user.full_name} `}</div>
+                 <div>
+              {`${doctorDetails[transaction.transaction_id]?.doctor_user?.full_name ?? 'Dr '}`}
+            </div>
                  </Typography>
                 </div>
                 <div className="flex items-center gap-0">
@@ -210,10 +219,11 @@ const BookingDetails = () => {
                 </div>
             
  
-                <Typography color="blue-gray">Booking Fees: ₹ {transaction.amount}</Typography>
-                <Typography color="blue-gray">{doctorDetails[transaction.transaction_id]?.doctor_user.specializations}</Typography>
-                <Typography color="blue-gray">Hospital: {doctorDetails[transaction.transaction_id]?.doctor_user.Hospital}</Typography>
-                <Typography color="blue-gray">Experience: {doctorDetails[transaction.transaction_id]?.doctor_user.experience} years</Typography>
+                <Typography color="blue-gray">Booking Fees: ₹ {transaction.amount ?? '300'}</Typography>
+                <Typography color="blue-gray">Specializations: {doctorDetails[transaction.transaction_id]?.doctor_user?.specializations ?? 'Cardiologist'}</Typography>
+                <Typography color="blue-gray">Hospital: {doctorDetails[transaction.transaction_id]?.doctor_user?.Hospital ?? 'Mother Care Hospital'}</Typography>
+                <Typography color="blue-gray">Experience: {doctorDetails[transaction.transaction_id]?.doctor_user?.experience ?? '4'} years</Typography>
+
               </div>
             </CardHeader>
             <CardBody className="mb-6 p-0 ml-8 ">
