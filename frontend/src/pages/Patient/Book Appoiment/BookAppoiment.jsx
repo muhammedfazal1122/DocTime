@@ -247,10 +247,8 @@ const fetchPatientCustomId =async ()=>{
        // Assuming you want to find the doctor by custom_id and then extract consultation_fees
        const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id == custom_id);
        if (doctor) {
-         setDoctorData(doctor);
+         setDoctorData(response.data.results.find(doctor => doctor.doctor_user.custom_id == custom_id));
        
-         
-
        } else {
         console.log("error");
          
