@@ -220,14 +220,23 @@ const fetchPatientCustomId =async ()=>{
 
 
  useEffect(() => {
-    // Fetch slots for the doctor
-    fetchSlots();
-    fetchPatientCustomId()
-    fetchDoctordata()
-    if (patientID) {
+  const fetchData = async () => {
+    try {
+      await fetchSlots();
+      await fetchPatientCustomId();
+      await fetchDoctordata();
       
-      // You can use the updated patientID here
-   }
+      // Use patientID if needed
+      if (patientID) {
+        // Do something with patientID
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle error as needed
+    }
+  };
+
+  fetchData();
  }, [custom_id, selectedDate,patientID]); // Depend on custom_id and selectedDate to refetch if they change
  
  const fetchDoctordata = async () => {
@@ -247,7 +256,7 @@ const fetchPatientCustomId =async ()=>{
        // Assuming you want to find the doctor by custom_id and then extract consultation_fees
        const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id == custom_id);
        if (doctor) {
-         setDoctorData(response.data.results.find(doctor => doctor.doctor_user.custom_id == custom_id));
+         setDoctorData(doctor);
        
        } else {
         console.log("error");
