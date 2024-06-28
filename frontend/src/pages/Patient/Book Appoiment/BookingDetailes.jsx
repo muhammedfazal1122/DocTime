@@ -12,7 +12,6 @@ import {
 import { FcVideoCall } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import ReviewFormForDr from '../ReviewFormForDr';
-import { set } from 'date-fns';
 
 
 
@@ -32,7 +31,6 @@ const BookingDetails = () => {
  const [isOpen, setIsOpen] = useState(false);
  const [doctorId, setDoctorId] = useState(null);
  const [prescriptions, setPrescriptions] = useState([]);
- const [TransactionId, setTransactionId] = useState([]);
  const [reviewTransactionId, setReviewTransactionId] = useState(null);
 
 
@@ -106,20 +104,35 @@ const BookingDetails = () => {
  }, [patientID]);
 
  useEffect(() => {
-    if (booking.length > 0) {
-      const fetchAndStoreDoctorDetails = async () => {
-        const details = {};
-        for (const transaction of booking) {
+  if (booking.length > 0) {
+    const fetchAndStoreDoctorDetails = async () => {
+      const details = {};
+  
+      try {
+        // Fetch doctor details in parallel using Promise.all
+        const doctorPromises = booking.map(async (transaction) => {
           const doctor = await fetchDoctordata(transaction.doctor_id);
+          return doctor || {}; // Return an empty object if doctor data is unavailable
+        });
+  
+        const fetchedDoctors = await Promise.all(doctorPromises);
+  
+        for (let i = 0; i < fetchedDoctors.length; i++) {
+          const doctor = fetchedDoctors[i];
           if (doctor) {
-            details[transaction.transaction_id] = doctor;
+            details[booking[i].transaction_id] = doctor;
           }
         }
+      } catch (error) {
+        console.error("Error fetching doctor details:", error);
+        // Handle the error appropriately (e.g., display an error message)
+      } finally {
         setDoctorDetails(details);
-      };
-
-      fetchAndStoreDoctorDetails();
-    }
+      }
+    };
+  
+    fetchAndStoreDoctorDetails();
+  }
  }, [booking]);
 
  const formatDate = (dateString) => {
@@ -162,18 +175,17 @@ const BookingDetails = () => {
 
 
  const toggleModal = (transaction_id) => {
-    setTransactionId(transaction_id)
-    fetchPrescriptions()
+    fetchPrescriptions(transaction_id)
    setIsOpen(!isOpen);
  };
 
- const fetchPrescriptions = async () => {
+ const fetchPrescriptions = async (transaction_id) => {
   try {
      
      
  
      // Correctly set withCredentials to true
-     const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${TransactionId}/`, { withCredentials: true });
+     const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${transaction_id}/`, { withCredentials: true });
    
      const data = response.data // This line extracts the JSON data from the response
      setPrescriptions(data.results);
