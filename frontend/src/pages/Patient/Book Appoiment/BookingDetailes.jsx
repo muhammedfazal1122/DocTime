@@ -328,7 +328,8 @@ const BookingDetails = () => {
                 <div key={index} className="border-b border-gray-200 py-4">
                  {/* Doctor's name */}
                  <p className="text-lg font-semibold text-gray-800 mb-1">
-                    Doctor Name: {`${doctorDetails[transaction.transaction_id]?.doctor_user.full_name} `} 
+                    Doctor Name:  {`${doctorDetails[transaction.transaction_id]?.doctor_user?.full_name ?? 'Dr '}`}
+
                  </p>
                  {/* Prescription details */}
                  <p className="text-sm text-gray-500 mb-1">
