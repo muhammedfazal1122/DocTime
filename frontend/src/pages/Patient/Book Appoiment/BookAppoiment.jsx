@@ -230,12 +230,12 @@ const fetchPatientCustomId =async ()=>{
    }
  }, [custom_id, selectedDate,patientID]); // Depend on custom_id and selectedDate to refetch if they change
  
- const fetchDoctordata = () => {
+ const fetchDoctordata = async () => {
   try {
     
      const accessToken = localStorage.getItem("access");
  
-     axios.get(`${baseUrl}auth/admin/doctor/verication/listbooking/`, {
+     await axios.get(`${baseUrl}auth/admin/doctor/verication/listbooking/`, {
        headers: {
          Authorization: `Bearer ${accessToken}`,
          Accept: 'application/json',
@@ -245,13 +245,14 @@ const fetchPatientCustomId =async ()=>{
        
        
        // Assuming you want to find the doctor by custom_id and then extract consultation_fees
-       const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id == doctorId);
+       const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id == custom_id);
        if (doctor) {
          setDoctorData(doctor);
        
          
 
        } else {
+        console.log("error");
          
        }
      }).catch(error => {
