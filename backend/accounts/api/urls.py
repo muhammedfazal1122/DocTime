@@ -48,7 +48,7 @@ urlpatterns = [
     path('admin/verification/doctor/<str:user__id>/', views.AdminDocVerificationView.as_view(), name='admin-verification-doctor'),
     path("admin/doctor/verication/list/", views.AdminDoctorApprovalListView.as_view(), name="admin-verification-doctor-list"),
     # ------------------------------------------------------booking fetch------------------
-    path("admin/doctor/verication/listbooking/", views.DoctorListViewlistbooking.as_view(), name="admin-verification-doctor-list"),
+    path("doctor/details/<str:doctor_user__custom_id>/", views.DoctorDetailsView.as_view(), name="admin-verification-doctor-list"),
 
     path("admin/doctor/list/", views.AdminDoctorListView.as_view(), name="admin-verification-doctor-list"),
 

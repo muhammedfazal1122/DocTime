@@ -258,10 +258,17 @@ class AdminDoctorApprovalListView(generics.ListAPIView):
     serializer_class = UserDetailsUpdateSerializer
 
 
-class DoctorListViewlistbooking(generics.ListAPIView):
-    queryset = User.objects.filter( Q(user_type='doctor') )
+
+
+
+
+class DoctorDetailsView(generics.RetrieveAPIView):
+    queryset = User.objects.filter( Q(user_type='doctor') & Q(approval_status='APPROVED') ).select_related('doctor_user')
     parser_classes = (MultiPartParser, FormParser)
+    lookup_field = 'doctor_user__custom_id'
     serializer_class = UserDetailsUpdateSerializerlistbooking
+
+
 
 
 class AdminDoctorApprovalListView(generics.ListAPIView):
