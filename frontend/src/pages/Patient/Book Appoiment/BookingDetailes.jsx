@@ -45,6 +45,69 @@ const BookingDetails = () => {
  };
  
 
+ const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+
+const formatDateTime = (dateTimeString) => {
+  const dateTime = new Date(dateTimeString);
+  return dateTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
+};
+
+
+
+// Function to check if the booking is today or in the future
+const isBookingTodayOrFuture = (bookingDate) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset hours, minutes, seconds, and milliseconds
+  const booking = new Date(bookingDate);
+  return booking >= today;
+};
+
+// Function to check if the current time is within the booking start time
+const isCurrentTimeWithinBookingTime = (bookingStartTime) => {
+  const now = new Date();
+  const bookingStart = new Date(bookingStartTime);
+  return now >= bookingStart;
+};
+
+const getColor = (status) => {
+if (status === "COMPLETED") {
+  return "green";
+} else if (status === "PENDING") {
+  return "blue";
+} else {
+  return "black"; // Default color if status is neither "COMPLETED" nor "PENDING"
+}
+};
+
+
+
+const toggleModal = (transaction_id) => {
+  fetchPrescriptions(transaction_id)
+ setIsOpen(!isOpen);
+};
+
+const fetchPrescriptions = async (transaction_id) => {
+try {
+   
+   
+
+   // Correctly set withCredentials to true
+   const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${transaction_id}/`, { withCredentials: true });
+ 
+   const data = response.data // This line extracts the JSON data from the response
+   setPrescriptions(data.results);
+   
+} catch (error) {
+   console.error("Error fetching prescriptions:", error);
+}
+};
+
+
+
+
  const fetchDoctordata = async (doctorId) => {
     try {
       const accessToken = localStorage.getItem("access");
@@ -121,66 +184,6 @@ const BookingDetails = () => {
     }
  }, [booking]);
 
- const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
- };
-
- const formatDateTime = (dateTimeString) => {
-    const dateTime = new Date(dateTimeString);
-    return dateTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
- };
-
-
-
-  // Function to check if the booking is today or in the future
-  const isBookingTodayOrFuture = (bookingDate) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset hours, minutes, seconds, and milliseconds
-    const booking = new Date(bookingDate);
-    return booking >= today;
- };
-
- // Function to check if the current time is within the booking start time
- const isCurrentTimeWithinBookingTime = (bookingStartTime) => {
-    const now = new Date();
-    const bookingStart = new Date(bookingStartTime);
-    return now >= bookingStart;
- };
-
- const getColor = (status) => {
-  if (status === "COMPLETED") {
-    return "green";
-  } else if (status === "PENDING") {
-    return "blue";
-  } else {
-    return "black"; // Default color if status is neither "COMPLETED" nor "PENDING"
-  }
-};
-
-
-
- const toggleModal = (transaction_id) => {
-    fetchPrescriptions(transaction_id)
-   setIsOpen(!isOpen);
- };
-
- const fetchPrescriptions = async (transaction_id) => {
-  try {
-     
-     
- 
-     // Correctly set withCredentials to true
-     const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${transaction_id}/`, { withCredentials: true });
-   
-     const data = response.data // This line extracts the JSON data from the response
-     setPrescriptions(data.results);
-     
-  } catch (error) {
-     console.error("Error fetching prescriptions:", error);
-  }
- };
- 
 
  return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
