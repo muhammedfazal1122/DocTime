@@ -429,7 +429,7 @@ class MultipleDoctorsViewSet(viewsets.ViewSet):
         if doctor_ids:
             doctor_ids_list = doctor_ids.split(',')
             queryset = Doctor.objects.filter(custom_id__in=doctor_ids_list)
-            serializer = DoctorSerializerAll(queryset, many=True)
+            serializer = DoctorCustomIDSerializer(queryset, many=True)
             return Response(serializer.data)
         else:
             return Response({"error": "Doctor IDs not provided"})

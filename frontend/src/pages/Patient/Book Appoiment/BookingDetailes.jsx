@@ -136,6 +136,12 @@ const BookingDetails = () => {
    fetchData();
  }, []);
 
+
+ console.log(booking.profile_picture,"llllllllllll");
+
+
+
+
 return (
   <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
     {error && <div className="text-red-500">{error}</div>}
@@ -148,8 +154,8 @@ return (
               size="lg"
               variant="circular"
               alt="Doctor"
-              src={doctorDetails[transaction.doctor_id]?.profile_picture?? "DocPic"}
-            />
+              src={doctorDetails[transaction.doctor_id]?.user.profile_picture || DocPic}
+              />
               <div className="flex w-full flex-col gap-0.5">
               {/* <button onClick={sendNotification}>Initiate Video Call</button> */}
                  <div>
@@ -158,7 +164,7 @@ return (
                 <div className="flex items-center justify-between">
                  <Typography variant="h5" color="blue-gray">
                  <div>
-                 {`${doctorDetails[transaction.doctor_id]?.full_name?? 'undefined'}`}
+                 {`${doctorDetails[transaction.doctor_id]?.full_name?? 'Dr'}`}
 
             </div>
                  </Typography>
@@ -172,10 +178,10 @@ return (
                  <StarIcon />
                 </div>
             
-                <Typography color="blue-gray">Booking Fees: ₹ {transaction.amount?? ''}</Typography>
-              <Typography color="blue-gray">Specializations: {doctorDetails[transaction.doctor_id]?.specializations?? ''}</Typography>
-              <Typography color="blue-gray">Hospital: {doctorDetails[transaction.doctor_id]?.Hospital?? ''}</Typography>
-              <Typography color="blue-gray">Experience: {doctorDetails[transaction.doctor_id]?.experience?? ''} years</Typography>
+                <Typography color="blue-gray">Booking Fees: ₹ {transaction.amount?? '300'}</Typography>
+              <Typography color="blue-gray">Specializations: {doctorDetails[transaction.doctor_id]?.specializations?? 'Cardiologist'}</Typography>
+              <Typography color="blue-gray">Hospital: {doctorDetails[transaction.doctor_id]?.Hospital?? 'health care'}</Typography>
+              <Typography color="blue-gray">Experience: {doctorDetails[transaction.doctor_id]?.experience?? '4'} years</Typography>
 
               </div>
             </CardHeader>
@@ -283,8 +289,7 @@ return (
                 <div key={index} className="border-b border-gray-200 py-4">
                  {/* Doctor's name */}
                  <p className="text-lg font-semibold text-gray-800 mb-1">
-                    Doctor Name:  {`${doctorDetails[transaction.transaction_id]?.doctor_user?.full_name ?? ''}`}
-
+                    Doctor Name:  {`${doctorDetails[transaction.transaction_id]?.full_name ?? ''}`}
                  </p>
                  {/* Prescription details */}
                  <p className="text-sm text-gray-500 mb-1">
