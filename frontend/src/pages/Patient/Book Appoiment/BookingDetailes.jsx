@@ -154,8 +154,11 @@ return (
               size="lg"
               variant="circular"
               alt="Doctor"
-              src={doctorDetails[transaction.doctor_id]?.user.profile_picture || DocPic}
-              />
+           
+              src={doctorDetails[transaction.doctor_id]?.user.profile_picture
+                ? `${baseUrl}${doctorDetails[transaction.doctor_id]?.user.profile_picture}`.replace(/([^:]\/)\/+/g, "$1")
+                : DocPic
+              }              />
               <div className="flex w-full flex-col gap-0.5">
               {/* <button onClick={sendNotification}>Initiate Video Call</button> */}
                  <div>
