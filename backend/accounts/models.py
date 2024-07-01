@@ -212,7 +212,7 @@ class Patient(models.Model):
         super().save(*args, **kwargs)
 
 
-    
+
 
 class OTPModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -231,3 +231,7 @@ def create_profile_for_user(sender ,instance, created, **kwargs):
             Patient.objects.create(user = instance, full_name = instance.first_name+" "+instance.last_name)  
 
 post_save.connect(create_profile_for_user, sender=User)
+
+
+
+

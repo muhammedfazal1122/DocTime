@@ -18,188 +18,138 @@ import ReviewFormForDr from '../ReviewFormForDr';
 
 
 
-
-
 const BookingDetails = () => {
- const [patientID, setPatientID] = useState(null);
- const [booking, setBooking] = useState([]);
- const [error, setError] = useState(null);
- const [doctorDetails, setDoctorDetails] = useState({});
- const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-
- const navigate = useNavigate()
- const [ws, setWs] = useState(null);
- const [isOpen, setIsOpen] = useState(false);
- const [doctorId, setDoctorId] = useState(null);
- const [prescriptions, setPrescriptions] = useState([]);
- const [reviewTransactionId, setReviewTransactionId] = useState(null);
-
-
-
-
-
- const videocall = (transaction_id) => {
-  const roomId = transaction_id;
-  // initiateVideoCall()
-  navigate(`/DoctorShow/videocall/${roomId}`);
+  const [patientID, setPatientID] = useState(null);
+  const [booking, setBooking] = useState([]);
+  const [error, setError] = useState(null);
+  const [doctorDetails, setDoctorDetails] = useState({});
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+ 
+  const navigate = useNavigate();
+  const [ws, setWs] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [doctorId, setDoctorId] = useState(null);
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [reviewTransactionId, setReviewTransactionId] = useState(null);
+ 
+  const videocall = (transaction_id) => {
+   const roomId = transaction_id;
+   navigate(`/DoctorShow/videocall/${roomId}`);
+  };
+ 
+  const formatDate = (dateString) => {
+   const date = new Date(dateString);
+   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
  };
  
-
- const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-};
-
-const formatDateTime = (dateTimeString) => {
-  const dateTime = new Date(dateTimeString);
-  return dateTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
-};
-
-
-
-// Function to check if the booking is today or in the future
-const isBookingTodayOrFuture = (bookingDate) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Reset hours, minutes, seconds, and milliseconds
-  const booking = new Date(bookingDate);
-  return booking >= today;
-};
-
-// Function to check if the current time is within the booking start time
-const isCurrentTimeWithinBookingTime = (bookingStartTime) => {
-  const now = new Date();
-  const bookingStart = new Date(bookingStartTime);
-  return now >= bookingStart;
-};
-
-const getColor = (status) => {
-if (status === "COMPLETED") {
-  return "green";
-} else if (status === "PENDING") {
-  return "blue";
-} else {
-  return "black"; // Default color if status is neither "COMPLETED" nor "PENDING"
-}
-};
-
-
-
-const toggleModal = (transaction_id) => {
-  fetchPrescriptions(transaction_id)
- setIsOpen(!isOpen);
-};
-
-const fetchPrescriptions = async (transaction_id) => {
-try {
-   
-   
-
-   // Correctly set withCredentials to true
-   const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${transaction_id}/`, { withCredentials: true });
- 
-   const data = response.data // This line extracts the JSON data from the response
-   setPrescriptions(data.results);
-   
-} catch (error) {
-   console.error("Error fetching prescriptions:", error);
-}
-};
-
-
-
-
- const fetchDoctordata = async (doctorId) => {
-    try {
-      const accessToken = localStorage.getItem("access");
-      const response = await axios.get(`${baseUrl}auth/admin/doctor/verication/list/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }
-      });
-      const doctor = response.data.results.find(doctor => doctor.doctor_user.custom_id === doctorId);
-      if (doctor) {
-        return doctor;
-      } else {
-        
-        return null;
-      }
-    } catch (error) {
-      
-      return null;
-    }  
+ const formatDateTime = (dateTimeString) => {
+   const dateTime = new Date(dateTimeString);
+   return dateTime.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit' });
  };
-
+ 
+ // Function to check if the booking is today or in the future
+ const isBookingTodayOrFuture = (bookingDate) => {
+   const today = new Date();
+   today.setHours(0, 0, 0, 0); // Reset hours, minutes, seconds, and milliseconds
+   const booking = new Date(bookingDate);
+   return booking >= today;
+ };
+ 
+ // Function to check if the current time is within the booking start time
+ const isCurrentTimeWithinBookingTime = (bookingStartTime) => {
+   const now = new Date();
+   const bookingStart = new Date(bookingStartTime);
+   return now >= bookingStart;
+ };
+ 
+ const getColor = (status) => {
+ if (status === "COMPLETED") {
+   return "green";
+ } else if (status === "PENDING") {
+   return "blue";
+ } else {
+   return "black"; // Default color if status is neither "COMPLETED" nor "PENDING"
+ }
+ };
+ 
+ const toggleModal = (transaction_id) => {
+   fetchPrescriptions(transaction_id);
+  setIsOpen(!isOpen);
+ };
+ 
+ const fetchPrescriptions = async (transaction_id) => {
+ try {
+    const response = await axios.get(`${baseUrl}appointment/prescriptions/display/${transaction_id}/`, { withCredentials: true });
+    const data = response.data; // Adjust according to the actual structure of your response
+    setPrescriptions(data.results);
+ } catch (error) {
+    console.error("Error fetching prescriptions:", error);
+ }
+ };
+ 
+ const fetchDoctorDataInBatch = async (doctorIds) => {
+   try {
+     const accessToken = localStorage.getItem("access");
+     const idsQuery = doctorIds.join(',');
+     const response = await axios.get(`${baseUrl}auth/multiple/doctors/list/?ids=${idsQuery}`, {
+       headers: {
+         Authorization: `Bearer ${accessToken}`,
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+       },
+     });
+     return response.data.reduce((acc, doctor) => {
+       acc[doctor.custom_id] = doctor;
+       return acc;
+     }, {});
+   } catch (error) {
+     console.error("Error fetching doctors' data:", error);
+     return {};
+   }
+ };
+ 
  useEffect(() => {
-    const fetchPatientCustomId = async () => {
-      try {
-        const refreshToken = localStorage.getItem("refresh");
-        let decoded = jwtDecode(refreshToken);
-        let id = decoded.user_id;
-        setPatientID(id);
+   const fetchData = async () => {
+     try {
+       const accessToken = localStorage.getItem("access");
+       let decoded = jwtDecode(accessToken);
+       let id = decoded.user_id;
+ 
+       const response = await axios.get(`${baseUrl}auth/patient/list/${id}`);
+       if (response.status === 200) {
+         const customId = response.data.patient_user.custom_id;
+         setPatientID(customId);
+ 
+         const bookingResponse = await axios.get(`${baseUrl}appointment/booking/details/patient/${customId}`);
+         setBooking(bookingResponse.data.data);
+ 
+         const doctorIds = bookingResponse.data.data.map(booking => booking.doctor_id);
+         const doctors = await fetchDoctorDataInBatch(doctorIds);
+         setDoctorDetails(doctors);
+       }
+     } catch (error) {
+       console.error("Error fetching data:", error);
+       setError("Error fetching data.");
+     }
+   };
+ 
+   fetchData();
+ }, []);
 
-        const response = await axios.get(`${baseUrl}auth/patient/list/${id}`);
-        if (response.status === 200) {
-          const customId = response.data.patient_user.custom_id;
-          setPatientID(customId);
-        }
-      } catch (error) {
-        console.error("Error fetching patient custom ID:", error);
-        setError("Error fetching patient custom ID.");
-      }
-    };
-
-    const fetchBookingDetails = async () => {
-      try {
-        const response = await axios.get(`${baseUrl}appointment/booking/details/patient/${patientID}`);
-        setBooking(response.data.data);
-      } catch (error) {
-        console.error("Error fetching booking details:", error);
-        setError("Error fetching booking details.");
-      }
-    };
-
-    if (patientID) {
-      fetchBookingDetails();
-    } else {
-      fetchPatientCustomId();
-    }
- }, [patientID]);
-
- useEffect(() => {
-    if (booking.length > 0) {
-      const fetchAndStoreDoctorDetails = async () => {
-        const details = {};
-        for (const transaction of booking) {
-          const doctor = await fetchDoctordata(transaction.doctor_id);
-          if (doctor) {
-            details[transaction.transaction_id] = doctor;
-          }
-        }
-        setDoctorDetails(details);
-      };
-
-      fetchAndStoreDoctorDetails();
-    }
- }, [booking]);
-
-
- return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
-        
-      {error && <div className="text-red-500">{error}</div>}
-      {booking.length > 0 ? (
-        booking.map((transaction, index) => (
-          <Card key={index} shadow={false} className="w-full max-w-[49rem] bg-slate-200 mt-5 relative">
-            <CardHeader color="transparent" floated={false} shadow={false} className="mx-0 flex items-center gap-4 pt-0 pb-8">
+return (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-800">
+    {error && <div className="text-red-500">{error}</div>}
+    {booking.length > 0? (
+      booking.map((transaction, index) => (
+        <Card key={index} shadow={false} className="w-full max-w-[49rem] bg-slate-200 mt-5 relative">
+          <CardHeader color="transparent" floated={false} shadow={false} className="mx-0 flex items-center gap-4 pt-0 pb-8">
             <Avatar
-  className="max-w-[8rem] ml-7"
-  size="lg"
-  variant="circular"
-  alt="Doctor"
-  src={doctorDetails[transaction.transaction_id]?.profile_picture ?? DocPic}
-/>
+              className="max-w-[8rem] ml-7"
+              size="lg"
+              variant="circular"
+              alt="Doctor"
+              src={doctorDetails[transaction.doctor_id]?.profile_picture?? "DocPic"}
+            />
               <div className="flex w-full flex-col gap-0.5">
               {/* <button onClick={sendNotification}>Initiate Video Call</button> */}
                  <div>
@@ -208,7 +158,8 @@ try {
                 <div className="flex items-center justify-between">
                  <Typography variant="h5" color="blue-gray">
                  <div>
-              {`${doctorDetails[transaction.transaction_id]?.doctor_user?.full_name ?? 'Dr '}`}
+                 {`${doctorDetails[transaction.doctor_id]?.full_name?? 'undefined'}`}
+
             </div>
                  </Typography>
                 </div>
@@ -221,11 +172,10 @@ try {
                  <StarIcon />
                 </div>
             
- 
-                <Typography color="blue-gray">Booking Fees: ₹ {transaction.amount ?? '300'}</Typography>
-                <Typography color="blue-gray">Specializations: {doctorDetails[transaction.transaction_id]?.doctor_user?.specializations ?? 'Cardiologist'}</Typography>
-                <Typography color="blue-gray">Hospital: {doctorDetails[transaction.transaction_id]?.doctor_user?.Hospital ?? 'Mother Care Hospital'}</Typography>
-                <Typography color="blue-gray">Experience: {doctorDetails[transaction.transaction_id]?.doctor_user?.experience ?? '4'} years</Typography>
+                <Typography color="blue-gray">Booking Fees: ₹ {transaction.amount?? ''}</Typography>
+              <Typography color="blue-gray">Specializations: {doctorDetails[transaction.doctor_id]?.specializations?? ''}</Typography>
+              <Typography color="blue-gray">Hospital: {doctorDetails[transaction.doctor_id]?.Hospital?? ''}</Typography>
+              <Typography color="blue-gray">Experience: {doctorDetails[transaction.doctor_id]?.experience?? ''} years</Typography>
 
               </div>
             </CardHeader>
@@ -331,7 +281,7 @@ try {
                 <div key={index} className="border-b border-gray-200 py-4">
                  {/* Doctor's name */}
                  <p className="text-lg font-semibold text-gray-800 mb-1">
-                    Doctor Name:  {`${doctorDetails[transaction.transaction_id]?.doctor_user?.full_name ?? 'Dr '}`}
+                    Doctor Name:  {`${doctorDetails[transaction.transaction_id]?.doctor_user?.full_name ?? ''}`}
 
                  </p>
                  {/* Prescription details */}

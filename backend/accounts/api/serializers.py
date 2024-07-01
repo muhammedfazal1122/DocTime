@@ -23,6 +23,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
+class DoctorSerializerAll(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields = "__all__"
+
+
+
+
 class DoctorCustomIDSerializer2(serializers.ModelSerializer):
     class Meta:
         model = Doctor

@@ -76,4 +76,9 @@ urlpatterns = [
     path("custom-id/doctor/<str:pk>",views.DoctorCustomIdView.as_view(),name="custom-id-doctor"),
 
 
+
+    path('multiple/doctors/list/', views.MultipleDoctorsViewSet.as_view({'get': 'list'}), name='MultipleDoctorsViewSet'),
+
+
+
 ]

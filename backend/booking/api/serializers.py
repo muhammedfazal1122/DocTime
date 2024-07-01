@@ -9,6 +9,11 @@ class DoctorSerializer(serializers.ModelSerializer):
         model = Doctor
         fields = ['id', 'name']
 
+class DoctorSerializerAll(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields = "__all__"
+
 
 
 class SlotSerializer(serializers.ModelSerializer):

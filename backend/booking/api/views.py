@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from booking.models import Slot,Review
 from notifications.models import Notification
 from accounts.models import Doctor,Patient
-from .serializers import SlotSerializer,AdminPatientUpdateSerializer,TransactionCommission,TransactionCommissionSerializer,PrescriptionSerializer,RazorpayOrderSerializer,TranscationModelSerializer,Transaction,TranscationModelList,ReviewSerializer,TransactionSerializer,Prescription
+from .serializers import SlotSerializer,DoctorSerializerAll,AdminPatientUpdateSerializer,TransactionCommission,TransactionCommissionSerializer,PrescriptionSerializer,RazorpayOrderSerializer,TranscationModelSerializer,Transaction,TranscationModelList,ReviewSerializer,TransactionSerializer,Prescription
 from rest_framework import generics
 from rest_framework import status
 from django.utils.dateparse import parse_date
@@ -513,5 +513,6 @@ class TransactionsCommitionIdAPIView(generics.ListAPIView):
     def get_queryset(self):
         transaction_id = self.kwargs['transaction_id']
         return TransactionCommission.objects.filter(transaction=transaction_id)
+
 
 

@@ -2,9 +2,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from .serializers import User,UserRegisterSerializer,UserDoctorCustomIDSerializer,UserSerializer, DoctorCustomIDSerializer,OTPModel,Patient,PatientUserSerializer,Doctor
 from .serializers import VarificationSerializer,Verification,AdminDocVerificationSerializer,UserDetailsUpdateSerializer,AdminDocUpdateSerializer,AdminClientUpdateSerializer
-from .serializers import UserIsActiveSerializer,UserDetailsUpdateSerializerlistbooking,AdminPatientUpdateSerializer,AdminDocVerificationSerializerApprove,DoctorSerializer,UserPatientCustomIDSerializer,UserDoctorCustomIDSerializer2
+from .serializers import UserIsActiveSerializer,DoctorSerializerAll,UserDetailsUpdateSerializerlistbooking,AdminPatientUpdateSerializer,AdminDocVerificationSerializerApprove,DoctorSerializer,UserPatientCustomIDSerializer,UserDoctorCustomIDSerializer2
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import viewsets, generics
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -418,3 +419,17 @@ class DoctorCustomIdView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserDoctorCustomIDSerializer2
     lookup_field = 'pk' 
+
+
+
+class MultipleDoctorsViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        doctor_ids = request.query_params.get('ids', None)
+        if doctor_ids:
+            doctor_ids_list = doctor_ids.split(',')
+            queryset = Doctor.objects.filter(custom_id__in=doctor_ids_list)
+            serializer = DoctorSerializerAll(queryset, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({"error": "Doctor IDs not provided"})
