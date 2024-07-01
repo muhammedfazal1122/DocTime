@@ -183,6 +183,8 @@ return (
               <Typography>
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white ">Transaction Details</h2>
 
+
+
               </Typography>
               <div className="mt-4">
                 <p className="text-gray-700 dark:text-gray-300">Transaction ID: <span className="font-medium text-gray-900 dark:text-white">{transaction.transaction_id}</span></p>
