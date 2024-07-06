@@ -205,23 +205,23 @@ return (
             </CardBody>
             
             <div className="absolute top-0 right-0 mt-4 mr-4">
- {/* Only show the FcVideoCall icon if the booking is today or in the future, the current time is within the booking start time, and the consultancy is not completed */}
- {isBookingTodayOrFuture(transaction.day) && transaction.start_time && transaction.is_consultency_completed !== "COMPLETED" ? (
-    <FcVideoCall onClick={() => videocall(transaction.transaction_id)} className="h-10 w-10 text-blue-500" />
- ) : null}
+        {/* Only show the FcVideoCall icon if the booking is today or in the future, the current time is within the booking start time, and the consultancy is not completed */}
+        {isBookingTodayOrFuture(transaction.day) && transaction.start_time && transaction.is_consultency_completed !== "COMPLETED" ? (
+            <FcVideoCall onClick={() => videocall(transaction.transaction_id)} className="h-10 w-10 text-blue-500" />
+        ) : null}
 
- {/* Only show the Review Doctor button if the consultancy is completed */}
- {transaction.is_consultency_completed === "COMPLETED" && (
-  <div>
+        {/* Only show the Review Doctor button if the consultancy is completed */}
+        {transaction.is_consultency_completed === "COMPLETED" && (
+          <div>
 
   
-    <button
-      onClick={() => {
-        setIsReviewModalOpen(true);
-        setDoctorId(transaction.doctor_id); 
-        setReviewTransactionId(transaction.transaction_id); // Set the transaction ID
-        
-        // Assuming transaction_id is the doctorId
+        <button
+          onClick={() => {
+            setIsReviewModalOpen(true);
+            setDoctorId(transaction.doctor_id); 
+            setReviewTransactionId(transaction.transaction_id); // Set the transaction ID
+            
+            // Assuming transaction_id is the doctorId
       }}
       className="font-inherit text-sm bg-blue-500 text-white py-1 px-2 flex items-center border-none rounded-lg overflow-hidden transition-all duration-200 ease-in-out cursor-pointer hover:scale-95 hover:bg-blue-700 hover:text-gray-100"
     >

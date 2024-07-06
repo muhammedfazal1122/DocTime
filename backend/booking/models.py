@@ -77,7 +77,7 @@ class TransactionCommission(models.Model):
 
 
 
-    
+
 class Review(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='patient_reviews')

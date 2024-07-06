@@ -196,6 +196,10 @@ function MyProfile() {
 
     switch (field) {
       case "first_name":
+      case "street":
+      case "country":
+      case "state":
+      case "city":
       case "last_name":
         // Validate that the name contains only letters
         if (!/^[a-zA-Z]+$/.test(value)) {

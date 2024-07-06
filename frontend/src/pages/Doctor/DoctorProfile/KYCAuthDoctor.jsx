@@ -64,9 +64,37 @@ import certificate_6703900 from '../../../../src/assets/logo/certificate_6703900
       }
   };
 
+
+  const validateInputs = () => {
+    if (!qualificationImage) {
+      toast.error("Qualification image is required.");
+      return false;
+    }
+    if (!licencecertificateImage) {
+      toast.error("Licence certificate image is required.");
+      return false;
+    }
+    if (!aadhaarNumber || aadhaarNumber.length !== 12) {
+      toast.error("A valid Aadhaar number is required (12 digits).");
+      return false;
+    }
+    if (!register_number) {
+      toast.error("Register number is required.");
+      return false;
+    }
+    if (!experience || isNaN(experience) || experience <= 0) {
+      toast.error("Valid experience is required.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
       e.preventDefault();
-
+      if (!validateInputs()) {
+        return;
+      }
+  
       if (!qualificationImage || !licencecertificateImage || !aadhaarNumber || !register_number ) {
         setError("Please fill in all fields.");
         return;

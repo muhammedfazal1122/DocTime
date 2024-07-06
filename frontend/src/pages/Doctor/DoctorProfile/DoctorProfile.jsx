@@ -16,6 +16,7 @@ const DoctorProfile = ({refresh}) => {
  const dispatch = useDispatch();
  const [profile_picture_state, setProfilePicture] = useState(null)
 
+  const SPECIALIZATION_CHOICES_FLATTENED = ['Cardiologist', 'Dermatologist', 'Neurologist', 'Orthopedic Surgeon', 'Ophthalmologist', 'Gastroenterologist', 'Endocrinologist', 'Pulmonologist', 'Nephrologist', 'Pediatrician', 'Psychiatrist', 'General', 'gynecologist', 'Radiologist']
 
 
   const [formData, setFormData] = useState({
@@ -96,10 +97,6 @@ const validateInput = (name, value) => {
 
 const handleChange = (e) => {
   const { name, value } = e.target;
-  if (!validateInput(name, value)) {
-    toast.error("Invalid input. Please enter a valid value.");
-    return;
-  }
 
   if (name.startsWith('user.')) {
      // If the input is for the user object, update it accordingly
@@ -127,6 +124,8 @@ const handleFileChange = (e) => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+
+  
   try {
      const authToken = localStorage.getItem('access');
      
@@ -440,22 +439,30 @@ const uploadProfilePicture = async () => {
                
       {/* -------------------------------------------------------------------------------- */}
       
-                <div>
-                  <label htmlFor="specializations" className="block text-sm font-medium text-gray-700">
-                    Specializations
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      className="appearance-none block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      required=""
-                      type="text"
-                      name="specializations"
-                      id="specializations"
-                      value={formData.specializations}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div> 
+      <div>
+  <label htmlFor="specializations" className="block text-sm font-medium text-gray-700">
+    Specializations
+  </label>
+  <div className="mt-1">
+  <select
+    className="appearance-none block w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    required=""
+    name="specializations"
+    id="specializations"
+    value={formData.specializations}
+    onChange={handleChange}
+  >
+    <option value="">Select...</option>
+    {SPECIALIZATION_CHOICES_FLATTENED.map((choice) => (
+      <option key={choice} value={choice}>
+        {choice}
+      </option>
+    ))}
+  </select>
+</div>
+
+</div>
+
       {/* --------------------------------------------------------------------------------- */}
                 <div>
                   <label htmlFor="consultaion_fees" className="block text-sm font-medium text-gray-700">
