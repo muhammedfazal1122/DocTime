@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import Doctor,Patient
 import datetime
+from django.utils import timezone
 from django.conf import settings
 
 class Slot(models.Model):
@@ -11,7 +12,7 @@ class Slot(models.Model):
     end_time = models.DateTimeField() # Changed from TimeField to DateTimeField
     is_booked = models.BooleanField(default=False)
     is_cancelled = models.BooleanField(default=False)
-    created_at = models.DateTimeField(default=datetime.datetime.now)
+    created_at = models.DateTimeField(default=timezone.now)
 
 
     def is_available(self):

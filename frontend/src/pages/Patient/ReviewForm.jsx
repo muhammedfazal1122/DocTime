@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { baseUrl } from '../../utils/constants/Constants';
 
 const ReviewForm = ({ doctorId }) => {
     const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ const ReviewForm = ({ doctorId }) => {
         };
 
         try {  
-            const response = await axios.post('http://localhost:8000/reviews/create/', reviewData);
+            const response = await axios.post(`${baseUrl}appointment/reviews/create/`, reviewData);
             
             // Handle success, e.g., show a success message or clear the form
             setEmail('');

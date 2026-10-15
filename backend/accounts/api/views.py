@@ -113,7 +113,7 @@ class UserLogin(APIView):
         return Response(content, status=status.HTTP_200_OK)
 
 class UserLogout(APIView):
-    permission_classes = (IsAuthenticated)
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:    
             refresh_token = request.data["refresh_token"]

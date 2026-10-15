@@ -9,5 +9,5 @@ from .models import Transaction
 def delete_expired_transactions():
     # Get the current date
     now = timezone.now()
-    # Delete all transactions where the consultation date is before the current date
-    Transaction.objects.filter(consultation_date__lt=now).delete()
+    # Delete all transactions where the consultation day is before the current date
+    Transaction.objects.filter(day__lt=now.date()).delete()

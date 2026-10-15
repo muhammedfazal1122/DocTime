@@ -9,6 +9,7 @@ import DoctorRoute from '../Private/DoctorRoute';
 import { set_authentication } from '../Redux/AuthanticationUser';
 import { set_profile } from '../Redux/UserProfileSlice';
 import axios from 'axios'; // Don't forget to import axios
+import { baseUrl } from '../utils/constants/Constants';
 import KYCAuthDoctor from '../pages/Doctor/DoctorProfile/KYCAuthDoctor';
 import {  NavbarWithSearch } from '../pages/Doctor/DocNavbar/Docnavbar';
 import CreateSloat from '../pages/Doctor/Sloat/CreateSloat';
@@ -55,16 +56,15 @@ const DoctorWrapper = () => {
     try {
       const authToken = localStorage.getItem('access');
       
-      const response = await axios.get(`${baseURL}/auth/profilepic-update/${userId}/`, {
+      const response = await axios.get(`${baseUrl}auth/user/details/`, {
         headers: { 
           Authorization: `Bearer ${authToken}`,
-          'Content-Type': 'multipart/form-data',
         }, 
       }); 
       
       dispatch(set_profile({
         name: response.data.first_name,
-        profile_pic: response.data.profile_pic,
+        profile_pic: response.data.profile_picture,
       }));
       
     } catch (error) {  

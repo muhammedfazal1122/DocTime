@@ -1,0 +1,33 @@
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+*.pyc
+__pycache__/
+
+# Node / Frontend
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.vite/
+
+# Environment Variables & Secrets
+.env
+backend/.env
+frontend/.env
+*.env
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+media/
+backend/media/
+staticfiles/
+
+# OS / Editor
+.DS_Store
+*.log
+.vscode/
+.idea/
