@@ -17,8 +17,6 @@ class Slot(models.Model):
 
     def is_available(self):
         return not self.is_booked
-    def is_cancelled(self):
-        return self.is_cancelled
 
 
 

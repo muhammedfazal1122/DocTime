@@ -34,7 +34,7 @@ const DoctorLogin = () => {
         
         dispatch(
           set_authentication({
-            name: jwtDecode(res.data.access),
+            name: jwtDecode(res.data.access).first_name,
             isAuthenticated: true,
             isAdmin: res.data.isAdmin,
             is_doctor: res.data.is_doctor,
